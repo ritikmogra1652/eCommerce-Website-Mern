@@ -1,0 +1,14 @@
+enum ActionType {
+    // SIGNUP = "SIGNUP",
+    LOGIN = "LOGIN",
+    PROFILE = "PROFILE",
+    LOGOUT = "LOGOUT",
+    ADD_TO_CART = 'ADD_TO_CART',
+    REMOVE_FROM_CART = 'REMOVE_FROM_CART',
+    CLEAR_CART = 'CLEAR_CART',
+    // UPDATE_AUTH = "UPDATE_AUTH",
+    // DELETE_AUTH = "DELETE_AUTH",
+    // ADD_TO_CART = "ADD_TO_CART",
+    // REMOVE_PRODUCT_DATA = "REMOVE_PRODUCT_DATA"
+}
+export default ActionType;
