@@ -1,5 +1,3 @@
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import envConfig from "../../../config/envConfig";
 import ProductModel,{IProduct} from '../models/product';
 import { ObjectId } from "mongoose";
@@ -28,11 +26,6 @@ class ProductService {
     limit,
     search,
   }: QueryParams): Promise<IResponse> {
-    const response: IResponse = {
-      success: false,
-      message: "",
-      data: null,
-    };
 
     try {
       let query: any = {};

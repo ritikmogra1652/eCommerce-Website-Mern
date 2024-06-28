@@ -6,6 +6,7 @@ import { authRoutes } from "./features/auth/routes/authRoutes";
 import { productRoutes } from "./features/product/routes/productRoutes";
 import { cartRoutes } from "./features/cart/routes/cartRoutes";
 import bodyParser from "body-parser";
+import { orderRoutes } from "./features/order/routes/orderRoutes";
 const app = express();
 app.use(bodyParser.json({ limit: "50mb" }));
 
@@ -22,6 +23,7 @@ app.use(cors({
 app.use("/users", authRoutes);
 app.use("/", productRoutes);
 app.use("/", cartRoutes);
+app.use("/", orderRoutes);
 
 app.listen(port, () => {
   console.log("server is running on port http://localhost:" + port);

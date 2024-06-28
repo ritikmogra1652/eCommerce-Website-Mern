@@ -4,7 +4,8 @@ const routes = {
     LOGIN: "/login",
     MYORDERS: "/myorders",
     MYPROFILE: "/myprofile",
-    CART:"/cart"
+    CART: "/cart",
+    CHECKOUT:"/checkout"
 };
 
 export const beforeLoginRoutes = [

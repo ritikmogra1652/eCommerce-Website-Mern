@@ -1,4 +1,4 @@
-import { AddToCartPayload, IProduct, RemoveFromCartPayload } from '../../interface/commonInterfaces';
+import { AddToCartPayload, IProduct, RemoveFromCartPayload, UpdateCartQuantityPayload } from '../../interface/commonInterfaces';
 import ActionType from '../../resources/enums/index';
 
 interface CartState {
@@ -21,6 +21,12 @@ interface RemoveFromCartAction {
     payload: RemoveFromCartPayload;
 }
 
+interface UpdateCartQuantityAction {
+    type: ActionType.UPDATE_CART_QUANTITY;
+    payload: UpdateCartQuantityPayload;
+}
+
+
 interface ClearCartAction {
     type:  ActionType.CLEAR_CART;
 }
@@ -28,6 +34,7 @@ interface ClearCartAction {
 type Action =
     | AddToCartAction
     | RemoveFromCartAction
+    | UpdateCartQuantityAction
     | ClearCartAction
 const CartReducer = (state:CartState= initialState, action: Action) => {
     switch (action?.type) {
@@ -48,10 +55,24 @@ const CartReducer = (state:CartState= initialState, action: Action) => {
                 items: [...state.items, action.payload],
             };
         }
+            
+        case ActionType.UPDATE_CART_QUANTITY:
+            return {
+                ...state,
+                items: state.items.map(item =>
+                    item.product._id === action.payload.productId
+                        ? { ...item, quantity: action.payload.quantity }
+                        : item
+                ),
+            };
+        
+        
         case ActionType.REMOVE_FROM_CART:
             return {
                 ...state,
                 items: state.items.filter(item => item.product._id !== action.payload.productId),
+                
+                
             };
         case ActionType.CLEAR_CART:
             return {

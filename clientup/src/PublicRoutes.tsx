@@ -8,6 +8,8 @@ import HomePage from "./components/home/HomePage";
 import Login from "./components/auth/Login";
 import SignUp from "./components/auth/SignUp";
 import Cart from "./components/utilities/Cart";
+import MyProfile from "./components/auth/MyProfile";
+import Checkout from './components/utilities/CheckOut';
 
 
 interface Props {
@@ -61,10 +63,10 @@ const PublicRoutes: React.FC = () => {
                     }
 
                 />
-                {/* { <Route
-                    path={routes.MYORDERS}
+                <Route
+                    path={routes.CHECKOUT}
                     element={
-                        <WithHeader component={MyOrders} route={routes.MYORDERS} />
+                        <WithHeader component={Checkout} route={routes.CHECKOUT} />
                     }
 
                 />
@@ -75,7 +77,7 @@ const PublicRoutes: React.FC = () => {
                         <WithHeader component={MyProfile} route={routes.MYPROFILE} />
                     }
 
-                /> } */}
+                /> 
 
             </Routes>
         </div>

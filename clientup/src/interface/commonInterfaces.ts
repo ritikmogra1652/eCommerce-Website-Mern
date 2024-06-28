@@ -19,6 +19,12 @@ export interface RemoveFromCartPayload {
 }
 
 
+export interface UpdateCartQuantityPayload {
+  productId: string;
+  quantity: number;
+}
+
+
 
 // export interface ISignUp {
 //     username:string,

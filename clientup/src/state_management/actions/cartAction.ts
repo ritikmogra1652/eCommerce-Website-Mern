@@ -1,5 +1,5 @@
 // import { Action, Dispatch } from "redux";
-import { IProduct } from "../../interface/commonInterfaces";
+import { IProduct, RemoveFromCartPayload, UpdateCartQuantityPayload } from "../../interface/commonInterfaces";
 import ActionType from "../../resources/enums";
 
 export const addToCart = (product: IProduct, quantity: number) => ({
@@ -7,9 +7,14 @@ export const addToCart = (product: IProduct, quantity: number) => ({
   payload: { product, quantity },
 });
 
-export const removeFromCart = (productId: string) => ({
+export const removeFromCart = (productId: RemoveFromCartPayload) => ({
   type: ActionType.REMOVE_FROM_CART,
   payload: productId,
+});
+
+export const updateCartQuantity = (payload: UpdateCartQuantityPayload) => ({
+  type: ActionType.UPDATE_CART_QUANTITY,
+  payload,
 });
 
 export const clearCart = () => ({
