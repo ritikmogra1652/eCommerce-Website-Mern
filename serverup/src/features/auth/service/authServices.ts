@@ -35,8 +35,6 @@ class AuthService {
 
     response.message = "User created successfully";
     response.success = true;
-    console.log(response);
-
     return response;
   }
 
@@ -56,7 +54,6 @@ class AuthService {
       userExists.password
     );
 
-    console.log(userExists.password);
     if (!isValidPassword) {
       response.message = "Invalid Password";
       response.success = false;
@@ -82,7 +79,6 @@ class AuthService {
 
   static async getProfile(data: Partial<IUsers>): Promise<IResponse> {
       const userExists = await UserModel.findOne({ email: data.email });
-      // console.log(userExists);
       
     if (!userExists) {
       response.message = "Invalid User email does not exists";

@@ -54,7 +54,7 @@ const AddProduct: React.FC = () => {
         };
 
         const AuthStr = 'Bearer '.concat(jwtToken as string);
-        const response = await axios.post(
+         await axios.post(
           `${backendApiUrl}${endPoints.ADMIN_ADD_PRODUCTS}`,
           productData,
           {
@@ -63,12 +63,10 @@ const AddProduct: React.FC = () => {
             },
           }
         );
-        console.log(response.data);
         alert('Product added successfully');
         reset();
       }
     } catch (error) {
-      console.error('Failed to add product:', error);
       alert('Failed to add product. Please try again.');
     }
   };

@@ -85,7 +85,6 @@ class ProductService {
     const updatedProduct = await ProductModel.findOne({
       _id: data.product_id,
     });
-    console.log(updatedProduct);
 
     response.message = "Product updated successfully";
     response.success = true;

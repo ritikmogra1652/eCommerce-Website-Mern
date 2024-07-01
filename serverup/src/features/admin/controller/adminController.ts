@@ -5,8 +5,6 @@ import { AuthRequest } from '../../auth/controller/authController';
 export const adminLogin = async (req: Request, res: Response) => {
     try {
       const body = req.body;
-      console.log(body);
-      
       const data = await AdminService.adminLogin(body);
   
       if (data.success) {

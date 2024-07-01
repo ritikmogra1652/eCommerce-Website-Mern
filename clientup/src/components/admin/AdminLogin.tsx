@@ -48,8 +48,6 @@ const Login = () => {
                 },
             }
         );
-
-        console.log(response);
         
 
         const userDetails = response?.data?.data?.user;
