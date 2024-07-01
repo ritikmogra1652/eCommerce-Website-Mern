@@ -1,109 +1,86 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../state_management';
-import endPoints, { backendApiUrl } from '../../constants/endPoints';
-import './MyOrder.css';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../state_management'; // Assuming RootState includes CartState
+import './Cart.css'; // Import your CSS file for styling
+import { removeFromCart, updateCartQuantity } from '../../state_management/actions/cartAction';
+import { useNavigate } from 'react-router-dom';
+import routes from '../../constants/routes';
 
-interface OrderItem {
-  productId: {
-    _id: string;
-    product_name: string;
-    image: string;
-  };
-  quantity: number;
-  price: number;
-}
+const MyCart: React.FC = () => {
+    const cartItems = useSelector((state: RootState) => state.CartReducer.items);
+    const isLoggedIn = useSelector((state: RootState) => state.AuthReducer.isLoggedIn)
+    const subtotal = cartItems.reduce((acc, item) => {
+        return acc + (item.product.price * item.quantity);
+    }, 0);
 
-interface Order {
-  _id: string;
-  items: OrderItem[];
-  total: number;
-  address: string;
-  phone: string;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-  username: string;
-}
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-const MyOrder: React.FC = () => {
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const jwtToken = useSelector((state: RootState) => state.AuthReducer.authData?.jwtToken);
+    const handleQuantityChange = (productId: string, newQuantity: number) => {
+        dispatch(updateCartQuantity({ productId, quantity: newQuantity }));
+    };
 
-  const fetchOrders = async () => {
-    try {
-      const AuthStr = 'Bearer '.concat(jwtToken as string);
-      const response = await axios.get(`${backendApiUrl}${endPoints.GET_ORDERS}`, {
-        headers: {
-          'Authorization': AuthStr
+    const handleRemoveFromCart = (productId: string) => {
+        dispatch(removeFromCart({ productId }));
+    };
+
+    const handleProceedToCheckout = () => {
+        if (isLoggedIn) {
+            navigate(routes.CHECKOUT); 
+        } else {
+            navigate(routes.LOGIN); 
         }
-      });
+    };
 
-      if (response.data.success) {
-        setOrders(response.data.data);
-      } else {
-        setError('Failed to fetch orders');
-      }
-    } catch (err) {
-      setError('Failed to fetch orders');
-    } finally {
-      setLoading(false);
-    }
-  };
+    const isEmpty = cartItems.length === 0;
 
-  useEffect(() => {
-    fetchOrders();
-  }, [jwtToken]);
+    return (
+        <div className={`cart-container ${isEmpty ? 'empty' : ''}`}>
+            <h2>My Cart</h2>
+            {isEmpty ? (
+                <p>Your cart is empty.</p>
+            ) : (
+                <div className="cart-items">
+                    {cartItems.map((item, index) => (
+                        <div key={index} className="cart-item">
+                            <img
+                                src={item.product.image}
+                                alt={item.product.product_name}
+                            />
 
-  if (loading) {
-    return <div className="loading-message">Loading...</div>;
-  }
+                            <div className="item-details">
+                                <h3>{item.product.product_name}</h3>
+                                <p>Price: Rs {item.product.price}</p>
+                                <div className="quantity-control">
+                                    <label htmlFor={`quantity-${index}`}>Quantity:</label>
+                                    <select
+                                        id={`quantity-${index}`}
+                                        value={item.quantity}
+                                        onChange={(e) => handleQuantityChange(item.product._id, +e.target.value)}
+                                    >
+                                        {[...Array(10)].map((_, i) => (
+                                            <option key={i} value={i + 1}>{i + 1}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <p>Total Price: Rs {item.product.price * item.quantity}</p>
+                                <button onClick={() => handleRemoveFromCart(item.product._id)}>
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                    <div className="subtotal">
+                        <p>Subtotal: Rs {subtotal}</p>
+                    </div>
 
-  if (error) {
-    return <div className="error-message">{error}</div>;
-  }
-
-  return (
-    <>
-          <div className="orders-container">
-      <h2>My Orders</h2>
-      {orders.length === 0 ? (
-        <p>You have no orders.</p>
-      ) : (
-        orders.map((order) => (
-          <div key={order._id} className="order">
-            <div className="order-details">
-              <p><strong>Order ID:</strong> {order._id}</p>
-              {/* <p><strong>Username:</strong> {order.username}</p> */}
-              <p><strong>Total:</strong> Rs {order.total}</p>
-              <p><strong>Status:</strong> {order.status}</p>
-              <p><strong>Address:</strong> {order.address}</p>
-              <p><strong>Phone:</strong> {order.phone}</p>
-              <p><strong>Ordered On:</strong> {new Date(order.createdAt).toLocaleDateString()}</p>
-            </div>
-            <div>
-            <div className="order-items">
-              {order.items.map((item) => (
-                <div key={item.productId._id} className="order-item">
-                  <img src={item.productId.image} alt={item.productId.product_name} />
-                  <div className="item-details">
-                    <h3>{item.productId.product_name}</h3>
-                    <p>Quantity: {item.quantity}</p>
-                    <p>Price: Rs {item.price}</p>
-                  </div>
+                    <button className="proceed-button" onClick={handleProceedToCheckout}>
+                        Proceed to Checkout
+                    </button>
                 </div>
-              ))}
-            </div>
-          </div>
-            </div>
-        ))
-      )}
-    </div>
-    </>
-  );
+            )}
+        </div>
+    );
 };
 
-export default MyOrder;
+export default MyCart;

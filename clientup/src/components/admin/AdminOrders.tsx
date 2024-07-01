@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import endPoints, { backendApiUrl } from '../../constants/endPoints';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../state_management';
+import endPoints, { backendApiUrl } from '../../constants/endPoints';
+import './AdminOrders.css';
 
-interface OrderItem {
+interface ProductItem {
   product_name: string;
-  quantity: number;
+  product_quantity: number;
 }
 
 interface Order {
-  _id: string;
-  items: OrderItem[];
+  order_id: string;
+  user_name: string;
+  products: ProductItem[];
   status: 'Pending' | 'Shipped' | 'Delivered';
-  createdAt: string;
+  created_at: string;
 }
 
 const AdminOrders: React.FC = () => {
@@ -24,61 +26,67 @@ const AdminOrders: React.FC = () => {
 
   const fetchOrders = async () => {
     try {
-        const AuthStr = 'Bearer '.concat(jwtToken as string);
-      const response = await axios.get(
-        `${backendApiUrl}${endPoints.ADMIN_GET_ORDERS}`,
-        {
-            headers: {
-                "Authorization": AuthStr,
-            },
-        }
-      ); 
-      console.log(response?.data?.data);
-      
-      setOrders(response?.data?.data);
+      setLoading(true);
+      const AuthStr = 'Bearer '.concat(jwtToken as string);
+      const response = await axios.get(`${backendApiUrl}${endPoints.ADMIN_GET_ORDERS}`, {
+        headers: {
+          Authorization: AuthStr,
+        },
+      });
+
+      if (response?.data?.data) {
+        setOrders(response.data.data);
+      } else {
+        setOrders([]);
+      }
       setLoading(false);
     } catch (err) {
       setError('Failed to fetch orders');
       setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-;
-
     fetchOrders();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
+  if (loading) return <p className="admin-orders-loading">Loading...</p>;
+  if (error) return <p className="admin-orders-error">{error}</p>;
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Order ID</th>
-          <th>Items</th>
-          <th>Status</th>
-          <th>Created At</th>
-        </tr>
-      </thead>
-      <tbody>
-        {orders.map((order) => (
-          <tr key={order._id}>
-            <td>{order._id}</td>
-            <td>
-              {order.items.map((item, index) => (
-                <div key={index}>
-                  {item.product_name} (Quantity: {item.quantity})
-                </div>
-              ))}
-            </td>
-            <td>{order.status}</td>
-            <td>{new Date(order.createdAt).toLocaleDateString()}</td>
+    <div className="admin-orders-container">
+      <h2>Admin Orders</h2>
+      <table className="admin-orders-table">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>User Name</th>
+            <th>Items</th>
+            <th>Status</th>
+            <th>Created At</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {orders.map((order) => (
+            <tr key={order.order_id}>
+              <td>{order.order_id}</td>
+              <td>{order.user_name}</td>
+              <td>
+                <ul>
+                  {order.products.map((product, index) => (
+                    <li key={index}>
+                      {product.product_name} (Quantity: {product.product_quantity})
+                    </li>
+                  ))}
+                </ul>
+              </td>
+              <td>{order.status}</td>
+              <td>{new Date(order.created_at).toLocaleDateString()}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

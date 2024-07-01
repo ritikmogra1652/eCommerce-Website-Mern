@@ -22,7 +22,6 @@ interface LogoutAction {
 
     type Action =
         | LoginAction
-        // | UpdateAuthAction
         | LogoutAction
 const AuthReducer = (state: IRootState = initialState, action: Action): IRootState => {
 
@@ -37,7 +36,7 @@ const AuthReducer = (state: IRootState = initialState, action: Action): IRootSta
             return {
                 isLoggedIn: false,
                 authData: {} as IUserData,
-            };
+            }
         default:
             return state;
     }

@@ -62,20 +62,72 @@
 
 
     static async getAllOrders(): Promise<IResponse> {
-      const orders = await OrderModel.find().sort({ createdAt: -1 });
+      const orders = await OrderModel.aggregate([
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userDetails",
+          },
+        },
+        {
+          $unwind: "$userDetails",
+        },
+        {
+          $unwind: "$items",
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "items.productId",
+            foreignField: "_id",
+            as: "productDetails",
+          },
+        },
+        {
+          $unwind: "$productDetails",
+        },
+        {
+          $group: {
+            _id: "$_id",
+            userName: { $first: "$userDetails.username" },
+            status: { $first: "$status" },
+            createdAt: { $first: "$createdAt" },
+            products: {
+              $push: {
+                product_name: "$productDetails.product_name",
+                product_quantity: "$items.quantity",
+              },
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            order_id: "$_id",
+            user_name: "$userName",
+            products: 1,
+            status: 1,
+            created_at: "$createdAt",
+          },
+        },
+      ]);
+
       if (!orders || orders.length === 0) {
         response.message = 'No orders found';
         return response;
       }
 
-      const ordersInfo = orders.map((order: IOrder) => ({
-        _id: order._id,
-        items: order.items.map((item: IOrderItem) => ({
-          product_Id: item.productId,
-          quantity: item.quantity,
+      const ordersInfo = orders.map((order: any) => ({
+        order_id: order.order_id,
+        user_name: order.user_name,
+        products: order.products.map((item: any) => ({
+          product_name: item.product_name,
+          product_quantity: item.product_quantity,
         })),
         status: order.status,
-        createdAt: order.createdAt, // Keep createdAt as Date
+        created_at: order.created_at,
       }));
 
       response.message = 'Fetch orders successful';

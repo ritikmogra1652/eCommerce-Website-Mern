@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import axios from 'axios';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -10,7 +10,7 @@ import { RootState } from '../../state_management';
 interface FormFields {
   product_name: string;
   description: string;
-  category_id: string; // Assuming category_id is a string (can be adjusted based on your actual schema)
+  // category_id?: string; // Assuming category_id is a string (can be adjusted based on your actual schema)
   price: number;
   image: FileList;
   stock: number;
@@ -19,32 +19,54 @@ interface FormFields {
 const schema = yup.object().shape({
   product_name: yup.string().required('Product name is required'),
   description: yup.string().required('Description is required'),
-  category_id: yup.string().required('Category is required'),
+  // category_id: yup.string().required('Category is required'),
   price: yup.number().required('Price is required').positive('Price must be a positive number'),
-  image: yup.mixed<FileList>().required(),
+  image: yup.mixed<FileList>().required('Image is required'),
   stock: yup.number().required('Stock is required').positive('Stock must be a positive number'),
 });
 
 const AddProduct: React.FC = () => {
-    const jwtToken = useSelector((state: RootState) => state.AuthReducer.authData?.jwtToken);
+  const jwtToken = useSelector((state: RootState) => state.AuthReducer.authData?.jwtToken);
+  const [profileImageBase64, setProfileImageBase64] = useState<string | null>(null);
   const { register, handleSubmit, formState: { errors }, reset } = useForm<FormFields>({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit: SubmitHandler<FormFields> = async (data:FormFields) => {
+  const convertToBase64 = (file: File): Promise<string> => {
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = error => reject(error);
+    });
+  };
+
+  const onSubmit: SubmitHandler<FormFields> = async (data: FormFields) => {
     try {
+      const profileImageFile = data.image[0];
+      if (profileImageFile) {
+        const base64String = await convertToBase64(profileImageFile);
+        setProfileImageBase64(base64String);
+
+        const productData = {
+          ...data,
+          image: profileImageBase64
+        };
+
         const AuthStr = 'Bearer '.concat(jwtToken as string);
-      const response = await axios.post(
-        `${backendApiUrl}${endPoints.ADMIN_ADD_PRODUCTS}`,
-         data,
-         {
+        const response = await axios.post(
+          `${backendApiUrl}${endPoints.ADMIN_ADD_PRODUCTS}`,
+          productData,
+          {
             headers: {
-                "Authorization": AuthStr,
+              Authorization: AuthStr,
             },
-        }); 
-      console.log(response.data);
-      alert('Product added successfully');
-      reset(); 
+          }
+        );
+        console.log(response.data);
+        alert('Product added successfully');
+        reset();
+      }
     } catch (error) {
       console.error('Failed to add product:', error);
       alert('Failed to add product. Please try again.');
@@ -81,7 +103,7 @@ const AddProduct: React.FC = () => {
 
         <div>
           <label htmlFor="image">Image</label>
-          <input {...register('image')} type="File" id="image" />
+          <input {...register('image')} type="file" id="image" />
           <p>{errors.image?.message}</p>
         </div>
 

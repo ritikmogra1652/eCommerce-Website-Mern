@@ -1,9 +1,27 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Sidebar.css'; // Adjust the path as necessary
+import { useNavigate } from 'react-router-dom'; 
+import './Sidebar.css';
 import routes from '../../constants/routes';
+import { logOutAction } from '../../state_management/actions/authAction';
+import { useDispatch } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 const Sidebar: React.FC = () => {
+  const navigate = useNavigate(); 
+  const dispatch = useDispatch();
+  const actions = bindActionCreators(
+    {
+      logOutAction,
+    },
+    dispatch
+  );
+  const handleLogout = () => {
+    actions.logOutAction();
+ 
+    navigate(routes.ADMIN_LOGIN);
+  };
+
   return (
     <div className="sidebar">
       <ul>
@@ -17,7 +35,7 @@ const Sidebar: React.FC = () => {
           <Link to={routes.ADMIN_ADD_PRODUCTS}>Add Product</Link>
         </li>
         <li>
-          <Link to="/logout">Logout</Link>
+          <a href="#" onClick={handleLogout}>Logout</a>
         </li>
       </ul>
     </div>

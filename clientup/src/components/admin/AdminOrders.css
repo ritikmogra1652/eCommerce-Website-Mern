@@ -1,0 +1,56 @@
+/* admin-orders.css */
+
+/* Container styles */
+.admin-orders-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Table styles */
+.admin-orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.admin-orders-table th,
+.admin-orders-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.admin-orders-table th {
+  background-color: #f2f2f2;
+}
+
+.admin-orders-table tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+.admin-orders-table ul {
+  padding-left: 0;
+}
+
+.admin-orders-table li {
+  list-style-type: none;
+  margin-bottom: 5px;
+}
+
+/* Loading and Error messages */
+.admin-orders-message {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 18px;
+  color: #666;
+}
+
+.admin-orders-loading,
+.admin-orders-error {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 18px;
+  color: #ff6347; /* Tomato color */
+}

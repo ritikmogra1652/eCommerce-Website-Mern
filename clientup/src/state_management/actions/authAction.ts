@@ -22,4 +22,7 @@ export const logOutAction  = () => (dispatch: Dispatch<Action>) => {
     }));
 };
 
+export const clearAuth = () => ({
+  type: ActionType.CLEAR_AUTH,
+});
 
