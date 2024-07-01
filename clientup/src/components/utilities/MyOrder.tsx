@@ -38,7 +38,6 @@ const MyOrder: React.FC = () => {
           'Authorization': AuthStr
         }
       });
-      console.log(response.data);
       if (response.data.success) {
         setOrders(response.data.data);
       } else {

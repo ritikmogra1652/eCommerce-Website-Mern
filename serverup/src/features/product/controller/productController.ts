@@ -30,9 +30,9 @@ export const getProducts = async (req: Request, res: Response) => {
     try {
     const { page = 1, limit = 10, search = ''} = req.query;
     const data = await ProductService.getProducts({
-      page: parseInt(page as string),
-      limit: parseInt(limit as string),
-      search:search as string
+        page: parseInt(page as string),
+        limit: parseInt(limit as string),
+        search:search as string
     });
     if (data.success) {
         res.status(201).json({

@@ -96,7 +96,8 @@ class OrderService {
                     },
                 },
             ]);
-
+            console.log(orders.length === 0);
+            
             if (orders.length === 0) {
                 response.message = "No orders found for the user";
                 response.success = false;

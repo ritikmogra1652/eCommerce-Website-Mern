@@ -6,11 +6,12 @@ import * as yup from 'yup';
 import endPoints, { backendApiUrl } from '../../constants/endPoints';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../state_management';
+import "./AddProduct.css"
 
 interface FormFields {
   product_name: string;
   description: string;
-  // category_id?: string; // Assuming category_id is a string (can be adjusted based on your actual schema)
+  // category_id?: string; 
   price: number;
   image: FileList;
   stock: number;
@@ -72,9 +73,9 @@ const AddProduct: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="add-product-container">
       <h2>Add Product</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form className="add-product-form" onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label htmlFor="product_name">Product Name</label>
           <input {...register('product_name')} type="text" id="product_name" />

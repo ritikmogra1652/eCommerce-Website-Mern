@@ -3,15 +3,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axios from 'axios';
 import endPoints, { backendApiUrl } from '../../constants/endPoints';
-// import "./Login.css";
+import "./AdminLogin.css";
 import { useDispatch } from 'react-redux';
-// import { useNavigate } from 'react-router-dom';
-// import { getProfile } from '../state_management/Actions/actions';
 import routes from '../../constants/routes';
 import { useNavigate } from 'react-router-dom';
 import { IUserData } from '../../interface/commonInterfaces';
 import { logInAction } from '../../state_management/actions/authAction';
 import { bindActionCreators } from 'redux';
+import { clearCart } from '../../state_management/actions/cartAction';
 const schema = yup.object({
     email: yup.string().email("Email format is not valid").required("Email is Required"),
     password: yup.string().required().min(8, "8 charaters are required"),
@@ -33,6 +32,7 @@ const Login = () => {
     const actions = bindActionCreators(
         {
             logInAction,
+            clearCart
         },
         dispatch
     );
@@ -62,14 +62,15 @@ const Login = () => {
         
         
 
-        actions.logInAction(authData)
+        actions.logInAction(authData);
+        actions.clearCart();
         navigate(routes.ADMIN_DASHBOARD);
     }
     return (
-        <div>
+        <div className="login-container">
             <h1>Login </h1>
 
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
 
                 <label htmlFor="email">Email</label>
                 <input {...register("email")} type="email" id="email" name="email" />

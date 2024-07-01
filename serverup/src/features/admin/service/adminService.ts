@@ -91,9 +91,12 @@
         {
           $group: {
             _id: "$_id",
-            userName: { $first: "$userDetails.username" },
+            userName: {
+              $first: "$userDetails.username",
+            },
             status: { $first: "$status" },
             createdAt: { $first: "$createdAt" },
+            total: { $first: "$total" },
             products: {
               $push: {
                 product_name: "$productDetails.product_name",
@@ -110,6 +113,7 @@
             products: 1,
             status: 1,
             created_at: "$createdAt",
+            total: 1,
           },
         },
       ]);
@@ -119,20 +123,9 @@
         return response;
       }
 
-      const ordersInfo = orders.map((order: any) => ({
-        order_id: order.order_id,
-        user_name: order.user_name,
-        products: order.products.map((item: any) => ({
-          product_name: item.product_name,
-          product_quantity: item.product_quantity,
-        })),
-        status: order.status,
-        created_at: order.created_at,
-      }));
-
       response.message = 'Fetch orders successful';
       response.success = true;
-      response.data = ordersInfo;
+      response.data = orders;
       return response;
   }
     }

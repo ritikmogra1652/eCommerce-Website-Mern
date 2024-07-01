@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../state_management';
 import endPoints, { backendApiUrl } from '../../constants/endPoints';
-import './AdminOrders.css';
+import './AdminOrders.css'; 
 
 interface ProductItem {
   product_name: string;
@@ -16,6 +16,7 @@ interface Order {
   products: ProductItem[];
   status: 'Pending' | 'Shipped' | 'Delivered';
   created_at: string;
+  total: number;
 }
 
 const AdminOrders: React.FC = () => {
@@ -35,6 +36,7 @@ const AdminOrders: React.FC = () => {
       });
 
       if (response?.data?.data) {
+        
         setOrders(response.data.data);
       } else {
         setOrders([]);
@@ -61,6 +63,7 @@ const AdminOrders: React.FC = () => {
           <tr>
             <th>Order ID</th>
             <th>User Name</th>
+            <th>Total Price</th>
             <th>Items</th>
             <th>Status</th>
             <th>Created At</th>
@@ -70,7 +73,9 @@ const AdminOrders: React.FC = () => {
           {orders.map((order) => (
             <tr key={order.order_id}>
               <td>{order.order_id}</td>
+              
               <td>{order.user_name}</td>
+              <td>{order.total}</td>  
               <td>
                 <ul>
                   {order.products.map((product, index) => (
@@ -82,6 +87,7 @@ const AdminOrders: React.FC = () => {
               </td>
               <td>{order.status}</td>
               <td>{new Date(order.created_at).toLocaleDateString()}</td>
+              
             </tr>
           ))}
         </tbody>

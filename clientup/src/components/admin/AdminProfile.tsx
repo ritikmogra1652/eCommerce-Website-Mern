@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import endPoints, { backendApiUrl } from '../../constants/endPoints';
 import { useSelector } from 'react-redux';
-// import './MyProfile.css'; // Import your CSS file for styling
+import './AdminProfile.css'; 
 import { RootState } from '../../state_management/index';
 
 

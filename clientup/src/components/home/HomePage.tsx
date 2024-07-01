@@ -54,7 +54,7 @@ const HomePage: React.FC = () => {
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
             fetchProducts();
-        }, 500); // Debounce time in milliseconds (adjust as needed)
+        }, 500); 
 
         return () => clearTimeout(delayDebounceFn);
     }, [currentPage, productsPerPage, searchTerm]); 
@@ -64,17 +64,17 @@ const HomePage: React.FC = () => {
         const quantity = 1; 
         dispatch(addToCart(product, quantity));
 
-        // Sync cart with backend if logged in
+
         // dispatch(syncCart(cart.items));
     };
     
 
     const handleProductClick = (product: IProduct) => {
-        setSelectedProduct(product); // Set selected product for modal
+        setSelectedProduct(product); 
     };
 
     const closeModal = () => {
-        setSelectedProduct(null); // Reset selected product to close modal
+        setSelectedProduct(null); 
     };
 
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
