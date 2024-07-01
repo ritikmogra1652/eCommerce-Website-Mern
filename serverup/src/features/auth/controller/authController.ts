@@ -4,6 +4,7 @@ import AuthService from "../service/authServices";
 export interface AuthRequest extends Request {
     email?: string;
     userId?: string;
+    
 }
 
 export const register = async(req:Request, res:Response)=>{

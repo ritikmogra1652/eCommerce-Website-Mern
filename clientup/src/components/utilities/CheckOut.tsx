@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import {  useSelector } from 'react-redux';
+import {  useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../state_management'; // Assuming RootState includes CartState
-// import { useNavigate } from 'react-router-dom';
-// import './Checkout.css'; // Import your CSS file for styling
-// import { clearCart } from '../../state_management/actions/cartAction';
 import axios from 'axios';
 import endPoints, { backendApiUrl } from '../../constants/endPoints';
+import { clearCart } from '../../state_management/actions/cartAction';
+import { useNavigate } from 'react-router-dom';
+import routes from '../../constants/routes';
 
 const Checkout: React.FC = () => {
     const cartItems = useSelector((state: RootState) => state.CartReducer.items);
@@ -13,8 +13,8 @@ const Checkout: React.FC = () => {
     const [phone, setPhone] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-    // const navigate = useNavigate();
-    // const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const subtotal = cartItems.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
     const jwtToken = useSelector((state: RootState) => state.AuthReducer.authData?.jwtToken);
@@ -43,9 +43,8 @@ const Checkout: React.FC = () => {
             });
 
             if (response.data.success) {
-                // dispatch(clearCart());
-                // navigate('/order-success');
-                console.log("orderSuccessfully----------------------------------");
+                dispatch(clearCart());
+                navigate(routes.HOMEPAGE);  
                 
             } else {
                 setError('Order could not be placed. Please try again.');

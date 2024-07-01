@@ -82,7 +82,7 @@ class AuthService {
 
   static async getProfile(data: Partial<IUsers>): Promise<IResponse> {
       const userExists = await UserModel.findOne({ email: data.email });
-      console.log(userExists);
+      // console.log(userExists);
       
     if (!userExists) {
       response.message = "Invalid User email does not exists";

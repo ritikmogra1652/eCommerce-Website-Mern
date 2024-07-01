@@ -1,4 +1,6 @@
-import { placeOrder } from '../controller/orderController';
+import mongoose from 'mongoose';
+import UserModel from '../../auth/models/user';
+// import { placeOrder } from '../controller/orderController';
 import { IOrder, OrderModel } from '../models/order';
     interface IResponse {
     message: string;
@@ -12,8 +14,6 @@ const response: IResponse = { message: "", success: false };
         static async placeOrder(data: Partial<IOrder>, id: string): Promise<IResponse> {
         
         try {
-            console.log(id);
-            
         const newOrder = new OrderModel({
             ...data,
             userId: id,  
@@ -27,6 +27,21 @@ const response: IResponse = { message: "", success: false };
         response.message = error.message;
         }
 
+        return response;
+    }
+
+    static async getOrder(userId:string): Promise<IResponse> {
+        
+        const orders = await OrderModel.find({ userId }).exec();
+
+        if (!orders) {
+        response.message = "No Order added";
+        response.success = false;
+        }
+
+        response.message = "Order Display Successfully";
+        response.success = true;
+        response.data = orders;
         return response;
     }
 }

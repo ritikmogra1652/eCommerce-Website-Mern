@@ -5,12 +5,11 @@ const endPoints = {
   MY_PROFILE:"/users/profile",
   GET_PRODUCTS: "/products",
   PLACE_ORDER:"/order",
-
-  // CART: "/auth/cart",
-  // PROFILE: "/auth/profile",
-  // UPDATE_PROFILE: "/auth/update-profile",
-  // SIGN_UP: "/auth/signup",
-  // DELETE_PROFILE: "/auth/delete-profile",
+  GET_ORDERS:"/get-orders",
+  ADMIN_LOGIN:"/admin/login",
+  ADMIN_PROFILE:"/admin/profile",
+  ADMIN_GET_ORDERS:"/admin/getOrders",
+  ADMIN_ADD_PRODUCTS:"admin/add-products"
 };
 
 export default endPoints;

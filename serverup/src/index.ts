@@ -7,6 +7,7 @@ import { productRoutes } from "./features/product/routes/productRoutes";
 import { cartRoutes } from "./features/cart/routes/cartRoutes";
 import bodyParser from "body-parser";
 import { orderRoutes } from "./features/order/routes/orderRoutes";
+import { adminRoutes } from "./features/admin/routes/adminRoutes";
 const app = express();
 app.use(bodyParser.json({ limit: "50mb" }));
 
@@ -24,6 +25,7 @@ app.use("/users", authRoutes);
 app.use("/", productRoutes);
 app.use("/", cartRoutes);
 app.use("/", orderRoutes);
+app.use("/admin", adminRoutes);
 
 app.listen(port, () => {
   console.log("server is running on port http://localhost:" + port);
