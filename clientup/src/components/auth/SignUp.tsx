@@ -65,7 +65,6 @@ const SignUp = () => {
                 }
             );
             navigate(routes.HOMEPAGE);
-            // console.log('Server response:', response.data);
         } catch (error) {
             console.error('Error submitting form:', error);
         }

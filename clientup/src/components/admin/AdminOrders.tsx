@@ -48,7 +48,7 @@ const AdminOrders: React.FC = () => {
 
   useEffect(() => {
     fetchOrders();
-  }, []);
+  }, [jwtToken]);
 
   if (loading) return <p className="admin-orders-loading">Loading...</p>;
   if (error) return <p className="admin-orders-error">{error}</p>;

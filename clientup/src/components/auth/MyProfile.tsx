@@ -44,7 +44,7 @@ const MyProfile: React.FC = () => {
     useEffect(() => {
 
         fetchUserProfile();
-    }, []);
+    }, [jwtToken]);
 
     if (loading) {
         return <div>Loading...</div>;

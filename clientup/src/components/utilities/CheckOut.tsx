@@ -1,16 +1,33 @@
 import React, { useState } from 'react';
-import {  useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import { RootState } from '../../state_management'; // Assuming RootState includes CartState
 import axios from 'axios';
 import endPoints, { backendApiUrl } from '../../constants/endPoints';
 import { clearCart } from '../../state_management/actions/cartAction';
 import { useNavigate } from 'react-router-dom';
 import routes from '../../constants/routes';
+// import './Checkout.css';
 
+const schema = yup.object().shape({
+    address: yup.string().required('Address is required'),
+    phone: yup.string()
+        .required('Phone number is required')
+        .matches(/^[0-9]+$/, 'Phone number must only contain digits')
+        .min(10, 'Phone number must be at least 10 digits')
+        .max(10, 'Phone number must be at most 10 digits'),
+});
+
+interface FormFields {
+    
+    address: string,
+    phone: string,
+
+}
 const Checkout: React.FC = () => {
     const cartItems = useSelector((state: RootState) => state.CartReducer.items);
-    const [address, setAddress] = useState<string>('');
-    const [phone, setPhone] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
@@ -19,13 +36,17 @@ const Checkout: React.FC = () => {
     const subtotal = cartItems.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
     const jwtToken = useSelector((state: RootState) => state.AuthReducer.authData?.jwtToken);
 
-    const handleOrder = async () => {
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        resolver: yupResolver(schema)
+    });
+
+    const handleOrder = async (data: FormFields) => {
         setLoading(true);
         setError(null);
 
         const orderData = {
-            address,
-            phone,
+            address: data.address,
+            phone: data.phone,
             items: cartItems.map(item => ({
                 productId: item.product._id,
                 quantity: item.quantity,
@@ -44,8 +65,8 @@ const Checkout: React.FC = () => {
 
             if (response.data.success) {
                 dispatch(clearCart());
-                navigate(routes.HOMEPAGE);  
-                
+                navigate(routes.HOMEPAGE);
+
             } else {
                 setError('Order could not be placed. Please try again.');
             }
@@ -74,26 +95,24 @@ const Checkout: React.FC = () => {
             <div className="checkout-summary">
                 <p>Subtotal: Rs {subtotal}</p>
             </div>
-            <form className="checkout-form" onSubmit={(e) => { e.preventDefault(); handleOrder(); }}>
+            <form className="checkout-form" onSubmit={handleSubmit(handleOrder)}>
                 <div className="form-group">
                     <label htmlFor="address">Address:</label>
                     <input
                         type="text"
                         id="address"
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
-                        required
+                        {...register('address')}
                     />
+                    {errors.address && <p className="error-message">{errors.address.message}</p>}
                 </div>
                 <div className="form-group">
                     <label htmlFor="phone">Phone Number:</label>
                     <input
                         type="text"
                         id="phone"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        required
+                        {...register('phone')}
                     />
+                    {errors.phone && <p className="error-message">{errors.phone.message}</p>}
                 </div>
                 <button type="submit" className="order-button" disabled={loading}>
                     {loading ? 'Placing Order...' : 'Place Order'}
