@@ -31,6 +31,7 @@ interface FormFields {
 }
 
 const SignUp = () => {
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const { register, handleSubmit, formState: { errors } } = useForm<FormFields>({
         resolver: yupResolver(schema)
     });
@@ -62,7 +63,15 @@ const SignUp = () => {
             );
             navigate(routes.HOMEPAGE);
         } catch (error) {
-            console.error('Error submitting form:', error);
+            if (axios.isAxiosError(error)) {
+                if (error.response?.status === 409) {
+                    setErrorMessage("Invalid email or password. Please try again.");
+                } else {
+                    setErrorMessage("An error occurred. Please try again later.");
+                }
+            } else {
+                setErrorMessage("An error occurred. Please try again later.");
+            }
         }
     }
 
@@ -98,6 +107,8 @@ const SignUp = () => {
                 <label htmlFor="profileImage">Profile Image</label>
                 <input {...register("profileImage")} type="file" id="profileImage" name="profileImage" accept='image/*' />
                 {errors.profileImage && (<p className="error-message">{errors.profileImage.message}</p>)}
+
+                {errorMessage && <p className="error-message">{errorMessage}</p>} 
 
                 <button type="submit">Submit</button>
             </form>
