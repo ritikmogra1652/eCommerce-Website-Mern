@@ -1,5 +1,5 @@
 import React from "react";
-import routes, { beforeLoginRoutes } from "./constants/routes";
+import routes, { adminRoutes, beforeLoginRoutes } from "./constants/routes";
 import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from './state_management/index';
@@ -13,21 +13,29 @@ const PrivateRoutes: React.FC<Props> = ({
     component: RouteComponent,
     route
 }) => {
-    let returnData;
-    const userData = useSelector((state: RootState) => state.AuthReducer);
-    if (beforeLoginRoutes.includes(route)) {
-        returnData = <RouteComponent />;
 
+    const userData = useSelector((state: RootState) => state.AuthReducer);
+    const authToken = userData?.authData?.jwtToken;
+    if ([routes.HOMEPAGE, routes.CART].includes(route)) {
+        return <RouteComponent />;
     }
-    else {
-        if (userData && userData?.isLoggedIn) {
-            returnData = <RouteComponent />;
+
+    if (authToken) {
+        if (beforeLoginRoutes.includes(route) && route == routes.LOGIN) {
+            return <Navigate to={routes.HOMEPAGE} />;
+            
+        } else if(adminRoutes.includes(route) && userData?.authData?.role !== 'admin') {
+            return <Navigate to={routes.ADMIN_LOGIN} />;
+        }else {
+            return <RouteComponent />;
         }
-        else {
-            returnData = <Navigate to={routes.LOGIN} />;
+    } else {
+        if (beforeLoginRoutes.includes(route)) {
+            return <RouteComponent />;
+        } else {
+            return <Navigate to={routes.LOGIN} />;
         }
     }
-    return returnData;
 }
 
 export default PrivateRoutes;

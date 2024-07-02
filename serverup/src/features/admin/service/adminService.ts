@@ -101,6 +101,7 @@
               $push: {
                 product_name: "$productDetails.product_name",
                 product_quantity: "$items.quantity",
+                product_price: "$items.price",
               },
             },
           },
@@ -114,6 +115,11 @@
             status: 1,
             created_at: "$createdAt",
             total: 1,
+          },
+        },
+        {
+          $sort: {
+            created_at: -1, // Sort by createdAt in descending order (-1 for descending, 1 for ascending)
           },
         },
       ]);

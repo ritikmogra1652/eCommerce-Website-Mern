@@ -21,4 +21,10 @@ export const beforeLoginRoutes = [
     routes.ADMIN_LOGIN
 ];
 
+export const adminRoutes = [
+  routes.ADMIN_DASHBOARD,
+  routes.ADMIN_PROFILE,
+  routes.ADMIN_GET_ORDERS,
+  routes.ADMIN_ADD_PRODUCTS,
+];
 export default routes;

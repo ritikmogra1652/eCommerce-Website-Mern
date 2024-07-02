@@ -17,7 +17,7 @@ import AdminDashboard from "./components/admin/AdminDashboard";
 import AdminProfile from "./components/admin/AdminProfile";
 import AdminOrders from "./components/admin/AdminOrders";
 import AddProduct from "./components/admin/AddProduct";
-
+import './PublicRoutes.css';
 
 interface Props {
     component: React.ComponentType;
@@ -28,9 +28,9 @@ interface Props {
 export const WithHeader = (props: Props) => {
     return (
         <>
-            <div>
-                <Navbar />
-                <div>
+            <div className="header-content">
+                <Navbar  />
+                <div className="main-content">
                     <PrivateRoutes {...props} />
                 </div>
             </div>
@@ -41,16 +41,15 @@ export const WithHeader = (props: Props) => {
 export const AdminHeader = (props: Props) => {
     return (
         <>
-            <div>
-                <Sidebar/>
-                <div>
+            <div className="header-content">
+                <Sidebar />
+                <div className="main-content">
                     <PrivateRoutes {...props} />
                 </div>
             </div>
         </>
     );
 };
-
 const PublicRoutes: React.FC = () => {
     return (
         <div>

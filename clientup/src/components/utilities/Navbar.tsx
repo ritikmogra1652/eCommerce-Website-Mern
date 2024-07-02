@@ -23,8 +23,6 @@ const Navbar: React.FC = () => {
     );
 
     const handleLogout = () => {
-        // dispatch(clearProfile());
-        // dispatch(clearAuth());
         actions.logOutAction();
         navigate(routes.HOMEPAGE);
     }

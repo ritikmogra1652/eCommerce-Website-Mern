@@ -36,6 +36,7 @@ export interface UpdateCartQuantityPayload {
 
 export interface IUserData{
     username:string
-    email:string,
+    email: string,
+    role:string,
     jwtToken:string,
 }

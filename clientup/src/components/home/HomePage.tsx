@@ -12,7 +12,7 @@ const HomePage: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [productsPerPage] = useState<number>(6);
+    const [productsPerPage] = useState<number>(8);
     const [totalProducts, setTotalProducts] = useState<number>(0);
     const [searchTerm, setSearchTerm] = useState<string>('');
     

@@ -9,7 +9,7 @@ import endPoints, { backendApiUrl } from '../../constants/endPoints';
 import { clearCart } from '../../state_management/actions/cartAction';
 import { useNavigate } from 'react-router-dom';
 import routes from '../../constants/routes';
-// import './Checkout.css';
+import './CheckOut.css';
 
 const schema = yup.object().shape({
     address: yup.string().required('Address is required'),

@@ -4,7 +4,7 @@ import endPoints, { backendApiUrl } from '../../constants/endPoints';
 import { useSelector } from 'react-redux';
 // import './MyProfile.css'; // Import your CSS file for styling
 import { RootState } from '../../state_management/index';
-// import AuthReducer from '../../state_management/reducers/authReducer';
+
 
 
 interface UserProfile {

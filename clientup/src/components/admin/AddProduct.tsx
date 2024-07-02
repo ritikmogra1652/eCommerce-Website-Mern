@@ -73,19 +73,19 @@ const AddProduct: React.FC = () => {
   };
 
   return (
-    <div className="add-product-container">
+    <div className="container">
       <h2>Add Product</h2>
-      <form className="add-product-form" onSubmit={handleSubmit(onSubmit)}>
+      <form className="form" onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label htmlFor="product_name">Product Name</label>
           <input {...register('product_name')} type="text" id="product_name" />
-          <p>{errors.product_name?.message}</p>
+          <p className="error-message">{errors.product_name?.message}</p>
         </div>
 
         <div>
           <label htmlFor="description">Description</label>
           <textarea {...register('description')} id="description" />
-          <p>{errors.description?.message}</p>
+          <p className="error-message">{errors.description?.message}</p>
         </div>
 
         {/* <div>
@@ -97,19 +97,19 @@ const AddProduct: React.FC = () => {
         <div>
           <label htmlFor="price">Price</label>
           <input {...register('price')} type="number" id="price" />
-          <p>{errors.price?.message}</p>
+          <p className="error-message">{errors.price?.message}</p>
         </div>
 
         <div>
           <label htmlFor="image">Image</label>
           <input {...register('image')} type="file" id="image" />
-          <p>{errors.image?.message}</p>
+          <p className="error-message">{errors.image?.message}</p>
         </div>
 
         <div>
           <label htmlFor="stock">Stock</label>
           <input {...register('stock')} type="number" id="stock" />
-          <p>{errors.stock?.message}</p>
+          <p className="error-message">{errors.stock?.message}</p>
         </div>
 
         <button type="submit">Add Product</button>

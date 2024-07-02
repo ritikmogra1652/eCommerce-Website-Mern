@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../state_management'; // Assuming RootState includes CartState
-import './Cart.css'; // Import your CSS file for styling
+import { RootState } from '../../state_management'; 
+import './Cart.css'; 
 import { removeFromCart, updateCartQuantity } from '../../state_management/actions/cartAction';
 import { useNavigate } from 'react-router-dom';
 import routes from '../../constants/routes';
@@ -73,11 +73,12 @@ const MyCart: React.FC = () => {
                     ))}
                     <div className="subtotal">
                         <p>Subtotal: Rs {subtotal}</p>
-                    </div>
-
-                    <button className="proceed-button" onClick={handleProceedToCheckout}>
-                        Proceed to Checkout
-                    </button>
+                        </div>
+                        <div>
+                            <button className="proceed-button" onClick={handleProceedToCheckout}>
+                                Proceed to Checkout
+                            </button>
+                        </div>
 
 
                 </div>

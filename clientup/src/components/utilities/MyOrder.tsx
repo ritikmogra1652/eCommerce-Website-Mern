@@ -10,6 +10,7 @@ interface OrderItem {
   product_name: string;
   image: string;
   price: number;
+  quantity: number;
 }
 
 interface Order {
@@ -52,7 +53,7 @@ const MyOrder: React.FC = () => {
 
   useEffect(() => {
     fetchOrders();
-  }, [jwtToken]);
+  }, [jwtToken]); 
 
   if (loading) {
     return <div className="loading-message">Loading...</div>;
@@ -62,11 +63,19 @@ const MyOrder: React.FC = () => {
     return <div className="error-message">{error}</div>;
   }
 
+  if (!orders || orders.length === 0) {
+    return (<>
+            <h2>My Orders</h2>
+      <p>You have no orders.</p>
+    </>
+    );
+  }
+
   return (
     <div className="orders-container">
       <h2>My Orders</h2>
-      {orders.length === 0 ? (
-        <p>You have no orders.</p>
+      {orders && orders.length === 0 ? (
+        <p>You have no orders.</p> 
       ) : (
         orders.map((order) => (
           <div key={order._id} className="order">
@@ -76,18 +85,20 @@ const MyOrder: React.FC = () => {
               <p><strong>Status:</strong> {order.status}</p>
               <p><strong>Address:</strong> {order.address}</p>
               <p><strong>Phone:</strong> {order.phone}</p>
-              <div className="order-items">
-                {order.items.map((item) => (
-                  <div key={item._id} className="order-item">
-                    <img src={item.image} alt={item.product_name} />
-                    <div className="item-details">
-                      <h3>{item.product_name}</h3>
-                      <p>Price: Rs {item.price}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
               <p><strong>Ordered On:</strong> {new Date(order.createdAt).toLocaleDateString()}</p>
+            </div>
+            <p><strong>Items: </strong></p>
+            <div className="order-items">
+              {order.items.map((item) => (
+                <div key={item._id} className="order-item">
+                  <img src={item.image} alt={item.product_name} />
+                  <div className="item-details">
+                    <h3>{item.product_name}</h3>
+                    <p>Price: Rs {item.price}</p>
+                    <p>Quantity: {item.quantity}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         ))

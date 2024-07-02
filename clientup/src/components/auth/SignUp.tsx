@@ -6,9 +6,7 @@ import { useState } from 'react';
 import axios from "axios";
 import routes from '../../constants/routes';
 import endPoints, { backendApiUrl } from '../../constants/endPoints';
-// import "./Login.css";
-// import { useDispatch } from 'react-redux';
-// import { useNavigate } from 'react-router-dom';
+import './SignUp.css';
 
 const schema = yup.object({
     username: yup.string().required("User name is required"),
@@ -39,22 +37,20 @@ const SignUp = () => {
 
     const [profileImageBase64, setProfileImageBase64] = useState<string | null>(null);
 
-    // const dispatch = useDispatch();
     const navigate = useNavigate();
-    const onSubmit: SubmitHandler<FormFields> = async (data:FormFields) => {
+    const onSubmit: SubmitHandler<FormFields> = async (data: FormFields) => {
         try {
             const profileImageFile = data.profileImage[0];
             if (profileImageFile) {
                 const base64String: string = await convertToBase64(profileImageFile);
                 setProfileImageBase64(base64String);
-                
             }
 
             const formData = {
                 ...data,
                 profileImage: profileImageBase64,
             };
-            
+
             await axios.post(
                 `${backendApiUrl}${endPoints.SIGN_UP}`,
                 formData,
@@ -80,34 +76,33 @@ const SignUp = () => {
     };
 
     return (
-        <div>
+        <div className="container">
             <h1>Sign Up</h1>
-
             <form onSubmit={handleSubmit(onSubmit)}>
-                <label htmlFor="username">username</label>
+                <label htmlFor="username">Username</label>
                 <input {...register("username")} type="text" id="username" name="username" />
-                <p>{errors.username && (<div>{errors.username.message}</div>)}</p>
+                {errors.username && (<p className="error-message">{errors.username.message}</p>)}
 
                 <label htmlFor="phone">Phone Number</label>
-                <input type="text" {...register('phone')} />
-                <p>{errors.phone && <span>{errors.phone.message}</span>}</p>
+                <input type="text" {...register('phone')} id="phone" />
+                {errors.phone && <p className="error-message">{errors.phone.message}</p>}
 
                 <label htmlFor="email">Email</label>
                 <input {...register("email")} type="email" id="email" name="email" />
-                <p>{errors.email && (<div>{errors.email.message}</div>)}</p>
+                {errors.email && (<p className="error-message">{errors.email.message}</p>)}
 
                 <label htmlFor="password">Password</label>
                 <input {...register("password")} type="password" id="password" name="password" />
-                <p>{errors.password && (<div>{errors.password.message}</div>)}</p>
+                {errors.password && (<p className="error-message">{errors.password.message}</p>)}
 
                 <label htmlFor="profileImage">Profile Image</label>
                 <input {...register("profileImage")} type="file" id="profileImage" name="profileImage" accept='image/*' />
-                <p>{errors.profileImage && (<div>{errors.profileImage.message}</div>)}</p>
+                {errors.profileImage && (<p className="error-message">{errors.profileImage.message}</p>)}
 
-                <button>Submit</button>
+                <button type="submit">Submit</button>
             </form>
 
-            <p>Already have an account? <Link to="/login">Login</Link></p>
+            <p>Already have an account? <Link to={routes.LOGIN}>Login</Link></p>
         </div>
     );
 }

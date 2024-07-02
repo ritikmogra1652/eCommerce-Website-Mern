@@ -8,6 +8,7 @@ import './AdminOrders.css';
 interface ProductItem {
   product_name: string;
   product_quantity: number;
+  product_price: number;
 }
 
 interface Order {
@@ -80,7 +81,7 @@ const AdminOrders: React.FC = () => {
                 <ul>
                   {order.products.map((product, index) => (
                     <li key={index}>
-                      {product.product_name} (Quantity: {product.product_quantity})
+                      {product.product_name} (Quantity: {product.product_quantity}, Price : {product.product_price})
                     </li>
                   ))}
                 </ul>

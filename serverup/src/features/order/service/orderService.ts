@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-import UserModel from "../../auth/models/user";
-// import { placeOrder } from '../controller/orderController';
+
 import { IOrder, OrderModel } from "../models/order";
 interface IResponse {
   message: string;
@@ -36,71 +35,76 @@ class OrderService {
         const response: IResponse = { message: "", success: false };
 
         try {
-            const orders = await OrderModel.aggregate([
-                { $match: { userId: new mongoose.Types.ObjectId(userId) } }, // Match orders for the given userId
-                {
-                    $lookup: {
-                        from: "products",
-                        localField: "items.productId",
-                        foreignField: "_id",
-                        as: "items",
-                    },
+          const orders = await OrderModel.aggregate([
+            { $match: { userId: new mongoose.Types.ObjectId(userId) } },
+              {
+                $lookup: {
+                  from: "products",
+                  localField: "items.productId",
+                  foreignField: "_id",
+                  as: "ProductDetails",
                 },
-                {
-                    $unwind: "$items",
+              },
+              {
+                $unwind: "$ProductDetails",
+              },
+              {
+                $lookup: {
+                  from: "users",
+                  localField: "userId",
+                  foreignField: "_id",
+                  as: "UserDetails",
                 },
-                {
-                    $lookup: {
-                        from: "users",
-                        localField: "userId",
-                        foreignField: "_id",
-                        as: "user",
-                    },
+              },
+              {
+                $unwind: "$UserDetails",
+              },
+              {
+                $project: {
+                  _id: 1,
+                  items: {
+                    _id: "$ProductDetails._id",
+                    product_name: "$ProductDetails.product_name",
+                    image: "$ProductDetails.image",
+                    quantity: 1,
+                    price: 1,
+                  },
+                  total: 1,
+                  address: 1,
+                  phone: 1,
+                  status: 1,
+                  createdAt: {
+                    $dateToString: { format: "%Y-%m-%d", date: "$createdAt" },
+                  },
+                  updatedAt: {
+                    $dateToString: { format: "%Y-%m-%d", date: "$updatedAt" },
+                  },
+                  username: "$UserDetails.username",
                 },
-                {
-                    $unwind: "$user",
+              },
+              {
+                $group: {
+                  _id: "$_id",
+                  items: { $first: "$items" },
+                  total: { $first: "$total" },
+                  address: { $first: "$address" },
+                  phone: { $first: "$phone" },
+                  status: { $first: "$status" },
+                  createdAt: { $first: "$createdAt" },
+                  updatedAt: { $first: "$updatedAt" },
+                  username: { $first: "$username" },
                 },
-                {
-                    $project: {
-                        _id: 1,
-                        items: {
-                            _id: "$items._id",
-                            product_name: "$items.product_name",
-                            image: "$items.image",
-                            price: 1,
-                        },
-                        total: 1,
-                        address: 1,
-                        phone: 1,
-                        status: 1,
-                        createdAt: {
-                            $dateToString: { format: "%Y-%m-%d", date: "$createdAt" },
-                        },
-                        updatedAt: {
-                            $dateToString: { format: "%Y-%m-%d", date: "$updatedAt" },
-                        },
-                        username: "$user.username",
-                    },
+              },
+              {
+                $sort: {
+                  created_at: -1, 
                 },
-                {
-                    $group: {
-                        _id: "$_id",
-                        items: { $push: "$items" },
-                        total: { $first: "$total" },
-                        address: { $first: "$address" },
-                        phone: { $first: "$phone" },
-                        status: { $first: "$status" },
-                        createdAt: { $first: "$createdAt" },
-                        updatedAt: { $first: "$updatedAt" },
-                        username: { $first: "$username" },
-                    },
-                },
+              },
             ]);
-            console.log(orders.length === 0);
             
             if (orders.length === 0) {
                 response.message = "No orders found for the user";
-                response.success = false;
+                response.success = true;
             } else {
                 response.message = "Orders fetched successfully";
                 response.success = true;

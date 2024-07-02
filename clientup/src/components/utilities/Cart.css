@@ -2,6 +2,8 @@
     max-width: 800px; /* Adjust as needed */
     margin: auto; /* Centering the container by default */
     padding: 20px;
+    
+    
 }
 
 .cart-items {
@@ -31,10 +33,24 @@
 
 .subtotal {
     margin-top: 20px;
+    text-align: center; 
+    font-size: 18px; 
 }
 
 .proceed-button {
     margin-top: 20px;
+    marign-left:20px;
+    padding: 12px 24px; /* Adjust padding */
+    background-color: #007bff; /* Button background color */
+    color: #fff; /* Button text color */
+    border: none;
+    border-radius: 4px;
+    font-size: 16px; /* Adjust font size */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.proceed-button:hover {
+    background-color: #0056b3; /* Button hover background color */
 }
 
 /* Adjustments when cart is empty */
