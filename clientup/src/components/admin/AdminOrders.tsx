@@ -54,7 +54,15 @@ const AdminOrders: React.FC = () => {
   }, [jwtToken]);
 
   if (loading) return <p className="admin-orders-loading">Loading...</p>;
-  if (error) return <p className="admin-orders-error">{error}</p>;
+  // if (error) return <p className="admin-orders-error">{error}</p>;
+
+  if (!orders || orders.length === 0) {
+    return (<>
+      <h2>Admin Orders</h2>
+      <p>You have no orders.</p>
+    </>
+    );
+  }
 
   return (
     <div className="admin-orders-container">

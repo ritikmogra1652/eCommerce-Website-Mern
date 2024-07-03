@@ -1,13 +1,12 @@
-.home-page {
+.homepage__home-page {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
-    /* padding: 20px; */
     min-height: 100vh; 
 }
 
-.product-item {
+.homepage__product-item {
     flex: 1 1 calc(25% - 20px);
     box-sizing: border-box;
     text-align: center;
@@ -18,15 +17,15 @@
     transition: transform 0.3s;
     margin-bottom: 20px;
     max-width: calc(25% - 20px);
-    max-height:450px;
-    min-width:300px
+    max-height: 450px;
+    min-width: 300px;
 }
 
-.product-item:hover {
+.homepage__product-item:hover {
     transform: translateY(-5px);
 }
 
-.product-image {
+.homepage__product-image {
     width: 100%;
     height: auto;
     cursor: pointer;
@@ -34,20 +33,19 @@
     margin-bottom: 15px;
 }
 
-.product-item h2 {
+.homepage__product-item h2 {
     font-size: 18px;
     color: #333;
     margin-bottom: 10px;
 }
 
-.product-item p {
+.homepage__product-item p {
     font-size: 16px;
     color: #555;
     margin-bottom: 15px;
-
 }
 
-.product-item button {
+.homepage__product-item button {
     background-color: #007bff;
     color: white;
     border: none;
@@ -57,18 +55,18 @@
     transition: background-color 0.3s;
 }
 
-.product-item button:hover {
+.homepage__product-item button:hover {
     background-color: #0056b3;
 }
 
-.pagination {
+.homepage__pagination {
     display: flex;
     justify-content: center;
     gap: 5px;
     margin: 20px 0;
 }
 
-.pagination button {
+.homepage__pagination button {
     border: none;
     padding: 10px 0px;
     cursor: pointer;
@@ -77,16 +75,16 @@
     transition: background-color 0.3s;
 }
 
-.pagination button.active {
+.homepage__pagination button.homepage__active {
     background-color: #00bbbb;
     color: white;
 }
 
-.pagination button:hover {
+.homepage__pagination button:hover {
     background-color: #0056b3;
 }
 
-.modal {
+.homepage__modal {
     position: fixed;
     top: 0;
     left: 0;
@@ -99,7 +97,7 @@
     z-index: 1000;
 }
 
-.modal-content {
+.homepage__modal-content {
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;
@@ -109,26 +107,26 @@
     position: relative;
 }
 
-.modal-content img {
+.homepage__modal-content img {
     width: 100%;
     height: auto;
     border-radius: 10px;
     margin-bottom: 15px;
 }
 
-.modal-content h2 {
+.homepage__modal-content h2 {
     font-size: 22px;
     color: #333;
     margin-bottom: 15px;
 }
 
-.modal-content p {
+.homepage__modal-content p {
     font-size: 16px;
     color: #555;
     margin-bottom: 15px;
 }
 
-.modal-content button {
+.homepage__modal-content button {
     background-color: #007bff;
     color: white;
     border: none;
@@ -138,11 +136,11 @@
     transition: background-color 0.3s;
 }
 
-.modal-content button:hover {
+.homepage__modal-content button:hover {
     background-color: #0056b3;
 }
 
-.modal .close {
+.homepage__modal .homepage__close {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -151,18 +149,17 @@
     color: #333;
 }
 
-.modal .close:hover {
+.homepage__modal .homepage__close:hover {
     color: #ff0000;
 }
 
-
-.search-bar {
+.homepage__search-bar {
     display: flex;
     justify-content: center;
     margin: 20px;
 }
 
-.search-bar input {
+.homepage__search-bar input {
     width: 300px;
     padding: 10px;
     font-size: 16px;
@@ -172,6 +169,6 @@
     transition: border-color 0.3s ease;
 }
 
-.search-bar input:focus {
+.homepage__search-bar input:focus {
     border-color: #4CAF50;
 }

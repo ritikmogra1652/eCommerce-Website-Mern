@@ -3,19 +3,18 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axios from 'axios';
 import endPoints, { backendApiUrl } from '../../constants/endPoints';
-// import "./Login.css";
 import { useDispatch } from 'react-redux';
-// import { useNavigate } from 'react-router-dom';
-// import { getProfile } from '../state_management/Actions/actions';
-import routes from '../../constants/routes';
 import { useNavigate } from 'react-router-dom';
 import { IUserData } from '../../interface/commonInterfaces';
 import { logInAction } from '../../state_management/actions/authAction';
 import { bindActionCreators } from 'redux';
 import { useState } from 'react';
+import routes from '../../constants/routes';
+import { toastMessageSuccess } from '../utilities/CommonToastMessage';
+
 const schema = yup.object({
     email: yup.string().email("Email format is not valid").required("Email is Required"),
-    password: yup.string().required().min(8, "8 charaters are required"),
+    password: yup.string().required().min(8, "Password must be at least 8 characters"),
 })
 
 type FormFields = {
@@ -32,6 +31,7 @@ const Login = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
     const actions = bindActionCreators(
         {
             logInAction,
@@ -39,8 +39,7 @@ const Login = () => {
         dispatch
     );
 
-    const onSubmit: SubmitHandler<FormFields> = async (data:FormFields) => {
-
+    const onSubmit: SubmitHandler<FormFields> = async (data: FormFields) => {
         try {
             const response = await axios.post(
                 `${backendApiUrl}${endPoints.LOGIN}`,
@@ -59,7 +58,8 @@ const Login = () => {
                 role: userDetails.role,
                 jwtToken: token,
             };
-            actions.logInAction(authData)
+            actions.logInAction(authData);
+            toastMessageSuccess("User logged in successfully");
             navigate(routes.HOMEPAGE);
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -73,23 +73,24 @@ const Login = () => {
             }
         }
     }
+
     return (
-        <div className="container">
-            <h1>Login </h1>
+        <div className="login__container">
+            <h1 className="login__title">Login</h1>
 
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form className="login__form" onSubmit={handleSubmit(onSubmit)}>
 
-                <label htmlFor="email">Email</label>
-                <input {...register("email")} type="email" id="email" name="email" />
+                <label className="login__label" htmlFor="email">Email</label>
+                <input className="login__input" {...register("email")} type="email" id="email" name="email" />
 
-                <p className="error-message">{errors.email && (<div>{errors.email.message}</div>)}</p>
+                <p className="login__error-message">{errors.email && (<div>{errors.email.message}</div>)}</p>
 
-                <label htmlFor="password">Password</label>
-                <input {...register("password")} type="password" id="password" name="password" />
+                <label className="login__label" htmlFor="password">Password</label>
+                <input className="login__input" {...register("password")} type="password" id="password" name="password" />
 
-                <p className="error-message">{errors.password && (<div>{errors.password.message}</div>)}</p>
-                {errorMessage && <p className="error-message">{errorMessage}</p>} 
-                <button>Submit</button>
+                <p className="login__error-message">{errors.password && (<div>{errors.password.message}</div>)}</p>
+                {errorMessage && <p className="login__error-message">{errorMessage}</p>}
+                <button className="login__button">Submit</button>
             </form>
         </div>
     )

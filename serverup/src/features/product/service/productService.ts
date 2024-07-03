@@ -1,3 +1,4 @@
+import { log } from "console";
 import envConfig from "../../../config/envConfig";
 import ProductModel,{IProduct} from '../models/product';
 import { ObjectId } from "mongoose";
@@ -40,10 +41,17 @@ class ProductService {
 
       const skip = (page - 1) * limit;
       const totalProducts = await ProductModel.countDocuments(query);
+      
       const products = await ProductModel.find(query).skip(skip).limit(limit);
+      console.log( products);
+      
+      
+      
 
       if (!products || products.length === 0) {
         response.message = "No Products Found";
+        response.success = true;
+        response.data = [];
       } else {
         response.success = true;
         response.message = "Products Displayed Successfully";

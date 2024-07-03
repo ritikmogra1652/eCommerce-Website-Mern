@@ -36,15 +36,24 @@ const SignUp = () => {
         resolver: yupResolver(schema)
     });
 
-    const [profileImageBase64, setProfileImageBase64] = useState<string | null>(null);
-
     const navigate = useNavigate();
+
+    const convertToBase64 = (file: File) => {
+        return new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = error => reject(error);
+        });
+    };
+
     const onSubmit: SubmitHandler<FormFields> = async (data: FormFields) => {
         try {
             const profileImageFile = data.profileImage[0];
+            let profileImageBase64 = null;
+
             if (profileImageFile) {
-                const base64String: string = await convertToBase64(profileImageFile);
-                setProfileImageBase64(base64String);
+                profileImageBase64 = await convertToBase64(profileImageFile);
             }
 
             const formData = {
@@ -61,11 +70,12 @@ const SignUp = () => {
                     },
                 }
             );
-            navigate(routes.HOMEPAGE);
+            
+            navigate(routes.LOGIN);
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 if (error.response?.status === 409) {
-                    setErrorMessage("Invalid email or password. Please try again.");
+                    setErrorMessage("User Already Registered");
                 } else {
                     setErrorMessage("An error occurred. Please try again later.");
                 }
@@ -75,45 +85,36 @@ const SignUp = () => {
         }
     }
 
-    const convertToBase64 = (file: File) => {
-        return new Promise<string>((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result as string);
-            reader.onerror = error => reject(error);
-        });
-    };
-
     return (
-        <div className="container">
-            <h1>Sign Up</h1>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <label htmlFor="username">Username</label>
-                <input {...register("username")} type="text" id="username" name="username" />
-                {errors.username && (<p className="error-message">{errors.username.message}</p>)}
+        <div className="signup__container">
+            <h1 className="signup__title">Sign Up</h1>
+            <form className="signup__form" onSubmit={handleSubmit(onSubmit)}>
+                <label className="signup__label" htmlFor="username">Username</label>
+                <input className="signup__input" {...register("username")} type="text" id="username" name="username" />
+                {errors.username && (<p className="signup__error-message">{errors.username.message}</p>)}
 
-                <label htmlFor="phone">Phone Number</label>
-                <input type="text" {...register('phone')} id="phone" />
-                {errors.phone && <p className="error-message">{errors.phone.message}</p>}
+                <label className="signup__label" htmlFor="phone">Phone Number</label>
+                <input className="signup__input" type="text" {...register('phone')} id="phone" />
+                {errors.phone && <p className="signup__error-message">{errors.phone.message}</p>}
 
-                <label htmlFor="email">Email</label>
-                <input {...register("email")} type="email" id="email" name="email" />
-                {errors.email && (<p className="error-message">{errors.email.message}</p>)}
+                <label className="signup__label" htmlFor="email">Email</label>
+                <input className="signup__input" {...register("email")} type="email" id="email" name="email" />
+                {errors.email && (<p className="signup__error-message">{errors.email.message}</p>)}
 
-                <label htmlFor="password">Password</label>
-                <input {...register("password")} type="password" id="password" name="password" />
-                {errors.password && (<p className="error-message">{errors.password.message}</p>)}
+                <label className="signup__label" htmlFor="password">Password</label>
+                <input className="signup__input" {...register("password")} type="password" id="password" name="password" />
+                {errors.password && (<p className="signup__error-message">{errors.password.message}</p>)}
 
-                <label htmlFor="profileImage">Profile Image</label>
-                <input {...register("profileImage")} type="file" id="profileImage" name="profileImage" accept='image/*' />
-                {errors.profileImage && (<p className="error-message">{errors.profileImage.message}</p>)}
+                <label className="signup__label" htmlFor="profileImage">Profile Image</label>
+                <input className="signup__input" {...register("profileImage")} type="file" id="profileImage" name="profileImage" accept='image/*' />
+                {errors.profileImage && (<p className="signup__error-message">{errors.profileImage.message}</p>)}
 
-                {errorMessage && <p className="error-message">{errorMessage}</p>} 
+                {errorMessage && <p className="signup__error-message">{errorMessage}</p>}
 
-                <button type="submit">Submit</button>
+                <button className="signup__button" type="submit">Submit</button>
             </form>
 
-            <p>Already have an account? <Link to={routes.LOGIN}>Login</Link></p>
+            <p className="signup__message">Already have an account? <Link to={routes.LOGIN}>Login</Link></p>
         </div>
     );
 }

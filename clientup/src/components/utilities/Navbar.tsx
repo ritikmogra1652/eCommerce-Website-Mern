@@ -8,6 +8,7 @@ import { RootState } from '../../state_management';
 import './Navbar.css'
 import { logOutAction } from '../../state_management/actions/authAction';
 import { bindActionCreators } from 'redux';
+import { toastMessageSuccess } from './CommonToastMessage';
 
 const Navbar: React.FC = () => {
 
@@ -24,6 +25,7 @@ const Navbar: React.FC = () => {
 
     const handleLogout = () => {
         actions.logOutAction();
+        toastMessageSuccess("User Logged Out SuccessFully");
         navigate(routes.HOMEPAGE);
     }
 
@@ -42,8 +44,9 @@ const Navbar: React.FC = () => {
                     </>
                 ) : (
                     <>
-
-                            <li><Link to={routes.SIGNUP}>SignUp</Link></li>
+                    
+                        <li><Link to={routes.LOGIN}>Login</Link></li>
+                        <li><Link to={routes.SIGNUP}>SignUp</Link></li>
                     </>
                 )}
 

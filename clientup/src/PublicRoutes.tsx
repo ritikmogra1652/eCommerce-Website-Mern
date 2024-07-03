@@ -18,6 +18,7 @@ import AdminProfile from "./components/admin/AdminProfile";
 import AdminOrders from "./components/admin/AdminOrders";
 import AddProduct from "./components/admin/AddProduct";
 import './PublicRoutes.css';
+import EditProfile from "./components/auth/EditProfile";
 
 interface Props {
     component: React.ComponentType;
@@ -138,6 +139,13 @@ const PublicRoutes: React.FC = () => {
                     path={routes.ADMIN_ADD_PRODUCTS}
                     element={
                         <AdminHeader component={AddProduct} route={routes.ADMIN_ADD_PRODUCTS} />
+                    }
+
+                />
+                <Route
+                    path={routes.EDIT_PROFILE}
+                    element={
+                        <WithHeader component={EditProfile} route={routes.EDIT_PROFILE} />
                     }
 
                 />

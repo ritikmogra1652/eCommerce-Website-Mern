@@ -1,66 +1,99 @@
-.cart-container {
-    max-width: 800px; /* Adjust as needed */
-    margin: auto; /* Centering the container by default */
+.mycart-container {
+    max-width: 800px;
+    margin: auto;
     padding: 20px;
-    
-    
 }
 
-.cart-items {
+.mycart-items {
     display: flex;
     flex-direction: column;
 }
 
-.cart-item {
+.mycart-item {
     display: flex;
     margin-bottom: 20px;
     padding: 10px;
     border: 1px solid #ddd;
 }
 
-.cart-item img {
+.mycart-item-image {
     max-width: 100px;
     margin-right: 20px;
+    border-radius:100%;
 }
 
-.item-details {
+.mycart-item-details {
     flex: 1;
 }
 
-.quantity-control {
+.mycart-quantity-control {
     margin-top: 10px;
 }
 
-.subtotal {
-    margin-top: 20px;
-    text-align: center; 
-    font-size: 18px; 
+.mycart-quantity-label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
 }
 
-.proceed-button {
-    margin-top: 20px;
-    marign-left:20px;
-    padding: 12px 24px; /* Adjust padding */
-    background-color: #007bff; /* Button background color */
-    color: #fff; /* Button text color */
+.mycart-quantity-select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    width: 100px;
+}
+
+.mycart-item-total {
+    margin-top: 5px;
+}
+
+.mycart-delete-button {
+    padding: 8px 16px;
+    background-color: #dc3545;
+    color: #fff;
     border: none;
     border-radius: 4px;
-    font-size: 16px; /* Adjust font size */
+    font-size: 14px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
-.proceed-button:hover {
-    background-color: #0056b3; /* Button hover background color */
+
+.mycart-delete-button:hover {
+    background-color: #c82333;
 }
 
-/* Adjustments when cart is empty */
-.cart-container.empty {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.mycart-subtotal {
+    margin-top: 20px;
     text-align: center;
+    font-size: 18px;
 }
 
-.cart-container.empty > p {
+.mycart-subtotal-text {
     margin: 0;
+}
+
+.mycart-actions {
+    margin-top: 20px;
+}
+
+.mycart-proceed-button {
+    padding: 12px 24px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.mycart-proceed-button:hover {
+    background-color: #0056b3;
+}
+
+.mycart-empty-message {
+    margin-top: 20px;
+    text-align: center;
+    color: #777;
 }

@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import endPoints, { backendApiUrl } from '../../constants/endPoints';
 import { useSelector } from 'react-redux';
-// import './MyProfile.css'; // Import your CSS file for styling
 import { RootState } from '../../state_management/index';
-
-
+import routes from '../../constants/routes';
+import endPoints, { backendApiUrl } from '../../constants/endPoints';
+import { Link } from 'react-router-dom';
 
 interface UserProfile {
     username: string;
     email: string;
     phone: string;
     profileImage: string;
-
 }
 
 const MyProfile: React.FC = () => {
@@ -21,29 +19,32 @@ const MyProfile: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    const fetchUserProfile = async () => {
-        try {
-            const AuthStr = 'Bearer '.concat(jwtToken as string);
-            const response = await axios.get(
-                `${backendApiUrl}${endPoints.MY_PROFILE}`,
-                {
-                    headers: {
-                        "Authorization": AuthStr,
-                    },
-                }
-            );
-            const userDetails = response?.data?.data;
-            setUserProfile(userDetails);
-        } catch (error) {
-            setError('Error fetching user profile');
-        } finally {
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            try {
+                const AuthStr = 'Bearer ' + jwtToken;
+                const response = await axios.get(
+                    `${backendApiUrl}${endPoints.MY_PROFILE}`,
+                    {
+                        headers: {
+                            Authorization: AuthStr,
+                        },
+                    }
+                );
+                const userDetails = response?.data?.data;
+                setUserProfile(userDetails);
+            } catch (error) {
+                setError('Error fetching user profile');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (jwtToken) {
+            fetchUserProfile();
+        } else {
             setLoading(false);
         }
-    };
-
-    useEffect(() => {
-
-        fetchUserProfile();
     }, [jwtToken]);
 
     if (loading) {
@@ -54,19 +55,16 @@ const MyProfile: React.FC = () => {
         return <div>{error}</div>;
     }
 
-
-
     return (
         <div className="profile-container">
             <h2>My Profile</h2>
-            {userProfile && (
-                <div className="profile-details">
-                    <img src={userProfile.profileImage} alt="" />
-                    <p><strong>Name:</strong> {userProfile.username}</p>
-                    <p><strong>Email:</strong> {userProfile.email}</p>
-                    <p><strong>Phone:</strong> {userProfile.phone}</p>
-                </div>
-            )}
+            <div className="profile-details">
+                <img src={userProfile?.profileImage} alt="Profile" />
+                <p><strong>Name:</strong> {userProfile?.username}</p>
+                <p><strong>Email:</strong> {userProfile?.email}</p>
+                <p><strong>Phone:</strong> {userProfile?.phone}</p>
+            </div>
+            <Link to={routes.EDIT_PROFILE}>Edit Profile</Link>
         </div>
     );
 };

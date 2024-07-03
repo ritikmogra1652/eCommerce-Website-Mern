@@ -2,9 +2,12 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
 import envConfig from "../../../config/envConfig";
-import { AuthRequest } from "../controller/authController";
-
-
+import { IUsers } from '../models/user';
+export interface AuthRequest extends Request {
+  userId?: string;
+  email?: string;
+  role?: string;
+}
 const { secretKey } = envConfig();
 
 const authorization = async (
@@ -25,9 +28,16 @@ const authorization = async (
       token,
       secretKey
     ) as jwt.JwtPayload;
+    
     req.email = decoded.email;
     req.userId = decoded.userId;
-    
+    req.role = decoded.role;
+    if (req.role !== "user") {
+      return res.status(403).json({
+        message: "Access denied. Only users can perform this action.",
+
+      });
+    }
     next();
   } catch (error) {
     return res.status(401).json({ message: "Invalid or expired token" });

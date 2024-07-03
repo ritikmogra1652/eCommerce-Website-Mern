@@ -1,5 +1,7 @@
 
 
+
+import { ToastContainer } from 'react-toastify'
 import './App.css'
 import PublicRoutes from './PublicRoutes'
 // import Login from './components/auth/Login';
@@ -11,7 +13,9 @@ function App() {
 
   return (
     <div>
-      <PublicRoutes/>
+      <PublicRoutes />
+      <ToastContainer />
+      
     </div>
   )
 }

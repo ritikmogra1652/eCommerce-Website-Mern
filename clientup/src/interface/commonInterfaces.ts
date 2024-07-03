@@ -38,5 +38,5 @@ export interface IUserData{
     username:string
     email: string,
     role:string,
-    jwtToken:string,
+    jwtToken: string,
 }

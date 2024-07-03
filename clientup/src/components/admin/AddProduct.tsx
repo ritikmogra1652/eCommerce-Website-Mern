@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import axios from 'axios';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -7,6 +7,7 @@ import endPoints, { backendApiUrl } from '../../constants/endPoints';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../state_management';
 import "./AddProduct.css"
+import { toastMessageSuccess } from '../utilities/CommonToastMessage';
 
 interface FormFields {
   product_name: string;
@@ -28,7 +29,7 @@ const schema = yup.object().shape({
 
 const AddProduct: React.FC = () => {
   const jwtToken = useSelector((state: RootState) => state.AuthReducer.authData?.jwtToken);
-  const [profileImageBase64, setProfileImageBase64] = useState<string | null>(null);
+  // const [profileImageBase64, setProfileImageBase64] = useState<string | null>(null);
   const { register, handleSubmit, formState: { errors }, reset } = useForm<FormFields>({
     resolver: yupResolver(schema),
   });
@@ -44,31 +45,32 @@ const AddProduct: React.FC = () => {
 
   const onSubmit: SubmitHandler<FormFields> = async (data: FormFields) => {
     try {
-      const profileImageFile = data.image[0];
-      if (profileImageFile) {
-        const base64String = await convertToBase64(profileImageFile);
-        setProfileImageBase64(base64String);
-
-        const productData = {
-          ...data,
-          image: profileImageBase64
-        };
-
-        const AuthStr = 'Bearer '.concat(jwtToken as string);
-         await axios.post(
-          `${backendApiUrl}${endPoints.ADMIN_ADD_PRODUCTS}`,
-          productData,
-          {
-            headers: {
-              Authorization: AuthStr,
-            },
-          }
-        );
-        alert('Product added successfully');
-        reset();
+      const productImageFile = data.image[0];
+      let profileImageBase64 = null;
+      if (productImageFile) {
+        profileImageBase64 = await convertToBase64(productImageFile);
       }
-    } catch (error) {
-      alert('Failed to add product. Please try again.');
+
+      const productData = {
+        ...data,
+        image: profileImageBase64
+      };
+
+      const AuthStr = 'Bearer '.concat(jwtToken as string);
+      await axios.post(
+        `${backendApiUrl}${endPoints.ADMIN_ADD_PRODUCTS}`,
+        productData,
+        {
+          headers: {
+            Authorization: AuthStr,
+          },
+        }
+      );
+      toastMessageSuccess("Product added successfully");
+      reset();
+    }
+    catch (error) {
+      alert('upload the image');
     }
   };
 

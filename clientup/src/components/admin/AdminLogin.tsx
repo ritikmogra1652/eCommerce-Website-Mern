@@ -12,6 +12,7 @@ import { logInAction } from '../../state_management/actions/authAction';
 import { bindActionCreators } from 'redux';
 import { clearCart } from '../../state_management/actions/cartAction';
 import { useState } from 'react';
+import { toastMessageSuccess } from '../utilities/CommonToastMessage';
 const schema = yup.object({
     email: yup.string().email("Email format is not valid").required("Email is Required"),
     password: yup.string().required().min(8, "8 charaters are required"),
@@ -66,6 +67,7 @@ const Login = () => {
             };
             actions.logInAction(authData);
             actions.clearCart();
+            toastMessageSuccess("Admin Successfully logged in");
             navigate(routes.ADMIN_PROFILE);
         } catch (error) {
             if (axios.isAxiosError(error)) {

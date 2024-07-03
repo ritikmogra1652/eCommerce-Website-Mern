@@ -40,7 +40,6 @@ export const adminValidation = (
         message: "Access denied. Only admin users can perform this action.",
       });
     }
-
     next();
   } catch (error) {
     return res.status(401).json({ message: "Invalid token." });

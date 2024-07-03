@@ -43,8 +43,8 @@ class AuthService {
       { email: data.email },
       { _id: 1, __v: 0 }
     );
-    if (!userExists) {
-      response.message = "Invalid User email does not exists";
+    if (!userExists || userExists.role !== "user") {
+      response.message = "Invalid admin email does not exist";
       response.success = false;
       return response;
     }
@@ -78,22 +78,50 @@ class AuthService {
   }
 
   static async getProfile(data: Partial<IUsers>): Promise<IResponse> {
-      const userExists = await UserModel.findOne({ email: data.email });
-      
+    const userExists = await UserModel.findOne({ email: data.email });
+
     if (!userExists) {
       response.message = "Invalid User email does not exists";
       response.success = false;
       return response;
     }
-    const  userInfo =  {
+    const userInfo = {
       username: userExists.username,
       email: userExists.email,
       phone: userExists.phone,
       profileImage: userExists.profileImage,
+    };
+    response.message = "User Profile successful";
+    response.success = true;
+    response.data = userInfo;
+    return response;
+  }
+
+  static async updateProfile(email: string, data: Partial<IUsers>): Promise<IResponse> {
+    const userExists = await UserModel.findOne({ email });
+
+    if (!userExists) {
+      response.message = "Invalid User email does not exists";
+      response.success = false;
+      return response;
     }
-      response.message = "User Profile successful";
-      response.success = true;
-      response.data = userInfo;
+
+    userExists.username = data.username || userExists.username;
+    userExists.phone = data.phone || userExists.phone;
+    userExists.profileImage = data.profileImage || userExists.profileImage;
+      if(data.password) {
+      userExists.password = await bcrypt.hash(data.password!,8);
+    }
+      
+      await userExists.save();
+    response.message = "User Profile successful";
+    response.success = true;
+    response.data = {
+        username: userExists.username,
+        phone: userExists.phone,
+      profileImage: userExists.profileImage,
+        
+    };
     return response;
   }
 }

@@ -10,6 +10,7 @@ import { clearCart } from '../../state_management/actions/cartAction';
 import { useNavigate } from 'react-router-dom';
 import routes from '../../constants/routes';
 import './CheckOut.css';
+import { toastMessageSuccess } from './CommonToastMessage';
 
 const schema = yup.object().shape({
     address: yup.string().required('Address is required'),
@@ -66,6 +67,7 @@ const Checkout: React.FC = () => {
             if (response.data.success) {
                 dispatch(clearCart());
                 navigate(routes.HOMEPAGE);
+                toastMessageSuccess("Order placed successfully");
 
             } else {
                 setError('Order could not be placed. Please try again.');

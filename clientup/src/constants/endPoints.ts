@@ -10,6 +10,7 @@ const endPoints = {
   ADMIN_PROFILE: "/admin/profile",
   ADMIN_GET_ORDERS: "/admin/getOrders",
   ADMIN_ADD_PRODUCTS: "/add-products",
+  UPDATE_MYPROFILE: "/users/update_profile",
 };
 
 export default endPoints;

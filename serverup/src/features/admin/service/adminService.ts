@@ -119,13 +119,14 @@
         },
         {
           $sort: {
-            created_at: -1, // Sort by createdAt in descending order (-1 for descending, 1 for ascending)
+            created_at: -1, 
           },
         },
       ]);
 
       if (!orders || orders.length === 0) {
         response.message = 'No orders found';
+        response.success = false;
         return response;
       }
 

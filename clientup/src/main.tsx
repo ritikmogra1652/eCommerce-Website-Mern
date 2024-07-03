@@ -6,12 +6,16 @@ import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux';
 import store from './state_management/index.ts'
 
+import "react-toastify/dist/ReactToastify.css";
+
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     
     <BrowserRouter>
       <Provider store={store}>
-      <App />
+        <App />
+        
       </Provider>
     </BrowserRouter>
 
