@@ -95,7 +95,7 @@ export const updateProfile = async (req: AuthRequest, res: Response) => {
       const body = {
         ...req.body 
         };
-        console.log(body);
+        // console.log(body);
         
     const data = await AuthService.updateProfile(email! , body);
 

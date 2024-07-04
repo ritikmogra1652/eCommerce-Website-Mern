@@ -14,6 +14,10 @@ export interface AddToCartPayload {
     quantity: number;
 }
 
+export interface UpdateProfilePayload {
+    username: string;
+}
+
 export interface RemoveFromCartPayload {
     productId: string;
 }
@@ -38,5 +42,5 @@ export interface IUserData{
     username:string
     email: string,
     role:string,
-    jwtToken: string,
+    jwtToken: string
 }

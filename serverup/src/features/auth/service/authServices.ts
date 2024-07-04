@@ -44,7 +44,7 @@ class AuthService {
       { _id: 1, __v: 0 }
     );
     if (!userExists || userExists.role !== "user") {
-      response.message = "Invalid admin email does not exist";
+      response.message = "Invalid email does not exist";
       response.success = false;
       return response;
     }
@@ -57,6 +57,7 @@ class AuthService {
     if (!isValidPassword) {
       response.message = "Invalid Password";
       response.success = false;
+      response.data = [];
       return response;
     }
     const token = jwt.sign(
@@ -78,22 +79,16 @@ class AuthService {
   }
 
   static async getProfile(data: Partial<IUsers>): Promise<IResponse> {
-    const userExists = await UserModel.findOne({ email: data.email });
+    const userExists = await UserModel.findOne({ email: data.email }, {password:0});
 
     if (!userExists) {
       response.message = "Invalid User email does not exists";
       response.success = false;
       return response;
     }
-    const userInfo = {
-      username: userExists.username,
-      email: userExists.email,
-      phone: userExists.phone,
-      profileImage: userExists.profileImage,
-    };
     response.message = "User Profile successful";
     response.success = true;
-    response.data = userInfo;
+    response.data = userExists;
     return response;
   }
 
@@ -108,7 +103,7 @@ class AuthService {
 
     userExists.username = data.username || userExists.username;
     userExists.phone = data.phone || userExists.phone;
-    userExists.profileImage = data.profileImage || userExists.profileImage;
+    // userExists.profileImage = data.profileImage || userExists.profileImage;
       if(data.password) {
       userExists.password = await bcrypt.hash(data.password!,8);
     }
@@ -119,7 +114,8 @@ class AuthService {
     response.data = {
         username: userExists.username,
         phone: userExists.phone,
-      profileImage: userExists.profileImage,
+      // profileImage: userExists.profileImage,
+
         
     };
     return response;

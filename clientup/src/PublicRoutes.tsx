@@ -1,5 +1,4 @@
 import React from "react";
-
 import PrivateRoutes from "./PrivateRoutes";
 import { Routes, Route } from "react-router-dom";
 import routes from "./constants/routes";

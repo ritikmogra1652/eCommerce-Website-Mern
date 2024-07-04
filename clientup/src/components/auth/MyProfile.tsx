@@ -14,7 +14,7 @@ interface UserProfile {
 }
 
 const MyProfile: React.FC = () => {
-    const jwtToken = useSelector((state: RootState) => state.AuthReducer.authData?.jwtToken);
+    const jwtToken  = useSelector((state: RootState) => state.AuthReducer?.authData?.jwtToken);
     const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);

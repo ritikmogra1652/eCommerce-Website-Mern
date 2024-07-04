@@ -9,6 +9,7 @@ import './Navbar.css'
 import { logOutAction } from '../../state_management/actions/authAction';
 import { bindActionCreators } from 'redux';
 import { toastMessageSuccess } from './CommonToastMessage';
+import { clearCart } from '../../state_management/actions/cartAction';
 
 const Navbar: React.FC = () => {
 
@@ -19,12 +20,14 @@ const Navbar: React.FC = () => {
     const actions = bindActionCreators(
         {
             logOutAction,
+            clearCart
         },
         dispatch
     );
 
     const handleLogout = () => {
         actions.logOutAction();
+        actions.clearCart();
         toastMessageSuccess("User Logged Out SuccessFully");
         navigate(routes.HOMEPAGE);
     }
