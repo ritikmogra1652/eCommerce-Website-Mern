@@ -57,6 +57,8 @@ const Checkout: React.FC = () => {
         };
 
         try {
+            console.log(orderData);
+            
             const AuthStr = 'Bearer '.concat(jwtToken as string);
             const response = await axios.post(`${backendApiUrl}${endPoints.PLACE_ORDER}`, orderData, {
                 headers: {

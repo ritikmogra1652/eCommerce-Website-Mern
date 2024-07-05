@@ -37,7 +37,7 @@ export const adminValidation = (
       
     if (req.role !== "admin") {
       return res.status(403).json({
-        message: "Access denied. Only admin users can perform this action.",
+        message: "Access denied. Only admin can perform this action.",
       });
     }
     next();

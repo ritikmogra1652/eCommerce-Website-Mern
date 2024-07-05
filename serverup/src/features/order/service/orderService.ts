@@ -37,67 +37,80 @@ class OrderService {
         try {
           const orders = await OrderModel.aggregate([
             { $match: { userId: new mongoose.Types.ObjectId(userId) } },
-            {
-              $lookup: {
-                from: "products",
-                localField: "items.productId",
-                foreignField: "_id",
-                as: "ProductDetails",
-              },
-            },
-            {
-              $unwind: "$ProductDetails",
-            },
-            {
-              $lookup: {
-                from: "users",
-                localField: "userId",
-                foreignField: "_id",
-                as: "UserDetails",
-              },
-            },
-            {
-              $unwind: "$UserDetails",
-            },
-            {
-              $project: {
-                _id: 1,
-                items: {
-                  _id: "$ProductDetails._id",
-                  product_name: "$ProductDetails.product_name",
-                  image: "$ProductDetails.image",
-                  quantity: 1,
-                  price: 1,
+              {
+                $lookup: {
+                  from: "products",
+                  localField: "items.productId",
+                  foreignField: "_id",
+                  as: "ProductDetails",
                 },
-                total: 1,
-                address: 1,
-                phone: 1,
-                status: 1,
-                createdAt: 1,
-                updatedAt: {
-                  $dateToString: { format: "%Y-%m-%d", date: "$updatedAt" },
+              },
+              {
+                $unwind: "$items",
+              },
+              {
+                $lookup: {
+                  from: "products",
+                  localField: "items.productId",
+                  foreignField: "_id",
+                  as: "ProductDetails",
                 },
-                username: "$UserDetails.username",
               },
-            },
-            {
-              $group: {
-                _id: "$_id",
-                items: { $first: "$items" },
-                total: { $first: "$total" },
-                address: { $first: "$address" },
-                phone: { $first: "$phone" },
-                status: { $first: "$status" },
-                createdAt: { $first: "$createdAt" },
-                updatedAt: { $first: "$updatedAt" },
-                username: { $first: "$username" },
+              {
+                $unwind: "$ProductDetails",
               },
-            },
-            {
-              $sort: {
-                createdAt: -1,
+              {
+                $lookup: {
+                  from: "users",
+                  localField: "userId",
+                  foreignField: "_id",
+                  as: "UserDetails",
+                },
               },
-            },
+              {
+                $unwind: "$UserDetails",
+              },
+              {
+                $project: {
+                  _id: 1,
+                  items: {
+                    _id: "$items._id",
+                    productId: "$items.productId",
+                    product_name: "$ProductDetails.product_name",
+                    image: "$ProductDetails.image",
+                    quantity: "$items.quantity",
+                    price: "$items.price",
+                  },
+                  total: 1,
+                  address: 1,
+                  phone: 1,
+                  status: 1,
+                  createdAt: 1,
+                  updatedAt: {
+                    $dateToString: { format: "%Y-%m-%d", date: "$updatedAt" },
+                  },
+                  username: "$UserDetails.username",
+                },
+              },
+              {
+                $group: {
+                  _id: "$_id",
+                  items: { $push: "$items" },
+                  total: { $first: "$total" },
+                  address: { $first: "$address" },
+                  phone: { $first: "$phone" },
+                  status: { $first: "$status" },
+                  createdAt: { $first: "$createdAt" },
+                  updatedAt: { $first: "$updatedAt" },
+                  username: { $first: "$username" },
+                },
+              },
+              {
+                $sort: {
+                  createdAt: -1,
+                },
+              },
+
           ]);
             
             if (orders.length === 0) {

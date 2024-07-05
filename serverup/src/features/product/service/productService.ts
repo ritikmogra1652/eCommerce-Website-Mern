@@ -27,7 +27,6 @@ class ProductService {
     limit,
     search,
   }: QueryParams): Promise<IResponse> {
-
     try {
       let query: any = {};
       if (search) {
@@ -41,12 +40,8 @@ class ProductService {
 
       const skip = (page - 1) * limit;
       const totalProducts = await ProductModel.countDocuments(query);
-      
+
       const products = await ProductModel.find(query).skip(skip).limit(limit);
-      
-      
-      
-      
 
       if (!products || products.length === 0) {
         response.message = "No Products Found";
@@ -62,10 +57,29 @@ class ProductService {
           limit,
         };
       }
-      } catch (error) {
-        response.message = "No Product Found";
-      }
+    } catch (error) {
+      response.message = "No Product Found";
+    }
 
+    return response;
+  }
+
+  static async getProduct(id :string): Promise<IResponse> {
+    try {
+
+      const product = await ProductModel.findById(id);
+      if (!product) {
+        response.message = "No Products Found";
+        response.success = true;
+        response.data = [];
+      } else {
+        response.success = true;
+        response.message = "Products Displayed Successfully";
+        response.data =product ;
+      }
+    } catch (error) {
+      response.message = "No Product Found";
+    }
     return response;
   }
   static async addProduct(data: Partial<IProduct>): Promise<IResponse> {

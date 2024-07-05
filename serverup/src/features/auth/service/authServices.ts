@@ -79,11 +79,15 @@ class AuthService {
   }
 
   static async getProfile(data: Partial<IUsers>): Promise<IResponse> {
-    const userExists = await UserModel.findOne({ email: data.email }, {password:0});
+    const userExists = await UserModel.findOne(
+      { email: data.email },
+      { password: 0 }
+    );
 
     if (!userExists) {
       response.message = "Invalid User email does not exists";
       response.success = false;
+      response.data = [];
       return response;
     }
     response.message = "User Profile successful";
@@ -92,32 +96,44 @@ class AuthService {
     return response;
   }
 
-  static async updateProfile(email: string, data: Partial<IUsers>): Promise<IResponse> {
-    const userExists = await UserModel.findOne({ email });
-
-    if (!userExists) {
-      response.message = "Invalid User email does not exists";
-      response.success = false;
-      return response;
-    }
-
-    userExists.username = data.username || userExists.username;
-    userExists.phone = data.phone || userExists.phone;
-    // userExists.profileImage = data.profileImage || userExists.profileImage;
-      if(data.password) {
-      userExists.password = await bcrypt.hash(data.password!,8);
-    }
-      
-      await userExists.save();
-    response.message = "User Profile successful";
-    response.success = true;
-    response.data = {
-        username: userExists.username,
-        phone: userExists.phone,
-      // profileImage: userExists.profileImage,
-
-        
+  static async updateProfile(
+    email: string,
+    data: Partial<IUsers>
+  ): Promise<IResponse> {
+    const response: IResponse = {
+      success: false,
+      message: "",
+      data: null,
     };
+
+    try {
+      // If a password is provided, hash it before updating
+      if (data.password) {
+        data.password = await bcrypt.hash(data.password, 8);
+      }
+
+      const updatedUser = await UserModel.findOneAndUpdate(
+        { email },
+        { $set: data }
+      );
+
+      if (!updatedUser) {
+        response.message = "Invalid User: email does not exist";
+        return response;
+      }
+
+      response.message = "User profile updated successfully";
+      response.success = true;
+      response.data = {
+        username: updatedUser.username,
+        phone: updatedUser.phone,
+        profileImage: updatedUser.profileImage,
+      };
+    } catch (error) {
+      response.message = "An error occurred while updating the profile";
+      console.error("Error updating profile:", error);
+    }
+
     return response;
   }
 }

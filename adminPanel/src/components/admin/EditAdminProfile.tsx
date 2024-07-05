@@ -39,7 +39,7 @@ export interface UserProfile {
     profileImage: string;
 }
 
-const EditProfile = () => {
+const EditAdminProfile = () => {
     const jwtToken = useSelector((state: RootState) => state.AuthReducer.authData?.jwtToken);
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const navigate = useNavigate();
@@ -53,7 +53,7 @@ const EditProfile = () => {
     const fetchProfile = async () => {
         try {
             const response = await axios.get(
-                `${backendApiUrl}${endPoints.MY_PROFILE}`,
+                `${backendApiUrl}${endPoints.ADMIN_PROFILE}`,
                 { headers: { Authorization: AuthStr } }
             );
             setProfile(response.data?.data);
@@ -95,7 +95,7 @@ const EditProfile = () => {
             };
 
             await axios.patch(
-                `${backendApiUrl}${endPoints.UPDATE_MYPROFILE}`,
+                `${backendApiUrl}${endPoints.UPDATE_ADMINPROFILE}`,
                 profileData,
                 {
                     headers: {
@@ -106,7 +106,7 @@ const EditProfile = () => {
             );
             toastMessageSuccess("Profile updated successfully");
             actions.updateAuth(data.username);
-            navigate(routes.MYPROFILE);
+            navigate(routes.ADMIN_PROFILE);
         } catch (error) {
             console.error('Error updating profile:', error);
             alert('Failed to update profile');
@@ -147,4 +147,4 @@ const EditProfile = () => {
     );
 };
 
-export default EditProfile;
+export default EditAdminProfile;

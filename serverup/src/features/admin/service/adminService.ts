@@ -16,50 +16,85 @@
   const secretKey = env.secretKey;
 
   class AdminService {
-      static async adminLogin(data: Partial<IUsers>): Promise<IResponse> {
-
-        const user = await UserModel.findOne({ email: data.email });
-        if (!user || user.role !== 'admin') {
-          response.message = "Invalid admin email does not exist";
-          response.success = false;
-          return response;
-        }
-    
-        const isPasswordValid = await bcrypt.compare(data.password!, user.password);
-        if (!isPasswordValid) {
-          response.message = "Invalid Password";
-          response.success = false;
-          return response;
-        }
-    
-        const token = jwt.sign({ id: user._id,email:user.email, role: user.role }, secretKey, { expiresIn: '1h' });
-        response.message = "Admin Login successful";
-        response.success = true;
-        response.data = { user, token };
-    
+    static async adminLogin(data: Partial<IUsers>): Promise<IResponse> {
+      const user = await UserModel.findOne({ email: data.email });
+      if (!user || user.role !== "admin") {
+        response.message = "Invalid admin email does not exist";
+        response.success = false;
         return response;
       }
 
+      const isPasswordValid = await bcrypt.compare(
+        data.password!,
+        user.password
+      );
+      if (!isPasswordValid) {
+        response.message = "Invalid Password";
+        response.success = false;
+        response.data = [];
+        return response;
+      }
 
-      static async getAdminProfile(data: Partial<IUsers>): Promise<IResponse> {
-        const userExists = await UserModel.findOne({ email: data.email });
+      const token = jwt.sign(
+        { id: user._id, email: user.email, role: user.role },
+        secretKey,
+        { expiresIn: "1h" }
+      );
+      response.message = "Admin Login successful";
+      response.success = true;
+      response.data = { user, token };
+
+      return response;
+    }
+
+    static async getAdminProfile(data: Partial<IUsers>): Promise<IResponse> {
+      const userExists = await UserModel.findOne({ email: data.email });
       if (!userExists) {
         response.message = "Invalid admin email does not exists";
         response.success = false;
         return response;
       }
-      const  userInfo =  {
-        admin: userExists.username,
+      const userInfo = {
+        username: userExists.username,
         email: userExists.email,
         phone: userExists.phone,
         profileImage: userExists.profileImage,
-      }
-        response.message = "admin Profile successful";
-        response.success = true;
-        response.data = userInfo;
+      };
+      response.message = "admin Profile successful";
+      response.success = true;
+      response.data = userInfo;
       return response;
     }
 
+    static async updateProfile(
+      email: string,
+      data: Partial<IUsers>
+    ): Promise<IResponse> {
+      const userExists = await UserModel.findOne({ email });
+
+      if (!userExists) {
+        response.message = "Invalid User email does not exists";
+        response.success = false;
+        return response;
+      }
+
+      userExists.username = data.username || userExists.username;
+      userExists.phone = data.phone || userExists.phone;
+      userExists.profileImage = data.profileImage || userExists.profileImage;
+      if (data.password) {
+        userExists.password = await bcrypt.hash(data.password!, 8);
+      }
+
+      await userExists.save();
+      response.message = "User Profile successful";
+      response.success = true;
+      response.data = {
+        username: userExists.username,
+        phone: userExists.phone,
+        profileImage: userExists.profileImage,
+      };
+      return response;
+    }
 
     static async getAllOrders(): Promise<IResponse> {
       const orders = await OrderModel.aggregate([
@@ -119,22 +154,23 @@
         },
         {
           $sort: {
-            created_at: -1, 
+            created_at: -1,
           },
         },
       ]);
 
       if (!orders || orders.length === 0) {
-        response.message = 'No orders found';
-        response.success = false;
+        response.message = "No orders found";
+        response.success = true;
+        response.data = [];
         return response;
       }
 
-      response.message = 'Fetch orders successful';
+      response.message = "Fetch orders successful";
       response.success = true;
       response.data = orders;
       return response;
-  }
     }
+  }
 
   export default AdminService;

@@ -16,22 +16,19 @@ const PrivateRoutes: React.FC<Props> = ({
 
     const userData = useSelector((state: RootState) => state.AuthReducer);
     const authToken = userData?.authData?.jwtToken;
-    if ([routes.HOMEPAGE, routes.CART].includes(route)) {
-        return <RouteComponent />;
-    }
 
     if (authToken) {
-        if (beforeLoginRoutes.includes(route) && route == routes.LOGIN) {
-            return <Navigate to={routes.HOMEPAGE} />;
+        if (beforeLoginRoutes.includes(route) && route == routes.ADMIN_LOGIN) {
+            return <Navigate to={routes.ADMIN_PROFILE} />;
             
-        } else {
+        }else {
             return <RouteComponent />;
         }
     } else {
         if (beforeLoginRoutes.includes(route)) {
             return <RouteComponent />;
         } else {
-            return <Navigate to={routes.LOGIN} />;
+            return <Navigate to={routes.ADMIN_LOGIN} />;
         }
     }
 }
