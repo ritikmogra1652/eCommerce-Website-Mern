@@ -107,7 +107,6 @@ class AuthService {
     };
 
     try {
-      // If a password is provided, hash it before updating
       if (data.password) {
         data.password = await bcrypt.hash(data.password, 8);
       }
@@ -124,11 +123,7 @@ class AuthService {
 
       response.message = "User profile updated successfully";
       response.success = true;
-      response.data = {
-        username: updatedUser.username,
-        phone: updatedUser.phone,
-        profileImage: updatedUser.profileImage,
-      };
+      response.data = updatedUser;
     } catch (error) {
       response.message = "An error occurred while updating the profile";
       console.error("Error updating profile:", error);

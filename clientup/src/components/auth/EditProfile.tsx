@@ -22,7 +22,7 @@ const schema = yup.object({
             /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
             'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
         ),
-    profileImage: yup.mixed<FileList>().required(),
+    profileImage: yup.mixed<FileList>().required("Image is required").test('filePresent', 'Profile image is required', value => value && value.length > 0),
 });
 
 interface FormFields {
