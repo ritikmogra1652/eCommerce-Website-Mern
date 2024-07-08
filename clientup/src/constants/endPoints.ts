@@ -6,10 +6,6 @@ const endPoints = {
   GET_PRODUCTS: "/products",
   PLACE_ORDER: "/order",
   GET_ORDERS: "/get-orders",
-  ADMIN_LOGIN: "/admin/login",
-  ADMIN_PROFILE: "/admin/profile",
-  ADMIN_GET_ORDERS: "/admin/getOrders",
-  ADMIN_ADD_PRODUCTS: "/add-products",
   UPDATE_MYPROFILE: "/users/update_profile",
 };
 

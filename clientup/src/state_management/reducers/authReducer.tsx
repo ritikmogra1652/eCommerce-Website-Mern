@@ -25,10 +25,10 @@ interface UpdateAuth{
  
 }
 
-    type Action =
-        | LoginAction
+type Action =
+    | LoginAction
     | LogoutAction
-        |UpdateAuth
+    | UpdateAuth
 const AuthReducer = (state: IRootState = initialState, action: Action): IRootState => {
 
     switch (action?.type) {

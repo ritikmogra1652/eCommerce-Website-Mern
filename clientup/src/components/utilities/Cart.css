@@ -11,13 +11,14 @@
 
 .mycart-item {
     display: flex;
+    background-color: #DADEDF;
     margin-bottom: 20px;
     padding: 10px;
     border: 1px solid #ddd;
 }
 
 .mycart-item-image {
-    max-width: 100px;
+    max-width: 4000px;
     margin-right: 20px;
     border-radius:100%;
 }
@@ -50,6 +51,7 @@
 
 .mycart-delete-button {
     padding: 8px 16px;
+    width:100px;
     background-color: #dc3545;
     color: #fff;
     border: none;
@@ -79,6 +81,7 @@
 
 .mycart-proceed-button {
     padding: 12px 24px;
+    width:200px;
     background-color: #007bff;
     color: #fff;
     border: none;

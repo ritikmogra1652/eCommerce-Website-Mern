@@ -57,7 +57,6 @@ export const updateProfile = async (req: AuthRequest, res: Response) => {
     const body = {
       ...req.body,
     };
-    // console.log(body);
 
     const data = await AdminService.updateProfile(email!, body);
 
