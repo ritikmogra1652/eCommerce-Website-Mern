@@ -17,6 +17,7 @@ const HomePage: React.FC = () => {
     const [productsPerPage] = useState<number>(8);
     const [totalProducts, setTotalProducts] = useState<number>(0);
     const [searchTerm, setSearchTerm] = useState<string>('');
+    const [sortOrder, setSortOrder] = useState<string>('');
 
     const dispatch = useDispatch();
 
@@ -30,6 +31,10 @@ const HomePage: React.FC = () => {
                 url += `&search=${encodeURIComponent(searchTerm)}`;
                 setCurrentPage(1);
 
+            }
+
+            if (sortOrder) { 
+                url += `&sort=${sortOrder}`;
             }
             const response = await axios.get(url, {
                 headers: {
@@ -59,7 +64,7 @@ const HomePage: React.FC = () => {
         }, 500);
 
         return () => clearTimeout(delayDebounceFn);
-    }, [currentPage, productsPerPage, searchTerm]);
+    }, [currentPage, productsPerPage, searchTerm,sortOrder]);
 
 
     const handleAddToCart = (product: IProduct) => {
@@ -108,6 +113,17 @@ const HomePage: React.FC = () => {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
+
+                    <select
+                        value={sortOrder}
+                        onChange={(e) => setSortOrder(e.target.value)}
+                        className="homepage__sort-dropdown"
+                    >
+                        <option value="">Sort by</option>
+                        <option value="lowToHigh">Price: Low to High</option>
+                        <option value="highToLow">Price: High to Low</option>
+                    </select>
+
                 </div>
                 <h2>No Product Found</h2></>
         );
@@ -123,6 +139,19 @@ const HomePage: React.FC = () => {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
+
+                <select
+                    value={sortOrder}
+                    onChange={(e) => setSortOrder(e.target.value)}
+                    className="homepage__sort-dropdown"
+                >
+                    <option value="">Sort by</option>
+                    <option value="lowToHigh">Price: Low to High</option>
+                    <option value="highToLow">Price: High to Low</option>
+                </select>
+
+
+
             </div>
 
             <div className="homepage__home-page">

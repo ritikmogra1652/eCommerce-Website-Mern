@@ -156,7 +156,7 @@
 
 .homepage__search-bar {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     margin: 20px;
 }
 
@@ -172,4 +172,11 @@
 
 .homepage__search-bar input:focus {
     border-color: #4CAF50;
+}
+
+
+.homepage__sort-dropdown {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
