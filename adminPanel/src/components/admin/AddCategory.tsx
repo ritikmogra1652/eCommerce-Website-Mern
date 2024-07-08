@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../state_management';
 import "./AddCategory.css"
+import { toastMessageSuccess } from '../utilities/CommonToastMessage';
 
 const schema = yup.object({
     categoryName: yup.string().required("Category name is required"),
@@ -20,7 +21,7 @@ interface FormFields {
 
 const AddCategory = () => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const { register, handleSubmit, formState: { errors } } = useForm<FormFields>({
+    const { register, handleSubmit,reset, formState: { errors } } = useForm<FormFields>({
         resolver: yupResolver(schema)
     });
     const jwtToken = useSelector((state: RootState) => state.AuthReducer.authData?.jwtToken);
@@ -40,7 +41,9 @@ const AddCategory = () => {
                 }
             );
 
-            navigate(routes.ADMIN_GET_PRODUCTS);
+            navigate(routes.ADMIN_ADD_PRODUCTS);
+            toastMessageSuccess("Category added successfully");
+            reset();
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 if (error.response?.status === 409) {

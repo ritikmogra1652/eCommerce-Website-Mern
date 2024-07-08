@@ -5,6 +5,7 @@ import './Cart.css';
 import { removeFromCart, updateCartQuantity } from '../../state_management/actions/cartAction';
 import { useNavigate } from 'react-router-dom';
 import routes from '../../constants/routes';
+import { toastMessageSuccess } from './CommonToastMessage';
 
 const MyCart: React.FC = () => {
     const cartItems = useSelector((state: RootState) => state.CartReducer.items);
@@ -22,6 +23,7 @@ const MyCart: React.FC = () => {
 
     const handleRemoveFromCart = (productId: string) => {
         dispatch(removeFromCart({ productId }));
+        toastMessageSuccess("Product removed successfully");
     };
 
     const handleProceedToCheckout = () => {
