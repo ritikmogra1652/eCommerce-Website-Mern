@@ -8,10 +8,11 @@ import AdminDashboard from "./components/admin/AdminDashboard";
 import AdminProfile from "./components/admin/AdminProfile";
 import AdminOrders from "./components/admin/AdminOrders";
 import AddProduct from "./components/admin/AddProduct";
-import './PublicRoutes.css';
 import AdminProducts from "./components/admin/AdminProducts";
 import EditProduct from "./components/admin/EditProduct";
 import EditAdminProfile from "./components/admin/EditAdminProfile";
+import AddCategory from "./components/admin/AddCategory";
+import UpdatePassword from "./components/admin/UpdatePassword";
 // import EditProfile from "./components/auth/EditProfile";
 
 interface Props {
@@ -90,6 +91,20 @@ const PublicRoutes: React.FC = () => {
                     path={routes.ADMIN_EDIT_PRODUCTS}
                     element={
                         <AdminHeader component={EditProduct} route={routes.ADMIN_EDIT_PRODUCTS} />
+                    }
+
+                />
+                <Route
+                    path={routes.ADMIN_ADD_CATEGORY}
+                    element={
+                        <AdminHeader component={AddCategory} route={routes.ADMIN_ADD_CATEGORY} />
+                    }
+
+                />
+                <Route
+                    path={routes.ADMIN_UPDATE_PASSWORD}
+                    element={
+                        <AdminHeader component={UpdatePassword} route={routes.ADMIN_UPDATE_PASSWORD} />
                     }
 
                 />

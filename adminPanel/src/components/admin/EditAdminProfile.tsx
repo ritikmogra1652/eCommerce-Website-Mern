@@ -11,31 +11,32 @@ import routes from '../../constants/routes';
 import { toastMessageSuccess } from '../utilities/CommonToastMessage';
 import { bindActionCreators } from 'redux';
 import { updateAuth } from '../../state_management/actions/authAction';
+import './EditAdminProfile.css';
 
 const schema = yup.object({
     username: yup.string().required("User name is required"),
     phone: yup.string().min(10, "Phone number must have 10 digits").max(10, "Phone number can have at most 10 digits").required('Phone number is required').matches(/^\d+$/, 'Invalid phone number'),
-    password: yup.string()
-        .required()
-        .min(8, 'Password must be at least 8 characters long')
-        .matches(
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-            'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
-        ),
-    profileImage: yup.mixed<FileList>().required(),
+    // password: yup.string()
+    //     .required()
+    //     .min(8, 'Password must be at least 8 characters long')
+    //     .matches(
+    //         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+    //         'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
+    //     ),
+    profileImage: yup.mixed<FileList>().required('Profile image is required'),
 });
 
 interface FormFields {
     username: string;
     phone: string;
-    password: string;
+    // password: string;
     profileImage: FileList;
 }
 
 export interface UserProfile {
     username: string;
     phone: string;
-    password: string;
+    // password: string;
     profileImage: string;
 }
 
@@ -57,7 +58,7 @@ const EditAdminProfile = () => {
                 { headers: { Authorization: AuthStr } }
             );
             setProfile(response.data?.data);
-            reset(response.data?.data);
+            reset();
         } catch (error) {
             console.error('Error fetching profile data:', error);
         }
@@ -83,10 +84,21 @@ const EditAdminProfile = () => {
 
     const onSubmit: SubmitHandler<FormFields> = async (data: FormFields) => {
         try {
-            let profileImageBase64 = profile?.profileImage || '';
+            // let profileImageBase64 = profile?.profileImage || '';
+            // if (data.profileImage && data.profileImage.length > 0) {
+            //     const profileImageFile = data.profileImage[0];
+            //     profileImageBase64 = await convertToBase64(profileImageFile) || '';
+            // }
+
+            let profileImageBase64 = '';
+
             if (data.profileImage && data.profileImage.length > 0) {
                 const profileImageFile = data.profileImage[0];
-                profileImageBase64 = await convertToBase64(profileImageFile) || '';
+                if (profileImageFile instanceof Blob) {
+                    profileImageBase64 = await convertToBase64(profileImageFile) || '';
+                } else {
+                    throw new Error('Invalid file type');
+                }
             }
 
             const profileData = {
@@ -107,6 +119,7 @@ const EditAdminProfile = () => {
             toastMessageSuccess("Profile updated successfully");
             actions.updateAuth(data.username);
             navigate(routes.ADMIN_PROFILE);
+            reset();
         } catch (error) {
             console.error('Error updating profile:', error);
             alert('Failed to update profile');
@@ -114,29 +127,29 @@ const EditAdminProfile = () => {
     };
 
     return (
-        <div>
+        <div className="admin-edit-profile-container">
             <h2>Edit Profile</h2>
             {profile ? (
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form className="admin-edit-profile-form" onSubmit={handleSubmit(onSubmit)}>
                     <div>
                         <label htmlFor="username">Username</label>
                         <input {...register("username")} type="text" id="username" defaultValue={profile.username} />
-                        {errors.username && <p>{errors.username.message}</p>}
+                        {errors.username && <p className="admin-edit-profile-error-message">{errors.username.message}</p>}
                     </div>
                     <div>
                         <label htmlFor="phone">Phone Number</label>
                         <input type="text" {...register('phone')} id="phone" defaultValue={profile.phone} />
-                        {errors.phone && <p>{errors.phone.message}</p>}
+                        {errors.phone && <p className="admin-edit-profile-error-message">{errors.phone.message}</p>}
                     </div>
-                    <div>
+                    {/* <div>
                         <label htmlFor="password">Password</label>
                         <input {...register("password")} type="password" id="password" />
-                        {errors.password && <p>{errors.password.message}</p>}
-                    </div>
+                        {errors.password && <p className="admin-edit-profile-error-message">{errors.password.message}</p>}
+                    </div> */}
                     <div>
                         <label htmlFor="profileImage">Profile Image</label>
                         <input {...register("profileImage")} type="file" id="profileImage" />
-                        {errors.profileImage && <p>{errors.profileImage.message}</p>}
+                        {errors.profileImage && <p className="admin-edit-profile-error-message">{errors.profileImage.message}</p>}
                     </div>
                     <button type="submit">Update Profile</button>
                 </form>

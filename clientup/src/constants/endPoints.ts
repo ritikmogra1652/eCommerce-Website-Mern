@@ -7,6 +7,7 @@ const endPoints = {
   PLACE_ORDER: "/order",
   GET_ORDERS: "/get-orders",
   UPDATE_MYPROFILE: "/users/update_profile",
+  UPDATE_PASSWORD: "/users/update_password",
 };
 
 export default endPoints;

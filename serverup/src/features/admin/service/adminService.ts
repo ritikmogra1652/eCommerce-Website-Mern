@@ -3,6 +3,7 @@
   import UserModel, { IUsers } from '../../auth/models/user';
   import envConfig from '../../../config/envConfig';
   import { IOrder, IOrderItem, OrderModel } from '../../order/models/order';
+import { updatePassword } from '../controller/adminController';
 
   interface IResponse {
     message: string;
@@ -81,9 +82,9 @@
       userExists.username = data.username || userExists.username;
       userExists.phone = data.phone || userExists.phone;
       userExists.profileImage = data.profileImage || userExists.profileImage;
-      if (data.password) {
-        userExists.password = await bcrypt.hash(data.password!, 8);
-      }
+      // if (data.password) {
+      //   userExists.password = await bcrypt.hash(data.password!, 8);
+      // }
 
       await userExists.save();
       response.message = "User Profile successful";
@@ -93,6 +94,28 @@
         phone: userExists.phone,
         profileImage: userExists.profileImage,
       };
+      return response;
+    }
+
+    static async updatePassword(
+      email: string,
+      data: Partial<IUsers>
+    ): Promise<IResponse> {
+      const userExists = await UserModel.findOne({ email });
+
+      if (!userExists) {
+        response.message = "Invalid User email does not exists";
+        response.success = false;
+        return response;
+      }
+      if (data.password) {
+        userExists.password = await bcrypt.hash(data.password!, 8);
+      }
+
+      await userExists.save();
+      response.message = "Password Updated Successfully";
+      response.success = true;
+      response.data = [];
       return response;
     }
 

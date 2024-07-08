@@ -67,7 +67,8 @@ const AdminProfile: React.FC = () => {
                     <p><strong>Name:</strong> {userProfile.admin}</p>
                     <p><strong>Email:</strong> {userProfile.email}</p>
                     <p><strong>Phone:</strong> {userProfile.phone}</p>
-                    <Link to={routes.ADMIN_EDIT_PROFILE}>Edit Profile</Link>
+                    <Link to={routes.ADMIN_EDIT_PROFILE}><button>Edit Profile</button></Link>
+                    <Link to={routes.ADMIN_UPDATE_PASSWORD}><button>Update Password</button></Link>
                 </div>
                 
             )}

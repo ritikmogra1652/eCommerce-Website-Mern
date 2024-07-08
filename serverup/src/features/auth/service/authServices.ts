@@ -100,35 +100,61 @@ class AuthService {
     email: string,
     data: Partial<IUsers>
   ): Promise<IResponse> {
-    const response: IResponse = {
-      success: false,
-      message: "",
-      data: null,
-    };
-
     try {
-      if (data.password) {
-        data.password = await bcrypt.hash(data.password, 8);
-      }
+      const userExist = await UserModel.findOne({ email });
 
-      const updatedUser = await UserModel.findOneAndUpdate(
-        { email },
-        { $set: data }
-      );
-
-      if (!updatedUser) {
+      if (!userExist) {
         response.message = "Invalid User: email does not exist";
+        response.success = false;
         return response;
       }
 
-      response.message = "User profile updated successfully";
+      userExist.username = data.username || userExist.username;
+      userExist.phone = data.phone || userExist.phone;
+      userExist.profileImage = data.profileImage || userExist.profileImage;
+
+      await userExist.save();
+
+      // await UserModel.updateOne({ email }, { $set: data });
+      // const updatedUser = await UserModel.findOne(
+      //   { email },
+      //   { password: 0 }
+      // );
+
+      response.message = "User Profile successful";
       response.success = true;
-      response.data = updatedUser;
+      response.data = {
+        username: userExist.username,
+        phone: userExist.phone,
+        profileImage: userExist.profileImage,
+      };
     } catch (error) {
       response.message = "An error occurred while updating the profile";
       console.error("Error updating profile:", error);
     }
 
+    return response;
+  }
+
+  static async updatePassword(
+    email: string,
+    data: Partial<IUsers>
+  ): Promise<IResponse> {
+    const userExists = await UserModel.findOne({ email });
+
+    if (!userExists) {
+      response.message = "Invalid User email does not exists";
+      response.success = false;
+      return response;
+    }
+    if (data.password) {
+      userExists.password = await bcrypt.hash(data.password!, 8);
+    }
+
+    await userExists.save();
+    response.message = "User Password Updated Successfully";
+    response.success = true;
+    response.data = [];
     return response;
   }
 }

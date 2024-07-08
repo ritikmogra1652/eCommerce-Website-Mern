@@ -10,8 +10,8 @@ import Cart from "./components/utilities/Cart";
 import MyProfile from "./components/auth/MyProfile";
 import Checkout from './components/utilities/CheckOut';
 import MyOrder from "./components/utilities/MyOrder";
-import './PublicRoutes.css';
 import EditProfile from "./components/auth/EditProfile";
+import UpdatePassword from "./components/auth/UpdatePassword";
 
 interface Props {
     component: React.ComponentType;
@@ -90,6 +90,14 @@ const PublicRoutes: React.FC = () => {
                     path={routes.EDIT_PROFILE}
                     element={
                         <WithHeader component={EditProfile} route={routes.EDIT_PROFILE} />
+                    }
+
+                />
+
+                <Route
+                    path={routes.UPDATE_PASSWORD}
+                    element={
+                        <WithHeader component={UpdatePassword} route={routes.UPDATE_PASSWORD} />
                     }
 
                 />

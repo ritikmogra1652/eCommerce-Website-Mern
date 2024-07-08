@@ -7,6 +7,8 @@ const routes = {
   ADMIN_EDIT_PRODUCTS: "/edit-products/:id",
   ADMIN_EDIT_PROFILE: "/editprofile",
   ADMIN_GET_PRODUCTS: "/getproducts",
+  ADMIN_ADD_CATEGORY: "/addcategory",
+  ADMIN_UPDATE_PASSWORD: "/updatepassword",
 };
 
 export const beforeLoginRoutes = [

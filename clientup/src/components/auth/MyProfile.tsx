@@ -5,6 +5,7 @@ import { RootState } from '../../state_management/index';
 import routes from '../../constants/routes';
 import endPoints, { backendApiUrl } from '../../constants/endPoints';
 import { Link } from 'react-router-dom';
+import './MyProfile.css'; // Import the CSS file
 
 interface UserProfile {
     username: string;
@@ -14,7 +15,7 @@ interface UserProfile {
 }
 
 const MyProfile: React.FC = () => {
-    const jwtToken  = useSelector((state: RootState) => state.AuthReducer?.authData?.jwtToken);
+    const jwtToken = useSelector((state: RootState) => state.AuthReducer?.authData?.jwtToken);
     const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -64,7 +65,12 @@ const MyProfile: React.FC = () => {
                 <p><strong>Email:</strong> {userProfile?.email}</p>
                 <p><strong>Phone:</strong> {userProfile?.phone}</p>
             </div>
-            <Link to={routes.EDIT_PROFILE}>Edit Profile</Link>
+            <div>
+                <Link to={routes.EDIT_PROFILE}>Edit Profile</Link>
+            </div>
+            <div>
+                <Link to={routes.UPDATE_PASSWORD}>UPDATE PASSWORD</Link>
+            </div>
         </div>
     );
 };

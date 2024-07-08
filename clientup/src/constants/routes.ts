@@ -4,6 +4,7 @@ const routes = {
   LOGIN: "/login",
   MYORDERS: "/myorders",
   MYPROFILE: "/myprofile",
+  UPDATE_PASSWORD: "/updatepassword",
   EDIT_PROFILE: "/editprofile",
   CART: "/cart",
   CHECKOUT: "/checkout",

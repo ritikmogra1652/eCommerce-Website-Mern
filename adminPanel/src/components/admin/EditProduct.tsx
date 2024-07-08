@@ -9,18 +9,22 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate, useParams } from 'react-router-dom';
 import routes from '../../constants/routes';
 import { toastMessageSuccess } from '../utilities/CommonToastMessage';
+import './EditProduct.css';
+import { ICategory } from '../../interface/commonInterfaces';
 
 const schema = yup.object({
     product_name: yup.string().required('Product name is required'),
     description: yup.string().required('Description is required'),
+    category_id:yup.string().required('Category id is required'),
     price: yup.number().required('Price is required').positive('Price must be a positive number'),
-    image: yup.mixed<FileList>().required('Image is required'), 
+    image: yup.mixed<FileList>().required('Image is required'),
     stock: yup.number().required('Stock is required').positive('Stock must be a positive number'),
 });
 
 interface FormFields {
     product_name: string;
     description: string;
+    category_id: string;
     price: number;
     image: FileList;
     stock: number;
@@ -29,6 +33,7 @@ interface FormFields {
 export interface Product {
     product_name: string;
     description: string;
+    category_id: string;
     price: number;
     image: string;
     stock: number;
@@ -38,11 +43,35 @@ const EditProduct = () => {
     const jwtToken = useSelector((state: RootState) => state.AuthReducer.authData?.jwtToken);
     const { id } = useParams<{ id: string }>();
     const [product, setProduct] = useState<Product | null>(null);
+    const [categories, setCategories] = useState<ICategory[]>([]);
     const navigate = useNavigate();
     const { register, handleSubmit, reset, formState: { errors } } = useForm<FormFields>({
         resolver: yupResolver(schema)
     });
     const AuthStr = 'Bearer ' + jwtToken;
+
+    
+    const fetchCategories = async () => {
+        try {
+            const response = await axios.get(
+                `${backendApiUrl}${endPoints.ADMIN_GET_CATEGORIES}`,
+                {
+                    headers: {
+                        Authorization: AuthStr,
+                    },
+                }
+            );
+            setCategories(response.data?.data);
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+        }
+    };
+    
+    useEffect(() => {
+        fetchCategories(); 
+    }, []);
+
+
 
     const fetchProduct = async () => {
         try {
@@ -117,39 +146,50 @@ const EditProduct = () => {
     };
 
     return (
-        <div>
+        <div className="admin-edit-product-container">
             <h2>Edit Product</h2>
             {product ? (
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form className="admin-edit-product-form" onSubmit={handleSubmit(onSubmit)}>
                     <div>
                         <label htmlFor="product_name">Product Name</label>
                         <input {...register('product_name')} type="text" id="product_name" defaultValue={product.product_name} />
-                        {errors.product_name && <p>{errors.product_name.message}</p>}
+                        {errors.product_name && <p className="admin-edit-product-error-message">{errors.product_name.message}</p>}
                     </div>
                     <div>
                         <label htmlFor="description">Description</label>
                         <textarea {...register('description')} id="description" defaultValue={product.description} />
-                        {errors.description && <p>{errors.description.message}</p>}
+                        {errors.description && <p className="admin-edit-product-error-message">{errors.description.message}</p>}
                     </div>
+
+                    <div>
+                        <label htmlFor="category_id">Category</label>
+                        <select {...register('category_id')} id="category_id" defaultValue={product.category_id}>
+                            {categories.map(category => (
+                                <option key={category._id} value={category._id}>{category.categoryName}</option>
+                            ))}
+                        </select>
+                        {errors.category_id && <p className="admin-edit-product-error-message">{errors.category_id.message}</p>}
+                    </div>
+
                     <div>
                         <label htmlFor="price">Price</label>
                         <input {...register('price')} type="number" id="price" defaultValue={product.price.toString()} />
-                        {errors.price && <p>{errors.price.message}</p>}
+                        {errors.price && <p className="admin-edit-product-error-message">{errors.price.message}</p>}
                     </div>
                     <div>
                         <label htmlFor="image">Image</label>
                         <input {...register('image')} type="file" id="image" />
-                        {errors.image && <p>{errors.image.message}</p>}
+                        {errors.image && <p className="admin-edit-product-error-message">{errors.image.message}</p>}
                     </div>
                     <div>
                         <label htmlFor="stock">Stock</label>
                         <input {...register('stock')} type="number" id="stock" defaultValue={product.stock.toString()} />
-                        {errors.stock && <p>{errors.stock.message}</p>}
+                        {errors.stock && <p className="admin-edit-product-error-message">{errors.stock.message}</p>}
                     </div>
                     <button type="submit">Update Product</button>
                 </form>
             ) : (
-                <p>Loading...</p>
+                <div className="admin-edit-product-loading">Loading...</div>
             )}
         </div>
     );

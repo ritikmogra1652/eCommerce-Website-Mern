@@ -1,3 +1,4 @@
+import  { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -9,12 +10,13 @@ import { useNavigate } from 'react-router-dom';
 import { IUserData } from '../../interface/commonInterfaces';
 import { logInAction } from '../../state_management/actions/authAction';
 import { bindActionCreators } from 'redux';
-import { useState } from 'react';
 import { toastMessageSuccess } from '../utilities/CommonToastMessage';
+import './AdminLogin.css'; // Import the CSS file
+
 const schema = yup.object({
     email: yup.string().email("Email format is not valid").required("Email is Required"),
     password: yup.string().required().min(8, "8 charaters are required"),
-})
+});
 
 type FormFields = {
     email: string,
@@ -23,12 +25,10 @@ type FormFields = {
 
 const Login = () => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    
-    
 
     const { register, handleSubmit, formState: { errors } } = useForm<FormFields>({
         resolver: yupResolver(schema)
-    })
+    });
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -50,11 +50,9 @@ const Login = () => {
                     },
                 }
             );
-            
 
             const userDetails = response?.data?.data?.user;
             const token = response?.data?.data?.token;
-
 
             const authData: IUserData = {
                 username: userDetails.username,
@@ -76,29 +74,27 @@ const Login = () => {
                 setErrorMessage("An error occurred. Please try again later.");
             }
         }
-    }
-        return (
-            <div className="container">
-                <h1>Admin Login </h1>
+    };
 
-                <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
+    return (
+        <div className="admin-login-container">
+            <h1>Admin Login</h1>
 
-                    <label htmlFor="email">Email</label>
-                    <input {...register("email")} type="email" id="email" name="email" />
+            <form className="admin-login-form" onSubmit={handleSubmit(onSubmit)}>
+                <label htmlFor="email">Email</label>
+                <input {...register("email")} type="email" id="email" name="email" />
+                <p className="error-message">{errors.email && (<div>{errors.email.message}</div>)}</p>
 
-                    <p className="error-message">{errors.email && (<div>{errors.email.message}</div>)}</p>
+                <label htmlFor="password">Password</label>
+                <input {...register("password")} type="password" id="password" name="password" />
+                <p className="error-message">{errors.password && (<div>{errors.password.message}</div>)}</p>
 
-                    <label htmlFor="password">Password</label>
-                    <input {...register("password")} type="password" id="password" name="password" />
+                {errorMessage && <p className="error-message">{errorMessage}</p>}
 
-                    <p className="error-message">{errors.password && (<div>{errors.password.message}</div>)}</p>
-
-                    {errorMessage && <p className="error-message">{errorMessage}</p>} 
-
-                    <button>Submit</button>
-                </form>
-            </div>
-        )
-    
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    );
 }
+
 export default Login;

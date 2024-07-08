@@ -9,6 +9,12 @@ export interface IProduct {
     createdAt: Date;
 }
 
+
+export interface ICategory {
+    _id: string;
+    categoryName: string;
+    createdAt: Date;
+}
 export interface AddToCartPayload {
     product: IProduct;
     quantity: number;

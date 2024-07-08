@@ -11,6 +11,7 @@ import { bindActionCreators } from 'redux';
 import { useState } from 'react';
 import routes from '../../constants/routes';
 import { toastMessageSuccess } from '../utilities/CommonToastMessage';
+import './Login.css'
 
 const schema = yup.object({
     email: yup.string().email("Email format is not valid").required("Email is Required"),
