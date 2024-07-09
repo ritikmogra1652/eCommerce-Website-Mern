@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../state_management';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import routes from '../../constants/routes';
 import { toastMessageSuccess } from '../utilities/CommonToastMessage';
 import './EditProduct.css';
@@ -15,7 +15,7 @@ import { ICategory } from '../../interface/commonInterfaces';
 const schema = yup.object({
     product_name: yup.string().required('Product name is required'),
     description: yup.string().required('Description is required'),
-    category_id:yup.string().required('Category id is required'),
+    category_id: yup.string().required('Category id is required'),
     price: yup.number().required('Price is required').positive('Price must be a positive number'),
     image: yup.mixed<FileList>().required('Image is required'),
     stock: yup.number().required('Stock is required').positive('Stock must be a positive number'),
@@ -45,12 +45,14 @@ const EditProduct = () => {
     const [product, setProduct] = useState<Product | null>(null);
     const [categories, setCategories] = useState<ICategory[]>([]);
     const navigate = useNavigate();
+    const location = useLocation();
+    console.log(location);
+    
     const { register, handleSubmit, reset, formState: { errors } } = useForm<FormFields>({
         resolver: yupResolver(schema)
     });
     const AuthStr = 'Bearer ' + jwtToken;
 
-    
     const fetchCategories = async () => {
         try {
             const response = await axios.get(
@@ -66,17 +68,15 @@ const EditProduct = () => {
             console.error('Error fetching categories:', error);
         }
     };
-    
+
     useEffect(() => {
-        fetchCategories(); 
+        fetchCategories();
     }, []);
-
-
 
     const fetchProduct = async () => {
         try {
             const response = await axios.get(
-                `${backendApiUrl}${endPoints.GET_PRODUCTS}/${id}`,
+                `${backendApiUrl}${endPoints.GET_PRODUCTS}/${location.state.id}`,
                 {
                     headers: {
                         Authorization: AuthStr,
@@ -85,16 +85,22 @@ const EditProduct = () => {
             );
             const productData: Product = response.data.data;
             setProduct(productData);
-            reset();
+            reset({
+                product_name: productData.product_name,
+                description: productData.description,
+                category_id: productData.category_id,
+                price: productData.price,
+                stock: productData.stock
+            });
         } catch (error) {
             console.error('Error fetching product data:', error);
         }
     };
 
     useEffect(() => {
-        if (id) {
+        
             fetchProduct();
-        }
+        
     }, [id]);
 
     const convertToBase64 = async (file: File): Promise<string | null> => {
@@ -127,7 +133,7 @@ const EditProduct = () => {
             };
 
             await axios.patch(
-                `${backendApiUrl}${endPoints.UPDATE_PRODUCT}/${id}`,
+                `${backendApiUrl}${endPoints.UPDATE_PRODUCT}/${location.state.id}`,
                 productData,
                 {
                     headers: {
@@ -163,7 +169,7 @@ const EditProduct = () => {
 
                     <div>
                         <label htmlFor="category_id">Category</label>
-                        <select {...register('category_id')} id="category_id" defaultValue={product.category_id}>
+                        <select {...register('category_id')} id="category_id" >
                             {categories.map(category => (
                                 <option key={category._id} value={category._id}>{category.categoryName}</option>
                             ))}

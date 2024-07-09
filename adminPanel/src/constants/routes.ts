@@ -4,16 +4,15 @@ const routes = {
   ADMIN_PROFILE: "/adminprofile",
   ADMIN_GET_ORDERS: "/getorders",
   ADMIN_ADD_PRODUCTS: "/add-products",
-  ADMIN_EDIT_PRODUCTS: "/edit-products/:id",
+  ADMIN_EDIT_PRODUCTS: "/edit-products",
   ADMIN_EDIT_PROFILE: "/editprofile",
   ADMIN_GET_PRODUCTS: "/getproducts",
   ADMIN_ADD_CATEGORY: "/addcategory",
   ADMIN_UPDATE_PASSWORD: "/updatepassword",
+  ADMIN_UPDATE_STATUS: "/updatestatus",
 };
 
-export const beforeLoginRoutes = [
-  routes.ADMIN_LOGIN,
-];
+export const beforeLoginRoutes = [routes.ADMIN_LOGIN];
 
 // export const adminRoutes = [
 //   routes.ADMIN_DASHBOARD,

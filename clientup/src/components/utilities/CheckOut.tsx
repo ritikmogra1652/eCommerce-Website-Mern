@@ -107,7 +107,7 @@ const Checkout: React.FC = () => {
                         id="address"
                         {...register('address')}
                     />
-                    {errors.address && <p className="error-message">{errors.address.message}</p>}
+                    {errors.address && <p className="checkout-error-message">{errors.address.message}</p>}
                 </div>
                 <div className="form-group">
                     <label htmlFor="phone">Phone Number:</label>
@@ -116,12 +116,12 @@ const Checkout: React.FC = () => {
                         id="phone"
                         {...register('phone')}
                     />
-                    {errors.phone && <p className="error-message">{errors.phone.message}</p>}
+                    {errors.phone && <p className="checkout-error-message">{errors.phone.message}</p>}
                 </div>
                 <button type="submit" className="order-button" disabled={loading}>
                     {loading ? 'Placing Order...' : 'Place Order'}
                 </button>
-                {error && <p className="error-message">{error}</p>}
+                {error && <p className="checkout-error-message">{error}</p>}
             </form>
         </div>
     );

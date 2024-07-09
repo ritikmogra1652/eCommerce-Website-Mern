@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 import { IOrder, OrderModel } from "../models/order";
+import { Response } from 'express';
 interface IResponse {
   message: string;
   data?: unknown;
@@ -127,7 +128,36 @@ class OrderService {
         }
 
         return response;
+  }
+  
+
+  static async updateOrderStatus(orderId: string, status: string): Promise<IResponse> {
+    try {
+
+      const allowedStatuses = ["Pending", "Shipped", "Delivered"];
+
+      if (!allowedStatuses.includes(status)) {
+        response.message = "invalid status: " + status;
+        response.success = false;
+        return response;
+      }
+      const order = await OrderModel.findByIdAndUpdate(orderId, { status }, { new: true });
+      if (!order) {
+        response.message = "Invalid Order ID";
+        response.success = false;
+        return response;
+      }
+      response.message = "Order status updated successfully";
+      response.success = true;
+      response.data = order;
+    } catch (error: any) {
+      response.message = error.message;
+      response.success = false;
     }
+    return response;  
+  }
+
+
 
 
 }

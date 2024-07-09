@@ -1,61 +1,69 @@
-/* AdminOrders.css */
-
-/* Container styles */
 .admin-orders-container {
-  max-width: 100%;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  margin: 20px;
 }
 
-/* Heading styles */
-.admin-orders-container h2 {
-  margin-bottom: 20px;
-  text-align: center;
+.admin-orders-loading,
+.admin-orders-error {
+  margin: 20px;
+  padding: 10px;
+  background-color: #f8d7da; /* Light red for errors */
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
 }
 
-/* Table styles */
 .admin-orders-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
 }
 
-.admin-orders-table th, .admin-orders-table td {
-  border: 1px solid #ddd;
-  padding: 10px;
+.admin-orders-table th,
+.admin-orders-table td {
+  border: 1px solid #dee2e6;
+  padding: 8px;
   text-align: left;
 }
 
 .admin-orders-table th {
   background-color: #f2f2f2;
-  font-weight: bold;
 }
 
 .admin-orders-table tbody tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: #f2f2f2;
 }
 
 .admin-orders-table tbody tr:hover {
-  background-color: #e0e0e0;
+  background-color: #e2e6ea;
+}
+
+.admin-orders-table select {
+  padding: 5px;
+  font-size: 14px;
 }
 
 .admin-orders-table ul {
-  margin: 0;
   padding: 0;
-  list-style-type: none;
+  margin: 0;
 }
 
 .admin-orders-table ul li {
+  list-style-type: none;
   margin-bottom: 5px;
 }
 
-/* Loading and error styles */
-.admin-orders-loading, .admin-orders-error {
-  text-align: center;
-  margin-top: 20px;
-  font-style: italic;
-  color: #666;
+/* Define different colors for different statuses */
+.admin-orders-table .status-pending select {
+  background-color: #ffc107;
+  color: #212529; /* Yellow */
+}
+
+.admin-orders-table .status-shipped select {
+  background-color: #17a2b8;
+  color: #fff; /* Blue */
+}
+
+.admin-orders-table .status-delivered select {
+  background-color: #28a745;
+  color: #fff; /* Green */
 }

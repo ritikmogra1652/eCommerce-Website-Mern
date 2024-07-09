@@ -71,8 +71,8 @@ const AdminProducts = () => {
         );
     }
 
-    const handleEditClick = (id: string) => {
-        navigate(routes.ADMIN_EDIT_PRODUCTS.replace(":id", id));
+    const handleEditClick = (id:string) => {
+        navigate(routes.ADMIN_EDIT_PRODUCTS,{state :{id:id}});
     };
 
     return (
@@ -95,7 +95,7 @@ const AdminProducts = () => {
                         <th>Price</th>
                         <th>Stock</th>
                         <th>Image</th>
-                        <th>Edit</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -111,6 +111,7 @@ const AdminProducts = () => {
                             </td>
                             <td>
                                 <button onClick={() => { handleEditClick(product._id) }}>Edit</button>
+                                <button onClick={() => { handleEditClick(product._id) }}>Delete</button>
                             </td>
                         </tr>
                     ))}

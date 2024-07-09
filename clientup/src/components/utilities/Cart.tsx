@@ -59,7 +59,7 @@ const MyCart: React.FC = () => {
                                         onChange={(e) => handleQuantityChange(item.product._id, +e.target.value)}
                                         className="mycart-quantity-select"
                                     >
-                                        {[...Array(10)].map((_, i) => (
+                                        {[...Array(100)].map((_, i) => (
                                             <option key={i} value={i + 1}>{i + 1}</option>
                                         ))}
                                     </select>

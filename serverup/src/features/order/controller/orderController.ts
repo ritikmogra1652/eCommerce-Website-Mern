@@ -53,3 +53,53 @@ export const getOrder = async (req: AuthRequest, res: Response) => {
         res.status(statusCode).json({ error: errorMessage });
     }
 };
+
+// export const getOrderById = async (req: Request, res: Response) => {
+
+//     try {
+//         const orderId = req.params.id;
+//         const data = await OrderService.getOrderById(orderId as string);
+
+//         if (data.success) {
+//         res.status(201).json({
+//             ...data,
+//             code: 201,
+//         });
+//         } else {
+//         res.status(409).json({
+//             ...data,
+//             code: 409,
+//         });
+//         }
+//     } catch (error: any) {
+//         const statusCode = error.output?.statusCode?? 500;
+//         const errorMessage = error.message?? "Internal Server Error";
+//         res.status(statusCode).json({ error: errorMessage });
+//     }
+
+// }
+
+export const updateOrderStatus = async (req: Request, res: Response) => {
+    try {
+        const orderId = req.params.id;
+        const status = req.body.status;
+
+        const data = await OrderService.updateOrderStatus(orderId, status as string);
+
+        if (data.success) {
+        res.status(201).json({
+            ...data,
+            code: 201,
+        });
+        } else {
+        res.status(409).json({
+            ...data,
+            code: 409,
+        });
+        }
+    } catch (error: any) {
+        const statusCode = error.output?.statusCode ?? 500;
+        const errorMessage = error.message ?? "Internal Server Error";
+        res.status(statusCode).json({ error: errorMessage });
+    }
+};

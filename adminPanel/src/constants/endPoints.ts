@@ -12,6 +12,7 @@ const endPoints = {
   ADMIN_ADD_CATEGORY: "/add-category",
   ADMIN_GET_CATEGORIES: "/categories",
   ADMIN_UPDATE_PASSWORD: "/admin/update_password",
+  ADMIN_UPDATE_STATUS: "/update-status",
 };
 
 export default endPoints;

@@ -107,7 +107,7 @@ input:focus {
     background-color: #218838;
 }
 
-.error-message {
+.checkout-error-message {
     color: red;
     font-size: 14px;
     margin-top: 5px;
