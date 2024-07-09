@@ -111,7 +111,7 @@ const AdminProducts = () => {
                             </td>
                             <td>
                                 <button onClick={() => { handleEditClick(product._id) }}>Edit</button>
-                                <button onClick={() => { handleEditClick(product._id) }}>Delete</button>
+                                {/* <button onClick={() => { handleEditClick(product._id) }}>Delete</button> */}
                             </td>
                         </tr>
                     ))}
