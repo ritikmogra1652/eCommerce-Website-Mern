@@ -69,3 +69,29 @@
     text-align: center;
     margin-top: 20px;
 }
+
+.admin-products-pagination{
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin: 20px 0;
+}
+
+.admin-products-pagination button {
+    border: none;
+    padding: 10px 0px;
+    width: 50px;
+    cursor: pointer;
+    background-color: #007bff;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.admin-products-pagination button.admin__page {
+    background-color: #00bbbb;
+    color: white;
+}
+
+.admin-products-pagination button:hover {
+    background-color: #0056b3;
+}

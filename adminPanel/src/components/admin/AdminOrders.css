@@ -67,3 +67,32 @@
   background-color: #28a745;
   color: #fff; /* Green */
 }
+
+
+.admin-orders-filters {
+  margin-bottom: 20px;
+  display: flex;
+}
+
+.admin-orders-filters label {
+  margin: 10px;
+  
+}
+
+
+.admin-orders-filters select,
+.admin-orders-filters input[type='text'] {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.admin-orders-filters select {
+  width: 120px;
+}
+
+.admin-orders-filters input[type='text'] {
+  width: 200px;
+}
+

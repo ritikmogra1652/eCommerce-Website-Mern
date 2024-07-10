@@ -9,7 +9,8 @@ import { updatePassword } from '../controller/adminController';
     message: string;
     data?: unknown;
     success: boolean;
-  }
+}
+  
 
   const response: IResponse = { message: "", success: false };
 
@@ -119,7 +120,18 @@ import { updatePassword } from '../controller/adminController';
       return response;
     }
 
-    static async getAllOrders(): Promise<IResponse> {
+    static async getAllOrders(
+      username?: string,
+      status?: string
+    ): Promise<IResponse> {
+      const matchConditions: any = {};
+      if (username) {
+        matchConditions["userDetails.username"] = new RegExp(username, "i"); // Case-insensitive search
+      }
+      if (status) {
+        matchConditions["status"] = status;
+      }
+
       const orders = await OrderModel.aggregate([
         {
           $lookup: {
@@ -145,6 +157,9 @@ import { updatePassword } from '../controller/adminController';
         },
         {
           $unwind: "$productDetails",
+        },
+        {
+          $match: matchConditions,
         },
         {
           $group: {

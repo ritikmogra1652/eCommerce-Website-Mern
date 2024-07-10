@@ -32,7 +32,7 @@ export const placeOrder = async (req: AuthRequest, res: Response) => {
 export const getOrder = async (req: AuthRequest, res: Response) => {
     
     try {
-       const userId = req.userId;
+        const userId = req.userId;
 
         const data = await OrderService.getOrder(userId as string);
 

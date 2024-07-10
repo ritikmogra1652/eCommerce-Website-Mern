@@ -80,7 +80,14 @@ export const updateProfile = async (req: AuthRequest, res: Response) => {
 
 export const getAllOrders = async (req: Request, res: Response) => {
   try {
-    const orders = await AdminService.getAllOrders();
+
+
+      const { username = '', status =''} = req.query;
+
+      const orders = await AdminService.getAllOrders(
+        username as string,
+        status as string
+      );
     if (orders.success) {
       res.status(200).json({
           ...orders,
