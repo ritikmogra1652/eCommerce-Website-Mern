@@ -16,7 +16,7 @@ interface FormFields {
   description: string;
   category_id: string;
   price: number;
-  image: FileList;
+  images: FileList;
   stock: number;
 }
 
@@ -25,7 +25,7 @@ const schema = yup.object().shape({
   description: yup.string().required('Description is required'),
   category_id: yup.string().required('Category is required'),
   price: yup.number().required('Price is required').positive('Price must be a positive number'),
-  image: yup.mixed<FileList>().required('Image is required'),
+  images: yup.mixed<FileList>().required('Image is required'),
   stock: yup.number().required('Stock is required').positive('Stock must be a positive number'),
 });
 
@@ -73,15 +73,16 @@ const AddProduct: React.FC = () => {
 
   const onSubmit: SubmitHandler<FormFields> = async (data: FormFields) => {
     try {
-      const productImageFile = data.image[0];
-      let profileImageBase64 = null;
-      if (productImageFile) {
-        profileImageBase64 = await convertToBase64(productImageFile);
+      const productImageFiles = Array.from(data.images);
+
+      let productImageBase64:string[] = [];
+      if (productImageFiles) {
+        productImageBase64 = await Promise.all(productImageFiles.map(file=>convertToBase64(file)));
       }
 
       const productData = {
         ...data,
-        image: profileImageBase64
+        images: productImageBase64.map(base64 => ({ imageUrl: base64 }))
       };
 
       const AuthStr = 'Bearer '.concat(jwtToken as string);
@@ -126,9 +127,9 @@ const AddProduct: React.FC = () => {
         </div>
 
         <div className="form-item">
-          <label className="add-product-label" htmlFor="image">Image</label>
-          <input {...register('image')} type="file" id="image" className="add-product-input" />
-          <p className="add-product-error-message">{errors.image?.message}</p>
+          <label className="add-product-label" htmlFor="images">Image</label>
+          <input {...register('images')} type="file" id="images" className="add-product-input" multiple/>
+          <p className="add-product-error-message">{errors.images?.message}</p>
         </div>
 
         <div className="form-item">

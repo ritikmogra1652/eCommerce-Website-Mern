@@ -18,6 +18,7 @@ const HomePage: React.FC = () => {
     const [totalProducts, setTotalProducts] = useState<number>(0);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [sortOrder, setSortOrder] = useState<string>('');
+    const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
 
     const dispatch = useDispatch();
 
@@ -158,7 +159,7 @@ const HomePage: React.FC = () => {
                 {products.map(product => (
                     <div key={product._id} className="homepage__product-item">
                         <img
-                            src={product.image}
+                            src={product.images[0].imageUrl}
                             alt={product.product_name}
                             onClick={() => handleProductClick(product)}
                             className="homepage__product-image"
@@ -191,13 +192,26 @@ const HomePage: React.FC = () => {
                     <div className="homepage__modal-content">
                         <span className="homepage__close" onClick={closeModal}>&times;</span>
                         <h2>{selectedProduct.product_name}</h2>
-                        <img src={selectedProduct.image} alt={selectedProduct.product_name} />
+                        <div className="homepage__modal-slider">
+                            <button
+                                onClick={() => setCurrentImageIndex((prev) => (prev === 0 ? selectedProduct.images.length - 1 : prev - 1))}
+                            >
+                                &#10094;
+                            </button>
+                            <img src={selectedProduct.images[currentImageIndex].imageUrl} alt={selectedProduct.product_name} />
+                            <button
+                                onClick={() => setCurrentImageIndex((prev) => (prev === selectedProduct.images.length - 1 ? 0 : prev + 1))}
+                            >
+                                &#10095;
+                            </button>
+                        </div>
                         <p>{selectedProduct.description}</p>
                         <p>Price: Rs {selectedProduct.price}</p>
                         <button onClick={() => handleAddToCart(selectedProduct)}>Add to Cart</button>
                     </div>
                 </div>
             )}
+
 
         </>
     );

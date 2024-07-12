@@ -8,16 +8,16 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import routes from '../../constants/routes';
-import { toastMessageSuccess } from '../utilities/CommonToastMessage';
+import { toastMessageSuccess, toastMessageError } from '../utilities/CommonToastMessage';
 import './EditProduct.css';
-import { ICategory } from '../../interface/commonInterfaces';
+import { ICategory, IProduct } from '../../interface/commonInterfaces';
 
 const schema = yup.object({
     product_name: yup.string().required('Product name is required'),
     description: yup.string().required('Description is required'),
     category_id: yup.string().required('Category id is required'),
     price: yup.number().required('Price is required').positive('Price must be a positive number'),
-    image: yup.mixed<FileList>().required('Image is required'),
+    images: yup.mixed<FileList>().required('Image is required'),
     stock: yup.number().required('Stock is required').positive('Stock must be a positive number'),
 });
 
@@ -26,28 +26,19 @@ interface FormFields {
     description: string;
     category_id: string;
     price: number;
-    image: FileList;
-    stock: number;
-}
-
-export interface Product {
-    product_name: string;
-    description: string;
-    category_id: string;
-    price: number;
-    image: string;
+    images: FileList;
     stock: number;
 }
 
 const EditProduct = () => {
     const jwtToken = useSelector((state: RootState) => state.AuthReducer.authData?.jwtToken);
     const { id } = useParams<{ id: string }>();
-    const [product, setProduct] = useState<Product | null>(null);
+    const [product, setProduct] = useState<IProduct | null>(null);
     const [categories, setCategories] = useState<ICategory[]>([]);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
-    console.log(location);
-    
+
     const { register, handleSubmit, reset, formState: { errors } } = useForm<FormFields>({
         resolver: yupResolver(schema)
     });
@@ -58,14 +49,13 @@ const EditProduct = () => {
             const response = await axios.get(
                 `${backendApiUrl}${endPoints.ADMIN_GET_CATEGORIES}`,
                 {
-                    headers: {
-                        Authorization: AuthStr,
-                    },
+                    headers: { Authorization: AuthStr },
                 }
             );
             setCategories(response.data?.data);
         } catch (error) {
             console.error('Error fetching categories:', error);
+            toastMessageError('Failed to fetch categories');
         }
     };
 
@@ -78,58 +68,54 @@ const EditProduct = () => {
             const response = await axios.get(
                 `${backendApiUrl}${endPoints.GET_PRODUCTS}/${location.state.id}`,
                 {
-                    headers: {
-                        Authorization: AuthStr,
-                    },
+                    headers: { Authorization: AuthStr },
                 }
             );
-            const productData: Product = response.data.data;
+            const productData: IProduct = response.data.data;
             setProduct(productData);
             reset({
                 product_name: productData.product_name,
                 description: productData.description,
                 category_id: productData.category_id,
                 price: productData.price,
-                stock: productData.stock
+                stock: productData.stock,
             });
         } catch (error) {
             console.error('Error fetching product data:', error);
+            toastMessageError('Failed to fetch product data');
         }
     };
 
     useEffect(() => {
-        
-            fetchProduct();
-        
+        fetchProduct();
     }, [id]);
 
     const convertToBase64 = async (file: File): Promise<string | null> => {
-        try {
-            return new Promise<string>((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => resolve(reader.result as string);
-                reader.onerror = error => reject(error);
-            });
-        } catch (error) {
-            console.error('Error converting image to base64:', error);
-            return null;
-        }
+        return new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = (error) => reject(error);
+        });
     };
 
     const onSubmit: SubmitHandler<FormFields> = async (data: FormFields) => {
+        setLoading(true);
         try {
-            let profileImageBase64 = product?.image || '';
-            if (data.image && data.image.length > 0) {
-                const productImageFile = data.image[0];
-                if (productImageFile) {
-                    profileImageBase64 = await convertToBase64(productImageFile) || '';
-                }
-            }
+            
+            const productImageFiles = Array.from(data.images);
+            let productImageBase64: string[] = [];
 
+            if (productImageFiles.length > 0) {
+                productImageBase64 = await Promise.all(
+                    productImageFiles.map(file => convertToBase64(file))
+                );
+            } else if (product) {
+                productImageBase64 = product.images.map(image => image.imageUrl);
+            }
             const productData = {
                 ...data,
-                image: profileImageBase64,
+                images: productImageBase64.map(base64 => ({ imageUrl: base64 }))
             };
 
             await axios.patch(
@@ -142,12 +128,15 @@ const EditProduct = () => {
                     },
                 }
             );
+
             toastMessageSuccess('Product updated successfully');
             navigate(routes.ADMIN_GET_PRODUCTS);
             reset();
         } catch (error) {
             console.error('Error updating product:', error);
-            alert('Failed to update product');
+            toastMessageError('Failed to update product');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -158,41 +147,41 @@ const EditProduct = () => {
                 <form className="admin-edit-product-form" onSubmit={handleSubmit(onSubmit)}>
                     <div>
                         <label htmlFor="product_name">Product Name</label>
-                        <input {...register('product_name')} type="text" id="product_name" defaultValue={product.product_name} />
+                        <input {...register('product_name')} type="text" id="product_name" />
                         {errors.product_name && <p className="admin-edit-product-error-message">{errors.product_name.message}</p>}
                     </div>
                     <div>
                         <label htmlFor="description">Description</label>
-                        <textarea {...register('description')} id="description" defaultValue={product.description} />
+                        <textarea {...register('description')} id="description" />
                         {errors.description && <p className="admin-edit-product-error-message">{errors.description.message}</p>}
                     </div>
-
                     <div>
                         <label htmlFor="category_id">Category</label>
-                        <select {...register('category_id')} id="category_id" >
+                        <select {...register('category_id')} id="category_id">
                             {categories.map(category => (
                                 <option key={category._id} value={category._id}>{category.categoryName}</option>
                             ))}
                         </select>
                         {errors.category_id && <p className="admin-edit-product-error-message">{errors.category_id.message}</p>}
                     </div>
-
                     <div>
                         <label htmlFor="price">Price</label>
-                        <input {...register('price')} type="number" id="price" defaultValue={product.price.toString()} />
+                        <input {...register('price')} type="number" id="price" />
                         {errors.price && <p className="admin-edit-product-error-message">{errors.price.message}</p>}
                     </div>
                     <div>
-                        <label htmlFor="image">Image</label>
-                        <input {...register('image')} type="file" id="image" />
-                        {errors.image && <p className="admin-edit-product-error-message">{errors.image.message}</p>}
+                        <label htmlFor="images">Images</label>
+                        <input {...register('images')} type="file" id="images" multiple />
+                        {errors.images && <p className="admin-edit-product-error-message">{errors.images.message}</p>}
                     </div>
                     <div>
                         <label htmlFor="stock">Stock</label>
-                        <input {...register('stock')} type="number" id="stock" defaultValue={product.stock.toString()} />
+                        <input {...register('stock')} type="number" id="stock" />
                         {errors.stock && <p className="admin-edit-product-error-message">{errors.stock.message}</p>}
                     </div>
-                    <button type="submit">Update Product</button>
+                    <button type="submit" disabled={loading}>
+                        {loading ? 'Updating...' : 'Update Product'}
+                    </button>
                 </form>
             ) : (
                 <div className="admin-edit-product-loading">Loading...</div>

@@ -78,7 +78,7 @@ class OrderService {
                     _id: "$items._id",
                     productId: "$items.productId",
                     product_name: "$ProductDetails.product_name",
-                    image: "$ProductDetails.image",
+                    images: "$ProductDetails.images",
                     quantity: "$items.quantity",
                     price: "$items.price",
                   },

@@ -44,7 +44,7 @@ const MyCart: React.FC = () => {
                     {cartItems.map((item, index) => (
                         <div key={index} className="mycart-item">
                             <img
-                                src={item.product.image}
+                                src={item.product.images[0].imageUrl}
                                 alt={item.product.product_name}
                                 className="mycart-item-image"
                             />

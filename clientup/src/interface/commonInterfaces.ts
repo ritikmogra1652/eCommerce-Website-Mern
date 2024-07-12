@@ -1,12 +1,16 @@
 export interface IProduct {
-    _id:string,
-    product_name: string;
-    description: string;
-    category_id: string;
-    price: number;
-    image: string;
-    stock: number;
-    createdAt: Date;
+  _id: string;
+  product_name: string;
+  description: string;
+  category_id: string;
+  price: number;
+  images: IImage[];
+  stock: number;
+  createdAt: Date;
+}
+
+export interface IImage{
+    imageUrl: string;
 }
 
 export interface AddToCartPayload {

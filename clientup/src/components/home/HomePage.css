@@ -180,3 +180,23 @@
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
+.homepage__modal-slider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.homepage__modal-slider img {
+    width: 300px; /* Adjust as needed */
+    height: auto;
+}
+
+.homepage__modal-slider button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    margin: 0 10px;
+    color: #000; /* Adjust color as needed */
+}

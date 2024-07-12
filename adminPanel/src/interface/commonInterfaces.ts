@@ -4,9 +4,15 @@ export interface IProduct {
     description: string;
     category_id: string;
     price: number;
-    image: string;
+    images: IImage[];
     stock: number;
     createdAt: Date;
+
+
+}
+
+export interface IImage{
+    imageUrl:string;
 }
 
 

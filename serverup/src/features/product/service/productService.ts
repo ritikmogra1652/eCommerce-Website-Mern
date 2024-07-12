@@ -30,7 +30,7 @@ class ProductService {
     sort
   }: QueryParams): Promise<IResponse> {
     try {
-      let query: any = {};
+      let query = {};
       if (search) {
         query = {
           $or: [

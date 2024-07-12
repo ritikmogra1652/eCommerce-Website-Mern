@@ -117,8 +117,13 @@ const AdminProducts = () => {
                             <td>{product.price}</td>
                             <td>{product.stock}</td>
                             <td>
-                                <img src={product.image} alt={product.product_name} />
-                            </td>
+                            {product.images.map(image => (
+                                
+                                    <img src={image.imageUrl} alt={product.product_name} />
+                                
+                            ))}
+                                    </td>
+                            
                             <td>
                                 <button onClick={() => { handleEditClick(product._id) }}>Edit</button>
                                 {/* <button onClick={() => { handleEditClick(product._id) }}>Delete</button> */}

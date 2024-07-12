@@ -4,11 +4,14 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../state_management';
 import endPoints, { backendApiUrl } from '../../constants/endPoints';
 import './MyOrder.css';
+import { IImage } from '../../interface/commonInterfaces';
+
+
 
 interface OrderItem {
   _id: string;
   product_name: string;
-  image: string;
+  images: IImage[];
   price: number;
   quantity: number;
 }
@@ -39,10 +42,11 @@ const MyOrder: React.FC = () => {
           'Authorization': AuthStr
         }
       });
-      console.log(response.data.data);
+      
       
       if (response.data.success) {
         setOrders(response.data.data);
+        // console.log(orders);
       } else {
         setError('Failed to fetch orders');
       }
@@ -93,7 +97,7 @@ const MyOrder: React.FC = () => {
             <div className="order-items">
               {order.items.map((item) => (
                 <div key={item._id} className="order-item">
-                  <img src={item.image} alt={item.product_name} />
+                  <img src={item.images[0].imageUrl} alt={item.product_name} />
                   <div className="item-details">
                     <h3>{item.product_name}</h3>
                     <p>Price: Rs {item.price}</p>
