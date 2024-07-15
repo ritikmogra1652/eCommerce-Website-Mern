@@ -170,6 +170,7 @@ const HomePage: React.FC = () => {
                         />
                         <h2>{product.product_name}</h2>
                         <p>Price: Rs {product.price}</p>
+                        <p>In stock: {product.stock}</p>
                         <button onClick={() => handleAddToCart(product)}>Add to Cart</button>
                     </div>
                 ))}

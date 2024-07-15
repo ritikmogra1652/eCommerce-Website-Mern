@@ -70,10 +70,10 @@ const Checkout: React.FC = () => {
                 toastMessageSuccess("Order placed successfully");
 
             } else {
-                setError('Order could not be placed. Please try again.');
+                setError(response?.data?.message||'Order could not be placed. Please try again.');
             }
-        } catch (err) {
-            setError('Order could not be placed. Please try again.');
+        } catch (error) {
+            setError(error.response?.data?.message||'Order could not be placed. Please try again.');
         } finally {
             setLoading(false);
         }

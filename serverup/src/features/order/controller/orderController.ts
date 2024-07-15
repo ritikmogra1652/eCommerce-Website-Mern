@@ -18,8 +18,9 @@ export const placeOrder = async (req: AuthRequest, res: Response) => {
         });
         } else {
         res.status(409).json({
-            ...data,
-            code: 409,
+          ...data,
+          code: 409,
+          message: data.message,
         });
         }
     } catch (error: any) {

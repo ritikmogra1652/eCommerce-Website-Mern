@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { toastMessageSuccess, toastMessageError } from '../utilities/CommonToastMessage';
 import endPoints, { backendApiUrl } from '../../constants/endPoints';
 import { useSelector } from 'react-redux';
@@ -78,10 +78,11 @@ const AdminUserList = () => {
             } else {
                 toastMessageError(response.data.message || 'Failed to update user status');
             }
-        } catch (error: any) {
+        } catch (error) {
             console.error('Error updating user status:', error);
-            if (error.response && error.response.data && error.response.data.message) {
-                toastMessageError(error.response.data.message);
+            const axiosError = error as AxiosError;
+            if (axiosError.response && axiosError.response.data && (axiosError.response.data as { message: string }).message) {
+                toastMessageError((axiosError.response.data as { message: string }).message);
             } else {
                 toastMessageError('Failed to update user status');
             }

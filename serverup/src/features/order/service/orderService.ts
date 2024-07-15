@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 import { IOrder, OrderModel } from "../models/order";
 import { Response } from 'express';
+import ProductModel from "../../product/models/product";
 interface IResponse {
   message: string;
   data?: unknown;
@@ -12,21 +13,45 @@ const response: IResponse = { message: "", success: false };
 
 class OrderService {
     static async placeOrder(
-        data: Partial<IOrder>,
+        data: IOrder,
         id: string
     ): Promise<IResponse> {
         try {
-            const newOrder = new OrderModel({
-                ...data,
-                userId: id,
+          // Check inventory
+          for (const item of data.items) {
+            const product = await ProductModel.findById(item.productId);
+            if (!product) {
+              response.message = `Product with ID ${item.productId} not found`;
+              return response;
+            }
+            if (product.stock < item.quantity) {
+              response.message = `Not enough stock for product ${product.product_name}`;
+              response.success = false;
+              return response;
+            }
+          }
+
+
+          for (const item of data.items) {
+            await ProductModel.findByIdAndUpdate(item.productId, {
+              $inc: { stock: -item.quantity },
             });
-            const savedOrder = await newOrder.save();
-            response.success = true;
-            response.data = savedOrder;
-            response.message = "Order placed successfully";
+          }
+
+          // Create order
+          const newOrder = new OrderModel({
+            ...data,
+            userId:id,
+            status: "Pending",
+          });
+          const savedOrder = await newOrder.save();
+
+          response.success = true;
+          response.data = savedOrder;
+          response.message = "Order placed successfully";
         } catch (error: any) {
-            response.success = false;
-            response.message = error.message;
+          response.success = false;
+          response.message = error.message;
         }
 
         return response;

@@ -12,7 +12,7 @@ import "./AddCategory.css"
 import { toastMessageSuccess } from '../utilities/CommonToastMessage';
 
 const schema = yup.object({
-    categoryName: yup.string().required("Category name is required"),
+    categoryName: yup.string().required("Category name is required").trim(),
 });
 
 interface FormFields {
