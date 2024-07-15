@@ -1,0 +1,59 @@
+.admin-user-list-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+}
+
+.admin-user-list-container h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.admin-user-list-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-user-list-container th,
+.admin-user-list-container td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.admin-user-list-container th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.admin-user-list-container tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.admin-user-list-container tr:hover {
+    background-color: #f1f1f1;
+}
+
+.admin-user-list-container img.profile-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.admin-user-list-loading,
+.admin-user-list-error {
+    text-align: center;
+    font-size: 18px;
+    margin: 20px 0;
+}
+
+.admin-user-list-loading {
+    color: #007bff;
+}
+
+.admin-user-list-error {
+    color: #dc3545;
+}

@@ -13,8 +13,8 @@ import './EditProduct.css';
 import { ICategory, IProduct } from '../../interface/commonInterfaces';
 
 const schema = yup.object({
-    product_name: yup.string().required('Product name is required'),
-    description: yup.string().required('Description is required'),
+    product_name: yup.string().required('Product name is required').trim(),
+    description: yup.string().required('Description is required').trim(),
     category_id: yup.string().required('Category id is required'),
     price: yup.number().required('Price is required').positive('Price must be a positive number'),
     images: yup.mixed<FileList>().required('Image is required'),
@@ -90,8 +90,8 @@ const EditProduct = () => {
         fetchProduct();
     }, [id]);
 
-    const convertToBase64 = async (file: File): Promise<string | null> => {
-        return new Promise<string>((resolve, reject) => {
+    const convertToBase64 = (file: File): Promise<string | null> => {
+        return new Promise<string | null>((resolve, reject) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = () => resolve(reader.result as string);
@@ -102,20 +102,20 @@ const EditProduct = () => {
     const onSubmit: SubmitHandler<FormFields> = async (data: FormFields) => {
         setLoading(true);
         try {
-            
             const productImageFiles = Array.from(data.images);
-            let productImageBase64: string[] = [];
+            let productImageBase64: (string | null)[] = [];
 
-            if (productImageFiles.length > 0) {
+            if (productImageFiles && productImageFiles.length > 0) {
                 productImageBase64 = await Promise.all(
                     productImageFiles.map(file => convertToBase64(file))
                 );
             } else if (product) {
                 productImageBase64 = product.images.map(image => image.imageUrl);
             }
+
             const productData = {
                 ...data,
-                images: productImageBase64.map(base64 => ({ imageUrl: base64 }))
+                images: productImageBase64.filter(Boolean).map(base64 => ({ imageUrl: base64 as string })) // Filter out any null values
             };
 
             await axios.patch(
@@ -191,3 +191,4 @@ const EditProduct = () => {
 };
 
 export default EditProduct;
+

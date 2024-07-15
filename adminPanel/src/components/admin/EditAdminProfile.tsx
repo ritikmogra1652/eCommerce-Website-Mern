@@ -14,7 +14,7 @@ import { updateAuth } from '../../state_management/actions/authAction';
 import './EditAdminProfile.css';
 
 const schema = yup.object({
-    username: yup.string().required("User name is required"),
+    username: yup.string().required("User name is required").trim(),
     phone: yup.string().min(10, "Phone number must have 10 digits").max(10, "Phone number can have at most 10 digits").required('Phone number is required').matches(/^\d+$/, 'Invalid phone number'),
     // password: yup.string()
     //     .required()

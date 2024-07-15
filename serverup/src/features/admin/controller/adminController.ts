@@ -80,8 +80,6 @@ export const updateProfile = async (req: AuthRequest, res: Response) => {
 
 export const getAllOrders = async (req: Request, res: Response) => {
   try {
-
-
       const { username = '', status =''} = req.query;
 
       const orders = await AdminService.getAllOrders(
@@ -132,3 +130,45 @@ export const updatePassword = async (req: AuthRequest, res: Response) => {
     res.status(statusCode).json({ error: errorMessage });
   }
 };
+
+export const getUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await AdminService.getUsers();
+    if (users.success) {
+      res.status(200).json({
+        ...users,
+        code: 200,
+      });
+    } else {
+      res.status(400).json({
+        ...users,
+        code: 400,
+      });
+    }
+  } catch (error: any) {
+    const statusCode = error.output?.statusCode ?? 500;
+    const errorMessage = error.message ?? "Internal Server Error";
+    res.status(statusCode).json({ error: errorMessage });
+  }
+};
+
+
+export const updateUserStatus = async (req: Request, res: Response) => { 
+  try {
+    const { userId, status } = req.body;
+    const data = await AdminService.updateUserStatus(userId, status as boolean);
+
+    if (data.success) {
+      res.status(200).json(data);
+    } else {
+      res.status(400).json({
+        message: data.message,
+        code: 400,
+      });
+    }
+  } catch (error: any) {
+    const statusCode = error.output?.statusCode?? 500;
+    const errorMessage = error.message?? "Internal Server Error";
+    res.status(statusCode).json({ error: errorMessage });
+  }
+}

@@ -5,6 +5,7 @@ export interface IUsers extends Document {
   phone: string;
   email: string;
   role: string;
+  isActivated: boolean;
   password: string;
   profileImage: string;
   createdAt: Date;
@@ -15,6 +16,7 @@ const UsersSchema: Schema<IUsers> = new Schema({
   phone: { type: String, required: true },
   email: { type: String, required: true },
   role: { type: String, enum: ["user", "admin"], default: "user" },
+  isActivated: { type: Boolean, default: true },
   password: { type: String, required: true },
   profileImage: { type: String, default: "" },
   createdAt: { type: Date, default: Date.now },

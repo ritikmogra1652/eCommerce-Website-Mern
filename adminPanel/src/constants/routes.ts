@@ -7,6 +7,7 @@ const routes = {
   ADMIN_EDIT_PRODUCTS: "/edit-products",
   ADMIN_EDIT_PROFILE: "/editprofile",
   ADMIN_GET_PRODUCTS: "/getproducts",
+  ADMIN_GET_USERS: "/getusers",
   ADMIN_ADD_CATEGORY: "/addcategory",
   ADMIN_UPDATE_PASSWORD: "/updatepassword",
   ADMIN_UPDATE_STATUS: "/updatestatus",

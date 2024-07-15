@@ -21,8 +21,8 @@ interface FormFields {
 }
 
 const schema = yup.object().shape({
-  product_name: yup.string().required('Product name is required'),
-  description: yup.string().required('Description is required'),
+  product_name: yup.string().required('Product name is required').trim(),
+  description: yup.string().required('Description is required').trim(),
   category_id: yup.string().required('Category is required'),
   price: yup.number().required('Price is required').positive('Price must be a positive number'),
   images: yup.mixed<FileList>().required('Image is required'),

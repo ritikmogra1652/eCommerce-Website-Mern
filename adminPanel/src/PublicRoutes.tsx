@@ -14,6 +14,7 @@ import EditAdminProfile from "./components/admin/EditAdminProfile";
 import AddCategory from "./components/admin/AddCategory";
 import UpdatePassword from "./components/admin/UpdatePassword";
 // import EditProfile from "./components/auth/EditProfile";
+import AdminUserList from './components/admin/AdminUserList';
 
 interface Props {
     component: React.ComponentType;
@@ -105,6 +106,13 @@ const PublicRoutes: React.FC = () => {
                     path={routes.ADMIN_UPDATE_PASSWORD}
                     element={
                         <AdminHeader component={UpdatePassword} route={routes.ADMIN_UPDATE_PASSWORD} />
+                    }
+
+                />
+                <Route
+                    path={routes.ADMIN_GET_USERS}
+                    element={
+                        <AdminHeader component={AdminUserList} route={routes.ADMIN_GET_USERS} />
                     }
 
                 />

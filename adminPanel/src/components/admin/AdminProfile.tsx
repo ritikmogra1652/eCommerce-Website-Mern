@@ -9,7 +9,7 @@ import routes from '../../constants/routes';
 
 
 interface AdminProfile {
-    admin: string;
+    username: string;
     email: string;
     phone: string;
     profileImage: string;
@@ -36,6 +36,8 @@ const AdminProfile: React.FC = () => {
             
             const userDetails = response?.data?.data;
             setUserProfile(userDetails);
+            console.log(userProfile);
+            
         } catch (error) {
             setError('Error fetching user profile');
         } finally {
@@ -46,6 +48,7 @@ const AdminProfile: React.FC = () => {
     useEffect(() => {
 
         fetchUserProfile();
+        
     }, []);
 
     if (loading) {
@@ -64,7 +67,7 @@ const AdminProfile: React.FC = () => {
             {userProfile && (
                 <div className="profile-details">
                     <img src={userProfile.profileImage} alt="" />
-                    <p><strong>Name:</strong> {userProfile.admin}</p>
+                    <p><strong>Name:</strong> {userProfile.username}</p>
                     <p><strong>Email:</strong> {userProfile.email}</p>
                     <p><strong>Phone:</strong> {userProfile.phone}</p>
                     <Link to={routes.ADMIN_EDIT_PROFILE}><button>Edit Profile</button></Link>

@@ -43,7 +43,7 @@ class AuthService {
       { email: data.email },
       { _id: 1, __v: 0 }
     );
-    if (!userExists || userExists.role !== "user") {
+    if (!userExists || userExists.role !== "user"||userExists.isActivated === false) {
       response.message = "Invalid email does not exist";
       response.success = false;
       return response;

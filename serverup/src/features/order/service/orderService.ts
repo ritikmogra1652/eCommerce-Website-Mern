@@ -131,22 +131,36 @@ class OrderService {
   }
   
 
-  static async updateOrderStatus(orderId: string, status: string): Promise<IResponse> {
+  static async updateOrderStatus(orderId: string, status: 'Pending' | 'Shipped' | 'Delivered'): Promise<IResponse> {
+    const allowedStatuses = ["Pending", "Shipped", "Delivered"];
     try {
 
-      const allowedStatuses = ["Pending", "Shipped", "Delivered"];
 
       if (!allowedStatuses.includes(status)) {
         response.message = "invalid status: " + status;
         response.success = false;
         return response;
-      }
-      const order = await OrderModel.findByIdAndUpdate(orderId, { status }, { new: true });
-      if (!order) {
-        response.message = "Invalid Order ID";
-        response.success = false;
-        return response;
-      }
+        }
+        const order = await OrderModel.findById(orderId);
+
+        if (!order) {
+          response.message = "Order not found";
+          response.success = false;
+          return response;
+        }
+        const currentStatus = order.status;
+        if (
+          (currentStatus === "Shipped" && status === "Pending") ||
+          (currentStatus === "Delivered" && status !== "Delivered")
+        ) {
+          response.message = "Invalid status transition";
+          response.success = false;
+          return response;
+        }
+
+        
+        order.status = status;
+        await order.save();
       response.message = "Order status updated successfully";
       response.success = true;
       response.data = order;

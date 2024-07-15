@@ -29,6 +29,9 @@ const Sidebar: React.FC = () => {
           <Link to={routes.ADMIN_PROFILE}>Profile</Link>
         </li>
         <li>
+          <Link to={routes.ADMIN_GET_USERS}>Users List</Link>
+        </li>
+        <li>
           <Link to={routes.ADMIN_GET_ORDERS}>Orders</Link>
         </li>
         <li>
@@ -43,6 +46,7 @@ const Sidebar: React.FC = () => {
         <li>
           <Link to={routes.ADMIN_LOGIN}><button onClick={handleLogout}>Logout</button></Link>
         </li>
+        
       </ul>
     </div>
   );

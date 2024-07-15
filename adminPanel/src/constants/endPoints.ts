@@ -5,6 +5,7 @@ const endPoints = {
   ADMIN_LOGIN: "/admin/login",
   ADMIN_PROFILE: "/admin/profile",
   ADMIN_GET_ORDERS: "/admin/getOrders",
+  ADMIN_GET_USERS: "/admin/getUsers",
   ADMIN_ADD_PRODUCTS: "/add-products",
   UPDATE_PRODUCT: "/products",
   UPDATE_MYPROFILE: "/users/update_profile",
@@ -13,6 +14,7 @@ const endPoints = {
   ADMIN_GET_CATEGORIES: "/categories",
   ADMIN_UPDATE_PASSWORD: "/admin/update_password",
   ADMIN_UPDATE_STATUS: "/update-status",
+  ADMIN_UPDATE_USER_STATUS: "/admin/update-user-status",
 };
 
 export default endPoints;

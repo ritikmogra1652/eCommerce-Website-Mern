@@ -3,7 +3,7 @@
   import UserModel, { IUsers } from '../../auth/models/user';
   import envConfig from '../../../config/envConfig';
   import { IOrder, IOrderItem, OrderModel } from '../../order/models/order';
-import { updatePassword } from '../controller/adminController';
+import { updatePassword, updateUserStatus } from '../controller/adminController';
 
   interface IResponse {
     message: string;
@@ -120,6 +120,20 @@ import { updatePassword } from '../controller/adminController';
       return response;
     }
 
+    static async getUsers(): Promise<IResponse> {
+      const users = await UserModel.find({ role: "user" });
+
+      if (!users || users.length === 0) {
+        response.message = "No User Found";
+        response.success = false;
+        return response;
+      }
+      response.message = "Users List successful";
+      response.success = true;
+      response.data = users;
+      return response;
+    }
+
     static async getAllOrders(
       username?: string,
       status?: string
@@ -209,6 +223,48 @@ import { updatePassword } from '../controller/adminController';
       response.data = orders;
       return response;
     }
+
+    static async updateUserStatus(userId: string, status: boolean): Promise<IResponse> { 
+
+      try {
+        const userExists = await UserModel.findById(userId);
+
+      if (!userExists) {
+        response.message = "Invalid User Id";
+        response.success = false;
+        return response;
+      }
+      const undeliveredOrders = await OrderModel.find({
+        userId: userId,
+        status: { $ne: "Delivered" },
+      });
+      if (undeliveredOrders && undeliveredOrders.length > 0) {
+        response.message = "User cannot be updated due to undelivered orders";
+        response.success = false;
+        return response;
+      }
+
+      userExists.isActivated = status;
+      await userExists.save();
+        const updatedUser = await UserModel.findById(userId);
+
+        
+      
+      response.message = "User status updated successfully";
+      response.success = true;
+      response.data = updatedUser;
+      }catch (error:any) {
+        response.message = error.message; 
+        response.success = false;
+    }
+
+      return response;
+
+    }
+
+
+
+
   }
 
   export default AdminService;

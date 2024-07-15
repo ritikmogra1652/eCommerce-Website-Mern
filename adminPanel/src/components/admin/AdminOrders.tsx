@@ -184,11 +184,23 @@ const AdminOrders: React.FC = () => {
               <td className={`status-${order.status.toLowerCase()}`}>
                 <select
                   value={order.status}
-                  onChange={(e) => updateOrderStatus(order.order_id, e.target.value as 'Pending' | 'Shipped' | 'Delivered')}
+                  onChange={(e) => {
+                    const newStatus = e.target.value as "Pending" | "Shipped" | "Delivered";
+                    if (
+                      (order.status === "Shipped" && newStatus === "Pending") ||
+                      (order.status === "Delivered" && newStatus !== "Delivered")
+                    ) {
+                      // Do not allow invalid status transition
+                      return;
+                    }
+                    updateOrderStatus(order.order_id, newStatus);
+                  }}
                 >
-                  <option value="Pending">Pending</option>
-                  <option value="Shipped">Shipped</option>
-                  <option value="Delivered">Delivered</option>
+                  {order.status === "Pending" && <option value="Pending">Pending</option>}
+                  {order.status !== "Delivered" && <option value="Shipped">Shipped</option>}
+                  {order.status === "Pending" || order.status === "Shipped" || order.status === "Delivered" ? (
+                    <option value="Delivered">Delivered</option>
+                  ) : null}
                 </select>
               </td>
               <td>{new Date(order.created_at).toLocaleDateString()}</td>
