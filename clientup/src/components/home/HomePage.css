@@ -11,13 +11,13 @@
     box-sizing: border-box;
     text-align: center;
     background-color: #fff;
-    padding: 20px;
+    padding:20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s;
     margin-bottom: 20px;
     max-width: calc(25% - 20px);
-    max-height: 450px;
+    max-height: 500px;
     min-width: 300px;
 }
 
@@ -53,6 +53,7 @@
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s;
+    margin-bottom: 10px;
 }
 
 .homepage__product-item button:hover {
@@ -135,6 +136,7 @@
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s;
+    margin-bottom: 10px;
 }
 
 .homepage__modal-content button:hover {
@@ -199,4 +201,26 @@
     font-size: 24px;
     margin: 0 10px;
     color: #000; /* Adjust color as needed */
+}
+
+.homepage__product-item .homepage__out-of-stock {
+    background-color: red;
+    cursor: not-allowed;
+}
+
+.homepage__product-item .homepage__out-of-stock:hover {
+    background-color: darkred;
+}
+
+
+
+
+
+.homepage__modal-content .homepage__out-of-stock {
+    background-color: red;
+    cursor: not-allowed;
+}
+
+.homepage__modal-content .homepage__out-of-stock:hover {
+    background-color: darkred;
 }

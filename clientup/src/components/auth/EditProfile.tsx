@@ -32,7 +32,7 @@ export interface UserProfile {
     profileImage: string;
 }
 
-const EditProfile = () => {
+const EditProfile:React.FC= () => {
     const jwtToken = useSelector((state: RootState) => state.AuthReducer.authData?.jwtToken);
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const navigate = useNavigate();

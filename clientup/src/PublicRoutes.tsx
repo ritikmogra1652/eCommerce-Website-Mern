@@ -12,9 +12,10 @@ import Checkout from './components/utilities/CheckOut';
 import MyOrder from "./components/utilities/MyOrder";
 import EditProfile from "./components/auth/EditProfile";
 import UpdatePassword from "./components/auth/UpdatePassword";
+import Review from "./components/utilities/Review";
 
 interface Props {
-    component: React.ComponentType;
+    component: React.ComponentType
     route: string;
 }
 
@@ -91,7 +92,6 @@ const PublicRoutes: React.FC = () => {
                     element={
                         <WithHeader component={EditProfile} route={routes.EDIT_PROFILE} />
                     }
-
                 />
 
                 <Route
@@ -100,6 +100,12 @@ const PublicRoutes: React.FC = () => {
                         <WithHeader component={UpdatePassword} route={routes.UPDATE_PASSWORD} />
                     }
 
+                />
+                <Route
+                    path={routes.REVIEW}
+                    element={
+                        <WithHeader component={Review} route={routes.REVIEW} />
+                    }
                 />
 
             </Routes>

@@ -1,3 +1,4 @@
+
 export interface IProduct {
   _id: string;
   product_name: string;
@@ -7,6 +8,16 @@ export interface IProduct {
   images: IImage[];
   stock: number;
   createdAt: Date;
+}
+export interface IReview{
+    _id: string;
+    userId: string;
+    productId: string;
+    rating: number;
+    comment: string;
+    status: string;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export interface IImage{

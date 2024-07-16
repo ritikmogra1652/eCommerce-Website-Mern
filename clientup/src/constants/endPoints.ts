@@ -8,6 +8,9 @@ const endPoints = {
   GET_ORDERS: "/get-orders",
   UPDATE_MYPROFILE: "/users/update_profile",
   UPDATE_PASSWORD: "/users/update_password",
+  GET_PRODUCT: "/products",
+  GET_REVIEW: "/get-reviews",
+  ADD_REIVEW: "/add-review"
 };
 
 export default endPoints;

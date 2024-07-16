@@ -6,6 +6,8 @@ import './HomePage.css';
 import { addToCart } from '../../state_management/actions/cartAction';
 import { useDispatch } from 'react-redux';
 import { toastMessageSuccess } from '../utilities/CommonToastMessage';
+import {  useNavigate } from 'react-router-dom';
+import routes from '../../constants/routes';
 
 
 const HomePage: React.FC = () => {
@@ -21,6 +23,8 @@ const HomePage: React.FC = () => {
     const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+   
 
     const fetchProducts = async () => {
         setLoading(true);
@@ -81,6 +85,11 @@ const HomePage: React.FC = () => {
     const handleProductClick = (product: IProduct) => {
         setSelectedProduct(product);
     };
+
+    const handleReviewClick = (productId: string) => {
+
+        navigate(routes.REVIEW, { state: { productId:productId } });
+    }
 
     const closeModal = () => {
         setSelectedProduct(null);
@@ -171,7 +180,9 @@ const HomePage: React.FC = () => {
                         <h2>{product.product_name}</h2>
                         <p>Price: Rs {product.price}</p>
                         <p>In stock: {product.stock}</p>
-                        <button onClick={() => handleAddToCart(product)}>Add to Cart</button>
+                        <button onClick={() => handleAddToCart(product)} disabled={Number(product.stock) === 0} className={`${Number(product.stock) === 0 ? 'homepage__out-of-stock' : ''
+                            }`}>{Number(product.stock) > 0 ? "Add to Cart" : "Out of Stock" }</button><br />
+                        <button onClick={() => handleReviewClick(product._id)}>Review Product</button>
                     </div>
                 ))}
             </div>
@@ -208,7 +219,9 @@ const HomePage: React.FC = () => {
                         </div>
                         <p>{selectedProduct.description}</p>
                         <p>Price: Rs {selectedProduct.price}</p>
-                        <button onClick={() => handleAddToCart(selectedProduct)}>Add to Cart</button>
+                        <button onClick={() => handleAddToCart(selectedProduct)} disabled={Number(selectedProduct.stock) === 0} className={`${Number(selectedProduct.stock) ? 'homepage__out-of-stock' : ''
+                            }`}>{Number(selectedProduct.stock) > 0 ? "Add to Cart" : "Out of Stock"}</button><br />
+                        <button onClick={() => handleReviewClick(selectedProduct._id)}>Review Product</button>
                     </div>
                 </div>
             )}

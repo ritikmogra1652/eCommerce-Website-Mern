@@ -25,7 +25,7 @@ interface FormFields {
     password: string,
 }
 
-const UpdatePassword = () => {
+const UpdatePassword:React.FC = () => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const { register, handleSubmit, reset, formState: { errors } } = useForm<FormFields>({
         resolver: yupResolver(schema)

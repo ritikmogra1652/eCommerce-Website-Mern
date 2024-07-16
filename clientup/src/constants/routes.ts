@@ -8,6 +8,8 @@ const routes = {
   EDIT_PROFILE: "/editprofile",
   CART: "/cart",
   CHECKOUT: "/checkout",
+  REVIEW: "/review-product",
+
 };
 
 export const beforeLoginRoutes = [
