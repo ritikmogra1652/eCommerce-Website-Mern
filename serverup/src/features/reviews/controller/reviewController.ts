@@ -27,6 +27,8 @@ export const addReview = async (req: AuthRequest, res: Response) => {
         const statusCode = error.output?.statusCode ?? 500;
         const errorMessage = error.message ?? "Internal Server Error";
         res.status(statusCode).json({ error: errorMessage });
+        
+        
     }
     };
 

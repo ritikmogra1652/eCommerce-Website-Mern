@@ -9,7 +9,7 @@ import authorization from '../../auth/middleware/authorization';
 const reviewRoutes = express.Router();
 
 
-reviewRoutes.post("/add-review/:productId", authorization, validationRequest(reviewValidationSchema), HandleErrors(addReview));
-reviewRoutes.get("/get-reviews/:productId", HandleErrors(getReviews));
+reviewRoutes.post("/add-review/:productId", authorization,  HandleErrors(addReview));
+reviewRoutes.get("/get-reviews/:productId",authorization, HandleErrors(getReviews));
 
 export { reviewRoutes };

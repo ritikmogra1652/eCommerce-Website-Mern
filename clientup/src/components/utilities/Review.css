@@ -1,0 +1,129 @@
+.review-page {
+    display:flex;
+    justify-content: space-around;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.review-page h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+}
+
+.review-page img {
+    width: 300px;
+    max-width: 300px;
+    max-height: 300px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.review-page p {
+    font-size: 1.2em;
+    color: #555;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.review-form {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.review-form h2 {
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    color: #555;
+    text-align: center;
+}
+
+.review-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.review-form textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    resize: vertical;
+    font-size: 1em;
+}
+
+.review-form button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.review-form button:hover {
+    background-color: #0056b3;
+}
+
+.reviews-list {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.reviews-list h2 {
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    color: #555;
+    text-align: center;
+}
+
+.review-item {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+}
+
+.review-item:last-child {
+    border-bottom: none;
+}
+
+.review-rating {
+    font-size: 1.2em;
+    color: #333;
+}
+
+.review-text {
+    margin-top: 5px;
+    color: #666;
+}
+
+.rating {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+}

@@ -34,7 +34,7 @@ interface FormFields {
     profileImage: FileList
 }
 
-const SignUp = () => {
+const SignUp:React.FC = () => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const { register, handleSubmit, formState: { errors } } = useForm<FormFields>({
         resolver: yupResolver(schema)
