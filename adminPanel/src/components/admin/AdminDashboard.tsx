@@ -72,6 +72,7 @@ const AdminDashboard: React.FC = () => {
                             <th>Phone</th>
                             <th>Total Orders</th>
                             <th>Total Revenue</th>
+                            <th>Revenue Per Order</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -91,7 +92,8 @@ const AdminDashboard: React.FC = () => {
                                         <td>{user.email}</td>
                                         <td>{user.phone}</td>
                                         <td>{user.totalOrders}</td>
-                                        <td>${user.totalRevenue}</td>
+                                        <td>Rs {user.totalRevenue}</td>
+                                        <td>Rs {user.totalRevenue / user.totalOrders}</td>
                                     </tr>
                                 ))
                         )}
