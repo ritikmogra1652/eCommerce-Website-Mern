@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import ReviewModel, { IReview } from "../models/review";
 
 interface IResponse {
@@ -17,7 +18,7 @@ class ReviewService {
             return response;
         }
 
-        const reviewExist = await ReviewModel.find({ userId: data.userId, productId: data.productId });
+        const reviewExist = await ReviewModel.find({ userId: data.userId, productId: data.productId, status:["approved"] });
         if (reviewExist.length > 0) {
             response.message = "Review already exists";
             response.data = [];
@@ -34,7 +35,52 @@ class ReviewService {
     };
 
     static async getReviews(productId: string): Promise<IResponse> {
-        const reviews = await ReviewModel.find({ productId, status: {$in:["approved","pending"]} });
+        const reviews = await ReviewModel.aggregate([
+            {
+                $match: {
+                productId: new mongoose.Types.ObjectId(productId),
+                status: { $in: ["approved"] },
+                },
+            },
+            {
+                $lookup: {
+                from: "users", 
+                localField: "userId",
+                foreignField: "_id",
+                as: "user",
+                },
+            },
+            {
+                $unwind: "$user",
+            },
+            {
+                $lookup: {
+                from: "products", 
+                localField: "productId",
+                foreignField: "_id",
+                as: "product",
+                },
+            },
+            {
+                $unwind: "$product",
+            },
+            {
+                $project: {
+                _id: 1,
+                rating: 1,
+                comment: 1,
+                status: 1,
+                createdAt: 1,
+                updatedAt: 1,
+                "user._id": 1,
+                "user.username": 1,
+                "user.profileImage": 1,
+                "product._id": 1,
+                "product.product_name": 1,
+                "product.image": 1,
+                },
+            },
+        ]);
         if (!reviews || reviews.length === 0) { 
             response.message = "No reviews found";
             response.success = false;

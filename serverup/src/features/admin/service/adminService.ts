@@ -4,6 +4,8 @@
   import envConfig from '../../../config/envConfig';
   import { IOrder, IOrderItem, OrderModel } from '../../order/models/order';
 import { updatePassword, updateUserStatus } from '../controller/adminController';
+import ReviewModel from '../../reviews/models/review';
+import mongoose from 'mongoose';
 
   interface IResponse {
     message: string;
@@ -224,47 +226,117 @@ import { updatePassword, updateUserStatus } from '../controller/adminController'
       return response;
     }
 
-    static async updateUserStatus(userId: string, status: boolean): Promise<IResponse> { 
-
+    static async updateUserStatus(
+      userId: string,
+      status: boolean
+    ): Promise<IResponse> {
       try {
         const userExists = await UserModel.findById(userId);
 
-      if (!userExists) {
-        response.message = "Invalid User Id";
-        response.success = false;
-        return response;
-      }
-      const undeliveredOrders = await OrderModel.find({
-        userId: userId,
-        status: { $ne: "Delivered" },
-      });
-      if (undeliveredOrders && undeliveredOrders.length > 0) {
-        response.message = "User cannot be updated due to undelivered orders";
-        response.success = false;
-        return response;
-      }
+        if (!userExists) {
+          response.message = "Invalid User Id";
+          response.success = false;
+          return response;
+        }
+        const undeliveredOrders = await OrderModel.find({
+          userId: userId,
+          status: { $ne: "Delivered" },
+        });
+        if (undeliveredOrders && undeliveredOrders.length > 0) {
+          response.message = "User cannot be updated due to undelivered orders";
+          response.success = false;
+          return response;
+        }
 
-      userExists.isActivated = status;
-      await userExists.save();
+        userExists.isActivated = status;
+        await userExists.save();
         const updatedUser = await UserModel.findById(userId);
 
-        
-      
-      response.message = "User status updated successfully";
-      response.success = true;
-      response.data = updatedUser;
-      }catch (error:any) {
-        response.message = error.message; 
+        response.message = "User status updated successfully";
+        response.success = true;
+        response.data = updatedUser;
+      } catch (error: any) {
+        response.message = error.message;
         response.success = false;
-    }
+      }
 
       return response;
+    }
 
+    static async getReview(productId: string): Promise<IResponse>{
+      const reviews = await ReviewModel.aggregate([
+        {
+          $match: { productId: new mongoose.Types.ObjectId(productId) },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "user",
+          },
+        },
+        {
+          $unwind: "$user",
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "productId",
+            foreignField: "_id",
+            as: "product",
+          },
+        },
+        {
+          $unwind: "$product",
+        },
+        {
+          $project: {
+            _id: 1,
+            rating: 1,
+            comment: 1,
+            status: 1,
+            createdAt: 1,
+            updatedAt: 1,
+            user: {
+              _id: "$user._id",
+              username: "$user.username",
+              email: "$user.email",
+              profileImage: "$user.profileImage",
+            },
+            product: {
+              _id: "$product._id",
+              product_name: "$product.product_name",
+            },
+          },
+        },
+      ]);
+      if (!reviews || reviews.length === 0) {
+        response.message = "No reviews found for this product";
+        response.success = false;
+        return response;
+      }
+      response.message = "Fetch reviews successful";
+      response.success = true;
+      response.data = reviews;
+      return response;
     }
 
 
-
-
+    static async updateReviewStatus(reviewId: string, status: "approved"  | "rejected"): Promise<IResponse>{
+      const id = new mongoose.Types.ObjectId(reviewId);
+      const review = await ReviewModel.findById(id);
+      if(!review){
+        response.message = "Review not found";
+        response.success = false;
+        return response;
+      }
+      review.status = status;
+      await review.save();
+      response.message = "Review status updated successfully";
+      response.success = true;
+      return response;
+    }
   }
 
   export default AdminService;

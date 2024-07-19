@@ -1,3 +1,4 @@
+
 export interface IProduct {
     _id:string,
     product_name: string;
@@ -55,4 +56,69 @@ export interface IUserData{
     email: string,
     role:string,
     jwtToken: string
+}
+
+export interface IUsersData {
+  _id: string;
+  username: string;
+  profileImage: string;
+}
+
+export interface IProductsData {
+  _id: string;
+  product_name: string;
+  image: string;
+}
+
+export interface IReviewData {
+  _id: string;
+  rating: number;
+  comment: string;
+  status: "approved" | "pending" | "rejected";
+  createdAt: Date;
+  updatedAt: Date;
+  user: IUsersData;
+  product: IProductsData;
+}
+
+
+
+export interface IUserDetails {
+  _id: string;
+  username: string;
+  email: string;
+  profileImage?: string;
+}
+
+export interface IProductDetails {
+  _id: string;
+  product_name: string;
+}
+
+export interface IReviewWithDetails {
+  _id: string;
+  rating: number;
+  comment: string | null;
+  status: "approved" | "pending" | "rejected";
+  createdAt: Date;
+  updatedAt: Date;
+  user: IUserDetails;
+  product: IProductDetails;
+}
+
+
+export interface ITopSellingProduct {
+  labels: string[];
+  data: number[];
+}
+
+export interface IUserInfo {
+  _id: string;
+  totalRevenue: number;
+  totalOrders: number;
+  userId: string;
+  userProfile: string;
+  username: string;
+  email: string;
+  phone: string;
 }

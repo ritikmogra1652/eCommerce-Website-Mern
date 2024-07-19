@@ -15,6 +15,14 @@ const endPoints = {
   ADMIN_UPDATE_PASSWORD: "/admin/update_password",
   ADMIN_UPDATE_STATUS: "/update-status",
   ADMIN_UPDATE_USER_STATUS: "/admin/update-user-status",
+  ADMIN_GET_REVIEWS: "/admin/get_reviews",
+  ADMIN_UPDATE_REVIEW_STATUS: "/admin/update_review_status",
+  ADMIN_TOTAL_SALES: "/dashboard/total-sales",
+  ADMIN_TOTAL_PRODUCTS: "/dashboard/total-products",
+  ADMIN_TOTAL_USERS: "/dashboard/total-users",
+  ADMIN_TOTAL_ORDERS: "/dashboard/total-orders",
+  ADMIN_TOP_SELLING_PRODUCT: "/dashboard/top-selling-products",
+  ADMIN_TOP_CUSTOMERS: "/dashboard/top-customers",
 };
 
 export default endPoints;

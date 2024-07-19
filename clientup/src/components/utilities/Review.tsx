@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { IProduct, IReview } from '../../interface/commonInterfaces';
+import { IProduct, IReviewData } from '../../interface/commonInterfaces';
 import endPoints, { backendApiUrl } from '../../constants/endPoints';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../state_management';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -11,6 +11,8 @@ import * as yup from 'yup';
 import { Rating } from 'react-simple-star-rating';
 import "./Review.css";
 import { toastMessageError, toastMessageSuccess } from './CommonToastMessage';
+import routes from '../../constants/routes';
+import Loader from '../../commonComponenets/Loader';
 
 const schema = yup.object().shape({
     // rating: yup.number().min(0).max(5).required('Rating is required'),
@@ -25,12 +27,13 @@ interface FormFields {
 const Review: React.FC = () => {
     const { productId } = useParams<{ productId: string }>();
     const [product, setProduct] = useState<IProduct | null>(null);
-    const [reviews, setReviews] = useState<IReview[]>([]);
+    const [reviews, setReviews] = useState<IReviewData[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [rating, setRating] = useState<number>(0);
     const location = useLocation();
     const jwtToken = useSelector((state: RootState) => state.AuthReducer.authData?.jwtToken);
     const AuthStr = 'Bearer ' + jwtToken;
+    const navigate = useNavigate();
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm<FormFields>({
         resolver: yupResolver(schema),
@@ -57,6 +60,8 @@ const Review: React.FC = () => {
                         Authorization: AuthStr,
                     },
                 });
+                console.log(response.data.data);
+                
                 setReviews(response.data.data);
             } catch (err) {
                 console.error('Error fetching reviews:', err);
@@ -68,7 +73,11 @@ const Review: React.FC = () => {
         setLoading(false);
     }, [location.state.productId]);
 
+
+    const averageRating =  reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length;
+
     const onSubmit: SubmitHandler<FormFields> = async (data: FormFields) => {
+        if (!jwtToken) { navigate(routes.LOGIN) }
         try {
             const res = await axios.post(`${backendApiUrl}${endPoints.ADD_REIVEW}/${location.state.productId}`, {
                 productId,
@@ -102,17 +111,16 @@ const Review: React.FC = () => {
     };
 
     if (loading) {
-        return <div>Loading...</div>;
+        <Loader />;
     }
 
     return (
         <>
-            <h1>Reviews </h1>
+            <h1>Reviews</h1>
             <div className="review-page">
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <img src={product?.images[0].imageUrl} alt="" />
                     <h1>{product?.product_name}</h1>
-                    {/* <h2>{product?.description}</h2> */}
                 </div>
                 <div>
                     <div className="review-form">
@@ -126,12 +134,10 @@ const Review: React.FC = () => {
                                     size={50}
                                     allowFraction={true}
                                     transition
-
                                     fillColor='orange'
                                     emptyColor='gray'
                                     className='foo'
                                 />
-                                {/* {errors.rating && <p>{errors.rating.message}</p>} */}
                             </div>
 
                             <div>
@@ -142,28 +148,55 @@ const Review: React.FC = () => {
                             <button type="submit">Submit Review</button>
                         </form>
                     </div>
-
                 </div>
-
             </div>
-            <div className="reviews-list">
-                <h2>Existing Reviews</h2>
-                {reviews.length > 0 ? (
-                    reviews.map((review) => (
-                        review.comment ? (
-                            <div key={review._id} className="review-item">
-                                {/* <div className="review-rating">
-                                    Rating: {review.rating} {review.rating === 1 ? 'Star' : 'Stars'}
-                                </div> */}
-                                <div className="review-text">{review.comment}</div>
-                            </div>
-                        ) : null
-                    ))
-                ) : (
-                    <p>No reviews yet.</p>
-                )}
-            </div></>
+            <div className='rating and review'>
+                <div className='average-rating'>
+                    <h2>Average Rating</h2>
+                    <Rating
+                        initialValue={averageRating}
+                        size={25}
+                        allowFraction={true}
+                        readonly={true}
+                        transition
+                        fillColor='orange'
+                        emptyColor='gray'
+                    />
+                </div>
+                <div className="reviews-list">
 
+                    <div>
+                        <h2>Reviews</h2>
+                        {reviews.length > 0 ? (
+                            reviews.map((review) => (
+                                review.comment ? (
+                                    <div key={review._id} className="review-item">
+                                        <div style={{float: 'left',margin:'auto'}}>
+                                            <img src={review.user?.profileImage} alt="" />
+                                        </div>
+                                        <div>
+                                            <p className="review-text">{review.user?.username}</p>
+                                            <Rating
+                                                initialValue={review.rating}
+                                                size={18}
+                                                allowFraction={true}
+                                                readonly={true}
+                                                transition
+                                                fillColor='orange'
+                                                emptyColor='gray'
+                                            />
+                                            <div className="review-text">{review.comment}</div>
+                                        </div>
+                                    </div>
+                                ) : null
+                            ))
+                        ) : (
+                            <p>No reviews yet.</p>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </>
     );
 };
 

@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../state_management';
 import endPoints, { backendApiUrl } from '../../constants/endPoints';
 import './AdminOrders.css';
+import Loader from '../../commonComponents/Loader';
 
 interface ProductItem {
   product_name: string;
@@ -95,40 +96,6 @@ const AdminOrders: React.FC = () => {
     return () => clearTimeout(delayDebounceFn);
   }, [username, setStatus, status]);
 
-  if (loading) return <p className="admin-orders-loading">Loading...</p>;
-  if (error) return <p className="admin-orders-error">{error}</p>;
-
-  if (!orders || orders.length === 0) {
-    return (
-      <>
-        <h2>Admin Orders</h2>
-        <p>You have no orders.</p>
-        <div className="admin-orders-filters">
-          <label>Status:</label>
-          <select
-            value={status}
-            onChange={(e) =>
-              setStatus(e.target.value as '' | 'Pending' | 'Shipped' | 'Delivered')
-            }
-          >
-            <option value="">All</option>
-            <option value="Pending">Pending</option>
-            <option value="Shipped">Shipped</option>
-            <option value="Delivered">Delivered</option>
-          </select>
-          
-          <label>Username:</label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Enter username"
-          />
-        </div>
-      </>
-    );
-  }
-
   return (
     <div className="admin-orders-container">
       <h2>All Orders</h2>
@@ -167,45 +134,62 @@ const AdminOrders: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {orders.map((order) => (
-            <tr key={order.order_id}>
-              <td>{order.order_id}</td>
-              <td>{order.user_name}</td>
-              <td>{order.total}</td>
-              <td>
-                <ul>
-                  {order.products.map((product, index) => (
-                    <li key={index}>
-                      {product.product_name} (Quantity: {product.product_quantity}, Price: {product.product_price})
-                    </li>
-                  ))}
-                </ul>
+          {loading ? (
+            <tr>
+              <td colSpan={6}>
+                <Loader />
               </td>
-              <td className={`status-${order.status.toLowerCase()}`}>
-                <select
-                  value={order.status}
-                  onChange={(e) => {
-                    const newStatus = e.target.value as "Pending" | "Shipped" | "Delivered";
-                    if (
-                      (order.status === "Shipped" && newStatus === "Pending") ||
-                      (order.status === "Delivered" && newStatus !== "Delivered")
-                    ) {
-                      // Do not allow invalid status transition
-                      return;
-                    }
-                    updateOrderStatus(order.order_id, newStatus);
-                  }}
-                >
-                  {order.status === "Pending" && <option value="Pending">Pending</option>}
-                  {order.status !== "Delivered" && <option value="Shipped">Shipped</option>}
-                  {order.status === "Pending" || order.status === "Shipped" || order.status === "Delivered" ? (
-                    <option value="Delivered">Delivered</option>
-                  ) : null}
-                </select>
-              </td>
-              <td>{new Date(order.created_at).toLocaleDateString()}</td>
             </tr>
-          ))}
+          ) : error ? (
+            <tr>
+              <td colSpan={6} className="admin-orders-error">
+                {error}
+              </td>
+            </tr>
+          ) : orders.length === 0 ? (
+            <tr>
+              <td colSpan={6} style = {{textAlign : 'center'}}>You have no orders.</td>
+            </tr>
+          ) : (
+            orders.map((order) => (
+              <tr key={order.order_id}>
+                <td>{order.order_id}</td>
+                <td>{order.user_name}</td>
+                <td>{order.total}</td>
+                <td>
+                  <ul>
+                    {order.products.map((product, index) => (
+                      <li key={index}>
+                        {product.product_name} (Quantity: {product.product_quantity}, Price: {product.product_price})
+                      </li>
+                    ))}
+                  </ul>
+                </td>
+                <td className={`status-${order.status.toLowerCase()}`}>
+                  <select
+                    value={order.status}
+                    onChange={(e) => {
+                      const newStatus = e.target.value as 'Pending' | 'Shipped' | 'Delivered';
+                      if (
+                        (order.status === 'Shipped' && newStatus === 'Pending') ||
+                        (order.status === 'Delivered' && newStatus !== 'Delivered')
+                      ) {
+                        return;
+                      }
+                      updateOrderStatus(order.order_id, newStatus);
+                    }}
+                  >
+                    {order.status === 'Pending' && <option value="Pending">Pending</option>}
+                    {order.status !== 'Delivered' && <option value="Shipped">Shipped</option>}
+                    {(order.status === 'Pending' || order.status === 'Shipped' || order.status === 'Delivered') && (
+                      <option value="Delivered">Delivered</option>
+                    )}
+                  </select>
+                </td>
+                <td>{new Date(order.created_at).toLocaleDateString()}</td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>

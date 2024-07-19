@@ -26,6 +26,9 @@ const Sidebar: React.FC = () => {
     <div className="sidebar">
       <ul>
         <li>
+          <Link to={routes.ADMIN_DASHBOARD}>DashBoard</Link>
+        </li>
+        <li>
           <Link to={routes.ADMIN_PROFILE}>Profile</Link>
         </li>
         <li>

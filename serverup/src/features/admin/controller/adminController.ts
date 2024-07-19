@@ -172,3 +172,47 @@ export const updateUserStatus = async (req: Request, res: Response) => {
     res.status(statusCode).json({ error: errorMessage });
   }
 }
+
+
+export const getReview = async (req: Request, res: Response) => {
+  try {
+    const { productId } = req.params;
+    const review = await AdminService.getReview(productId);
+    if (review.success) {
+      res.status(200).json({
+        ...review,
+        code: 200,
+      });
+    } else {
+      res.status(400).json({
+        ...review,
+        code: 400,
+      });
+    }
+  } catch (error: any) {
+    const statusCode = error.output?.statusCode ?? 500;
+    const errorMessage = error.message ?? "Internal Server Error";
+    res.status(statusCode).json({ error: errorMessage });
+  }
+};
+
+export const updateReviewStatus = async (req: Request, res: Response) => {
+  try {
+    const { status } = req.body;
+    const data = await AdminService.updateReviewStatus(req.params.reviewId, status );
+    // const data = await AdminService.updateUserStatus(userId, status as boolean);
+
+    if (data.success) {
+      res.status(200).json(data);
+    } else {
+      res.status(400).json({
+        message: data.message,
+        code: 400,
+      });
+    }
+  } catch (error: any) {
+    const statusCode = error.output?.statusCode ?? 500;
+    const errorMessage = error.message ?? "Internal Server Error";
+    res.status(statusCode).json({ error: errorMessage });
+  }
+};

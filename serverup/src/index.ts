@@ -10,6 +10,7 @@ import { orderRoutes } from "./features/order/routes/orderRoutes";
 import { adminRoutes } from "./features/admin/routes/adminRoutes";
 import { categoryRotues } from "./features/product_categories/routes/categoryRoutes";
 import { reviewRoutes } from "./features/reviews/routes/reviewRoutes";
+import { dashboardRoutes } from "./features/admin/dashboard/routes/dashboardRoutes";
 const app = express();
 app.use(bodyParser.json({ limit: "50mb" }));
 
@@ -29,7 +30,8 @@ app.use("/", cartRoutes);
 app.use("/", orderRoutes);
 app.use("/admin", adminRoutes);
 app.use("/", categoryRotues);
-app.use('/',reviewRoutes)
+app.use('/', reviewRoutes)
+app.use('/dashboard',dashboardRoutes)
 
 app.listen(port, () => {
   console.log("server is running on port http://localhost:" + port);

@@ -17,6 +17,7 @@ export const beforeLoginRoutes = [
   routes.LOGIN,
   routes.CART,
   routes.SIGNUP,
+  routes.REVIEW
 ];
 
 export default routes;

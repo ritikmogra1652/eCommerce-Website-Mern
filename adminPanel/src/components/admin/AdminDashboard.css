@@ -1,0 +1,99 @@
+/* Dashboard.css */
+.dashboard-container{
+    display:flex;
+    justify-content: space-between;
+}
+.top-selling-product{
+    width: 30%;
+    height: auto;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(300px, 1fr));
+    width: 50%;
+    gap: 20px;
+}
+
+.card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+}
+
+.card h2 {
+    margin-bottom: 10px;
+}
+
+.card p {
+    margin: 5px 0;
+}
+
+.card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.card li {
+    margin: 5px 0;
+}
+.user-info-table {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.user-info-table h2 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.user-info-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.user-info-table th,
+.user-info-table td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.user-info-table th {
+    background-color: #f4f4f4;
+    color: #555;
+    font-weight: bold;
+}
+
+.user-info-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.user-info-table img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-info-table td {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.user-info-table td img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-info-table td:last-child {
+    text-align: center;
+}

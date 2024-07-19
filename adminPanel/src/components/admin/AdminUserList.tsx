@@ -5,6 +5,7 @@ import endPoints, { backendApiUrl } from '../../constants/endPoints';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../state_management';
 import './AdminUserList.css';
+import Loader from '../../commonComponents/Loader';
 
 interface IUser {
     _id: string;
@@ -66,8 +67,7 @@ const AdminUserList = () => {
                     },
                 }
             );
-            
-            
+
             if (response.data.success) {
                 toastMessageSuccess('User status updated successfully');
                 setUsers((prevUsers) =>
@@ -89,9 +89,6 @@ const AdminUserList = () => {
         }
     };
 
-    if (loading) return <p className="admin-user-list-loading">Loading...</p>;
-    if (error) return <p className="admin-user-list-error">{error}</p>;
-
     return (
         <div className="admin-user-list-container">
             <h2>User List</h2>
@@ -103,31 +100,50 @@ const AdminUserList = () => {
                         <th>Phone</th>
                         <th>Status</th>
                         <th>Action</th>
-                        
                         <th>Profile Image</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {users.map(user => (
-                        <tr key={user._id}>
-                            <td>{user.username}</td>
-                            <td>{user.email}</td>
-                            <td>{user.phone}</td>
-                            <td>{user.isActivated ? 'Activated' : 'DeActivated'}</td>
-                            <td>
-                                <button onClick={() => handleUserStatusChange(user._id, user.isActivated)} disabled={loading}>
-                                    {user.isActivated ? 'Deactivate' : 'Activate'}
-                                </button>
-                            </td>
-                            <td>
-                                <img
-                                    src={user.profileImage || ''}
-                                    alt={`${user.username}'s profile`}
-                                    className="profile-image"
-                                />
+                    {loading ? (
+                        <tr>
+                            <td colSpan={6}>
+                                <Loader />
                             </td>
                         </tr>
-                    ))}
+                    ) : error ? (
+                        <tr>
+                            <td colSpan={6} className="admin-user-list-error">
+                                {error}
+                            </td>
+                        </tr>
+                    ) : users.length === 0 ? (
+                        <tr>
+                            <td colSpan={6} className="admin-user-list-no-data">
+                                No Users Found
+                            </td>
+                        </tr>
+                    ) : (
+                        users.map(user => (
+                            <tr key={user._id}>
+                                <td>{user.username}</td>
+                                <td>{user.email}</td>
+                                <td>{user.phone}</td>
+                                <td>{user.isActivated ? 'Activated' : 'DeActivated'}</td>
+                                <td>
+                                    <button onClick={() => handleUserStatusChange(user._id, user.isActivated)} disabled={loading}>
+                                        {user.isActivated ? 'Deactivate' : 'Activate'}
+                                    </button>
+                                </td>
+                                <td>
+                                    <img
+                                        src={user.profileImage || ''}
+                                        alt={`${user.username}'s profile`}
+                                        className="profile-image"
+                                    />
+                                </td>
+                            </tr>
+                        ))
+                    )}
                 </tbody>
             </table>
         </div>

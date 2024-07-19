@@ -15,6 +15,7 @@ import AddCategory from "./components/admin/AddCategory";
 import UpdatePassword from "./components/admin/UpdatePassword";
 // import EditProfile from "./components/auth/EditProfile";
 import AdminUserList from './components/admin/AdminUserList';
+import AdminReviews from "./components/admin/AdminReviews";
 
 interface Props {
     component: React.ComponentType;
@@ -116,6 +117,21 @@ const PublicRoutes: React.FC = () => {
                     }
 
                 />
+                <Route
+                    path={routes.ADMIN_REVIEWS}
+                    element={
+                        <AdminHeader component={AdminReviews} route={routes.ADMIN_REVIEWS} />
+                    }
+
+                />
+                <Route
+                    path={routes.ADMIN_DASHBOARD}
+                    element={
+                        <AdminHeader component={AdminDashboard} route={routes.ADMIN_DASHBOARD} />
+                    }
+
+                />
+
 
             </Routes>
         </div>

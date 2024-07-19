@@ -59,3 +59,27 @@ export interface IUserData{
     role:string,
     jwtToken: string
 }
+
+
+export interface IUsersData {
+  _id: string;
+  username: string;
+  profileImage: string;
+}
+
+export interface IProductsData {
+  _id: string;
+  product_name: string;
+  image: string;
+}
+
+export interface IReviewData {
+  _id: string;
+  rating: number;
+  comment: string;
+  status: "approved" | "pending" | "rejected";
+  createdAt: Date;
+  updatedAt: Date;
+  user: IUsersData;
+  product: IProductsData;
+}

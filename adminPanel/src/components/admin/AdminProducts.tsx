@@ -5,6 +5,7 @@ import routes from '../../constants/routes';
 import { IProduct } from '../../interface/commonInterfaces';
 import endPoints, { backendApiUrl } from '../../constants/endPoints';
 import './AdminProducts.css';
+import Loader from '../../commonComponents/Loader';
 
 const AdminProducts = () => {
     const [products, setProducts] = useState<IProduct[]>([]);
@@ -34,9 +35,11 @@ const AdminProducts = () => {
             if (response.data.success) {
                 setProducts(response.data.data.products);
                 setTotalProducts(response.data.data.total);
+            } else {
+                setProducts([]);
             }
         } catch (err) {
-            console.error('No Product Found');
+            console.error('Failed to fetch products');
         } finally {
             setLoading(false);
         }
@@ -50,7 +53,6 @@ const AdminProducts = () => {
         return () => clearTimeout(delayDebounceFn);
     }, [currentPage, productsPerPage, searchTerm]);
 
-
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
     const pageNumbers = [];
@@ -58,31 +60,12 @@ const AdminProducts = () => {
         pageNumbers.push(i);
     }
 
-    if (loading) {
-        return <div className="admin-products-loading">Loading...</div>;
-    }
+    const handleEditClick = (id: string) => {
+        navigate(routes.ADMIN_EDIT_PRODUCTS, { state: { id: id } });
+    };
 
-    if (!products || products.length === 0) {
-        return (
-            <div className="admin-products-container">
-                <h1>All Products</h1>
-                <div className="admin-products-search-bar">
-                    <input
-                        type="text"
-                        placeholder="Search products..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                </div>
-                <div className="admin-products-no-data">
-                    <h2>No Product Found</h2>
-                </div>
-            </div>
-        );
-    }
-
-    const handleEditClick = (id:string) => {
-        navigate(routes.ADMIN_EDIT_PRODUCTS,{state :{id:id}});
+    const handleReviewsClick = (id: string) => {
+        navigate(routes.ADMIN_REVIEWS, { state: { id: id } });
     };
 
     return (
@@ -106,34 +89,46 @@ const AdminProducts = () => {
                         <th>Stock</th>
                         <th>Image</th>
                         <th>Actions</th>
+                        <th>Reviews</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {products.map(product => (
-                        <tr key={product._id}>
-                            <td>{product._id}</td>
-                            <td>{product.product_name}</td>
-                            <td>{product.description}</td>
-                            <td>{product.price}</td>
-                            <td>{product.stock}</td>
-                            <td>
-                            {product.images.map(image => (
-                                
-                                    <img src={image.imageUrl} alt={product.product_name} />
-                                
-                            ))}
-                                    </td>
-                            
-                            <td>
-                                <button onClick={() => { handleEditClick(product._id) }}>Edit</button>
-                                {/* <button onClick={() => { handleEditClick(product._id) }}>Delete</button> */}
+                    {loading ? (
+                        <tr>
+                            <td colSpan={8}>
+                                <Loader/>
                             </td>
                         </tr>
-                    ))}
+                    ) : !products || products.length === 0 ? (
+                        <tr>
+                            <td colSpan={8}>
+                                <div className="admin-products-no-data">No Product Found</div>
+                            </td>
+                        </tr>
+                    ) : (
+                        products.map(product => (
+                            <tr key={product._id}>
+                                <td>{product._id}</td>
+                                <td>{product.product_name}</td>
+                                <td>{product.description}</td>
+                                <td>{product.price}</td>
+                                <td>{product.stock}</td>
+                                <td>
+                                    {product.images.map((image, index) => (
+                                        <img key={index} src={image.imageUrl} alt={product.product_name} />
+                                    ))}
+                                </td>
+                                <td>
+                                    <button onClick={() => { handleEditClick(product._id) }}>Edit</button>
+                                </td>
+                                <td>
+                                    <button onClick={() => { handleReviewsClick(product._id) }}>View Reviews</button>
+                                </td>
+                            </tr>
+                        ))
+                    )}
                 </tbody>
             </table>
-
-
             <div className='admin-products-pagination'>
                 {pageNumbers.map(number => (
                     <button
@@ -145,7 +140,6 @@ const AdminProducts = () => {
                     </button>
                 ))}
             </div>
-
         </div>
     );
 };

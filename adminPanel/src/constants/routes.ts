@@ -11,6 +11,8 @@ const routes = {
   ADMIN_ADD_CATEGORY: "/addcategory",
   ADMIN_UPDATE_PASSWORD: "/updatepassword",
   ADMIN_UPDATE_STATUS: "/updatestatus",
+  ADMIN_REVIEWS: "/get_reviews",
+
 };
 
 export const beforeLoginRoutes = [routes.ADMIN_LOGIN];
