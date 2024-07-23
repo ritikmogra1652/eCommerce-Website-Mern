@@ -61,6 +61,11 @@
   cursor: pointer;
   border-radius: 4px;
 }
+.add-product-form-button  {
+  display:flex;
+  /* margin: 0 auto; */
+}
+
 
 .add-product-submit-button:hover {
   background-color: #45a049;

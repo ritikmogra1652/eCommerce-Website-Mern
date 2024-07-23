@@ -6,6 +6,19 @@ import { IProduct } from '../../interface/commonInterfaces';
 import endPoints, { backendApiUrl } from '../../constants/endPoints';
 import './AdminProducts.css';
 import Loader from '../../commonComponents/Loader';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../state_management';
+import * as yup from 'yup';
+import Modal from '../commonComponents.tsx/modal';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import { toastMessageError, toastMessageSuccess } from '../utilities/CommonToastMessage';
+const schema = yup.object().shape({
+    file: yup.mixed<FileList>().required('File is required')
+});
+interface AddFile {
+    file: FileList;
+}
 
 const AdminProducts = () => {
     const [products, setProducts] = useState<IProduct[]>([]);
@@ -14,6 +27,16 @@ const AdminProducts = () => {
     const [productsPerPage] = useState<number>(8);
     const [totalProducts, setTotalProducts] = useState<number>(0);
     const [searchTerm, setSearchTerm] = useState<string>('');
+    const [showModal, setShowModal] = useState(false);
+    const jwtToken = useSelector((state: RootState) => state.AuthReducer.authData?.jwtToken);
+    const AuthStr = "Bearer " + jwtToken;
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        resolver: yupResolver(schema),
+    });
+    const openModal = () => setShowModal(true);
+    const closeModal = () => setShowModal(false);
+
+
 
     const navigate = useNavigate();
 
@@ -44,6 +67,65 @@ const AdminProducts = () => {
             setLoading(false);
         }
     };
+    const ExportProductHandler = async () => {
+        try {
+            const res = await axios.get(`${backendApiUrl}${endPoints.ADMIN_EXPORT_PRODUCTS}`, {
+                headers: { Authorization: AuthStr },
+                responseType: 'blob'
+            });
+            const url = window.URL.createObjectURL(new Blob([res.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'products.xlsx');
+            document.body.appendChild(link);
+            link.click();
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const ImportProductHandler = async () => { 
+        try {
+            const res = await axios.get(`${backendApiUrl}${endPoints.ADMIN_EXPORT_SAMPLE_EXCEL}`, {
+                headers: { Authorization: AuthStr },
+                responseType: 'blob'
+            });
+            const url = window.URL.createObjectURL(new Blob([res.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'Addproducts.xlsx');
+            document.body.appendChild(link);
+            link.click();
+            openModal()
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const onSubmit = async (data: AddFile) => {
+        const formData = new FormData();
+        formData.append('file', data.file[0]);
+        try {
+            await axios.post(`${backendApiUrl}${endPoints.ADMIN_IMPORT_PRODUCTS}`, formData, {
+                headers: {
+                    Authorization: AuthStr,
+                    'Content-Type': 'multipart/form-data'
+                },
+            }).then(res => {
+                if (res.data.success === true) {
+                    toastMessageSuccess('Products Imported Successfully')
+                    closeModal()
+                    fetchProducts()
+                } else {
+                    toastMessageError(res.data.message)
+                    closeModal()
+                    
+                }
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
@@ -78,7 +160,11 @@ const AdminProducts = () => {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
+                <button onClick={()=>navigate(routes.ADMIN_ADD_PRODUCTS)}>Add Products</button>
+                <button onClick={ImportProductHandler}>Import Products</button>
+                <button onClick={ExportProductHandler}>Export Products</button>
             </div>
+            
             <table className="admin-products-table">
                 <thead>
                     <tr>
@@ -140,6 +226,30 @@ const AdminProducts = () => {
                     </button>
                 ))}
             </div>
+            <Modal show={showModal} onClose={closeModal}>
+                <div className="modal">
+                    <div className="modal-content">
+                        <button className="close-button" onClick={closeModal}>&times;</button>
+                        <div className="modal-header">
+                            <h2>Add CSV</h2>
+                        </div>
+                        <form onSubmit={handleSubmit(onSubmit)} className="modal-form" noValidate>
+                            <div>
+                                <label htmlFor="file">File</label>
+                                <input
+                                    type="file"
+                                    {...register('file')}
+                                    id="file"
+                                />
+                                {errors.file && <p>{errors.file.message}</p>}
+                            </div>
+                            <button type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </Modal>
+
+
         </div>
     );
 };

@@ -40,9 +40,9 @@ const Sidebar: React.FC = () => {
         <li>
           <Link to={routes.ADMIN_GET_PRODUCTS}>Products</Link>
         </li>
-        <li>
+        {/* <li>
           <Link to={routes.ADMIN_ADD_PRODUCTS}>Add Product</Link>
-        </li>
+        </li> */}
         <li>
           <Link to={routes.ADMIN_ADD_CATEGORY}>Add Category</Link>
         </li>

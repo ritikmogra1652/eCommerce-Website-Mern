@@ -30,7 +30,7 @@ const HomePage: React.FC = () => {
             let url = `${backendApiUrl}${endPoints.GET_PRODUCTS}?page=${currentPage}&limit=${productsPerPage}`;
             if (searchTerm) {
                 url += `&search=${encodeURIComponent(searchTerm)}`;
-                setCurrentPage(1);
+                
             }
             if (sortOrder) {
                 url += `&sort=${sortOrder}`;
@@ -60,6 +60,10 @@ const HomePage: React.FC = () => {
         }, 500);
         return () => clearTimeout(delayDebounceFn);
     }, [currentPage, productsPerPage, searchTerm, sortOrder]);
+    
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm]);
 
     const handleAddToCart = (product: IProduct) => {
         const quantity = 1;

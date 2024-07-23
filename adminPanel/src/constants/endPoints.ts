@@ -23,6 +23,9 @@ const endPoints = {
   ADMIN_TOTAL_ORDERS: "/dashboard/total-orders",
   ADMIN_TOP_SELLING_PRODUCT: "/dashboard/top-selling-products",
   ADMIN_TOP_CUSTOMERS: "/dashboard/top-customers",
+  ADMIN_EXPORT_PRODUCTS: "/export-products",
+  ADMIN_EXPORT_SAMPLE_EXCEL: "/export-sample-excel",
+  ADMIN_IMPORT_PRODUCTS: "/import-products",
 };
 
 export default endPoints;

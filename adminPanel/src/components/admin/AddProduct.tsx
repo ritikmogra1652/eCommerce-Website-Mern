@@ -6,7 +6,7 @@ import * as yup from 'yup';
 import endPoints, { backendApiUrl } from '../../constants/endPoints';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../state_management';
-import { toastMessageSuccess } from '../utilities/CommonToastMessage';
+import { toastMessageError, toastMessageSuccess } from '../utilities/CommonToastMessage';
 import routes from '../../constants/routes';
 import { useNavigate } from 'react-router-dom';
 import './AddProduct.css';
@@ -50,17 +50,17 @@ const AddProduct: React.FC = () => {
         }
       );
       setCategories(response.data?.data);
+      // toastMessageSuccess(response.data.message);
     } catch (error) {
       console.error('Error fetching categories:', error);
+      toastMessageError('error.response.data.message');
     }
   };
 
 
   useEffect(() => {
-    
-
     fetchCategories();
-  }, [jwtToken]);
+  }, []);
 
   const convertToBase64 = (file: File): Promise<string> => {
     return new Promise<string>((resolve, reject) => {
@@ -99,8 +99,10 @@ const AddProduct: React.FC = () => {
       toastMessageSuccess("Product added successfully");
       reset();
     }
-    catch (error) {
-      alert('Failed to add product');
+    catch (error: any) {
+      console.error('Error adding product:', error);
+      // alert('Failed to add product');
+      toastMessageError(error.response.data.message); 
     }
   };
 
@@ -149,7 +151,10 @@ const AddProduct: React.FC = () => {
           <p className="add-product-error-message">{errors.category_id?.message}</p>
         </div>
 
-        <button type="submit" className="add-product-submit-button">Add Product</button>
+        <div className='add-product-form-button'>
+          <button type="submit" className="add-product-submit-button">Add Product</button>
+          <button onClick={() => navigate(-1)} className="add-product-submit-button" type="button" >Back</button>
+        </div>
       </form>
     </div>
   );
