@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document, ObjectId } from "mongoose";
 
 interface IOrderItem extends Document {
+  name:string;
   productId: mongoose.Types.ObjectId;
   quantity: number;
   price: number;
@@ -12,7 +13,7 @@ interface IOrder extends Document {
   total: number;
   address: string;
   phone: string;
-  status: 'Pending' | 'Shipped' |'Delivered';
+  status: "Pending" | "Shipped" | "Delivered";
   createdAt: Date;
   updatedAt: Date;
 }
@@ -30,7 +31,11 @@ const OrderSchema: Schema = new Schema(
     total: { type: Number, required: true },
     address: { type: String, required: true },
     phone: { type: String, required: true },
-    status: { type: String,enum: ['Pending', 'Shipped', 'Delivered'], default: "Pending" },
+    status: {
+      type: String,
+      enum: ["Pending", "Shipped", "Delivered"],
+      default: "Pending",
+    },
   },
   { timestamps: true }
 );
