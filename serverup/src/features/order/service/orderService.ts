@@ -6,7 +6,7 @@ import ProductModel from "../../product/models/product";
 import Stripe from "stripe";
 
 const stripe = new Stripe(
-  "",
+  "sk_test_51QNoyMLUUdEwqEnJK4e5AQ2xEAsFjuGxSuQbHPy7ViUKfpH1U6QLQdxhLDcwsoCjXaOMyBNFTT9hWZRHAhoRPIvE00xeiBqYVO",
   { apiVersion: "2022-11-15" as Stripe.LatestApiVersion }
 );
 interface IResponse {
@@ -19,7 +19,6 @@ const response: IResponse = { message: "", success: false };
 
 class OrderService {
   static async placeOrder(data: IOrder, userId: string): Promise<IResponse> {
-    console.log("gggggggggggggggggggg");
     
     const response: IResponse = { message: "", success: false };
 
@@ -41,7 +40,6 @@ class OrderService {
 
 
       // Create Stripe Checkout Session
-      console.log(data.items,"llllllllllllllllllll");
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         line_items: await Promise.all(
