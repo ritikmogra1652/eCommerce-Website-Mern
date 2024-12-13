@@ -12,6 +12,7 @@ const routes = {
   ADMIN_UPDATE_PASSWORD: "/updatepassword",
   ADMIN_UPDATE_STATUS: "/updatestatus",
   ADMIN_REVIEWS: "/get_reviews",
+  ADMIN_CALENDER:"/calender"
 
 };
 

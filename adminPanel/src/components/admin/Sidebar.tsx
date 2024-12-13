@@ -47,6 +47,9 @@ const Sidebar: React.FC = () => {
           <Link to={routes.ADMIN_ADD_CATEGORY}>Add Category</Link>
         </li>
         <li>
+          <Link to={routes.ADMIN_CALENDER}> Calender</Link>
+        </li>
+        <li>
           <Link to={routes.ADMIN_LOGIN}><button onClick={handleLogout}>Logout</button></Link>
         </li>
         
