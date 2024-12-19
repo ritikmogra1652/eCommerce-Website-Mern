@@ -26,6 +26,8 @@ const endPoints = {
   ADMIN_EXPORT_PRODUCTS: "/export-products",
   ADMIN_EXPORT_SAMPLE_EXCEL: "/export-sample-excel",
   ADMIN_IMPORT_PRODUCTS: "/import-products",
+  ADMIN_GET_MEETINGS: "/get-meetings",
+  ADMIN_APPROVE_MEETING:"/approve-meetings",
 };
 
 export default endPoints;

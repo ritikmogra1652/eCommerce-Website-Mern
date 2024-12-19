@@ -12,7 +12,8 @@ const routes = {
   ADMIN_UPDATE_PASSWORD: "/updatepassword",
   ADMIN_UPDATE_STATUS: "/updatestatus",
   ADMIN_REVIEWS: "/get_reviews",
-  ADMIN_CALENDER:"/calender"
+  ADMIN_CALENDER: "/calender",
+  ADMIN_APPROVE_MEETINGS: '/approve_meetings'
 
 };
 
