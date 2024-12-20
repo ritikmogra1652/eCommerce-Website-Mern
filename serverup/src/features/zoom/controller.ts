@@ -51,8 +51,7 @@ export const getMeetings = async (req: AuthRequest, res: Response) => {
 
 export const approveMeetings = async (req: AuthRequest, res: Response) => {
   try {
-      const meetingId=  req.params.id
-    
+    const meetingId = req.params.id;
 
     const data = await MeetingService.approveMeetings(meetingId as string);
     if (data.success) {
@@ -73,25 +72,25 @@ export const approveMeetings = async (req: AuthRequest, res: Response) => {
   }
 };
 
-export const zoomOauth = async (req: AuthRequest, res: Response) => {
-  try {
-      const { code } = req.query;
+// export const zoomOauth = async (req: AuthRequest, res: Response) => {
+//   try {
+//       const { code } = req.query;
 
-    const data = await MeetingService.zoomOauth(code as string);
-    if (data.success) {
-      res.status(201).json({
-        ...data,
-        code: 201,
-      });
-    } else {
-      res.status(409).json({
-        ...data,
-        code: 409,
-      });
-    }
-  } catch (error: any) {
-    const statusCode = error.output?.statusCode ?? 500;
-    const errorMessage = error.message ?? "Internal Server Error";
-    res.status(statusCode).json({ error: errorMessage });
-  }
-};
+//     const data = await MeetingService.zoomOauth(code as string);
+//     if (data.success) {
+//       res.status(201).json({
+//         ...data,
+//         code: 201,
+//       });
+//     } else {
+//       res.status(409).json({
+//         ...data,
+//         code: 409,
+//       });
+//     }
+//   } catch (error: any) {
+//     const statusCode = error.output?.statusCode ?? 500;
+//     const errorMessage = error.message ?? "Internal Server Error";
+//     res.status(statusCode).json({ error: errorMessage });
+//   }
+// };
