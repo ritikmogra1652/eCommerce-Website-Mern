@@ -19,6 +19,7 @@ const response: IResponse = { message: "", success: false };
 
 class OrderService {
   static async placeOrder(data: IOrder, userId: string): Promise<IResponse> {
+    
     const response: IResponse = { message: "", success: false };
 
     try {
@@ -36,6 +37,7 @@ class OrderService {
       }
 
       // // Prepare line items for Stripe Checkout Session
+
 
       // Create Stripe Checkout Session
       const session = await stripe.checkout.sessions.create({
