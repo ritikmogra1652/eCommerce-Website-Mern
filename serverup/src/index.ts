@@ -11,38 +11,27 @@ import { adminRoutes } from "./features/admin/routes/adminRoutes";
 import { categoryRotues } from "./features/product_categories/routes/categoryRoutes";
 import { reviewRoutes } from "./features/reviews/routes/reviewRoutes";
 import { dashboardRoutes } from "./features/admin/dashboard/routes/dashboardRoutes";
-import { zoomRoutes } from "./features/zoom/routes";
 const app = express();
 app.use(bodyParser.json({ limit: "50mb" }));
 
 // app.use(express.urlencoded({ limit: "50mb" }));
-app.use(
-  bodyParser.urlencoded({
-    limit: "50mb",
-    extended: true,
-    parameterLimit: 50000,
-  })
-);
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
 
 const env = envConfig();
 const port = env.port;
 connectDB();
-app.use(
-  cors({
-    origin: "*",
-    credentials: true,
-  })
-);
+app.use(cors({
+    origin: '*',
+    credentials: true
+}));
 app.use("/users", authRoutes);
 app.use("/", productRoutes);
 app.use("/", cartRoutes);
 app.use("/", orderRoutes);
 app.use("/admin", adminRoutes);
 app.use("/", categoryRotues);
-app.use("/", reviewRoutes);
-app.use("/dashboard", dashboardRoutes);
-
-app.use("/", zoomRoutes);
+app.use('/', reviewRoutes)
+app.use('/dashboard',dashboardRoutes)
 
 app.listen(port, () => {
   console.log("server is running on port http://localhost:" + port);
