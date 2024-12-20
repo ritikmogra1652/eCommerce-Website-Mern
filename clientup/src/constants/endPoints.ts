@@ -10,7 +10,8 @@ const endPoints = {
   UPDATE_PASSWORD: "/users/update_password",
   GET_PRODUCT: "/products",
   GET_REVIEW: "/get-reviews",
-  ADD_REIVEW: "/add-review"
+  ADD_REIVEW: "/add-review",
+  REQUEST_MEETING: "/requestMeet",
 };
 
 export default endPoints;

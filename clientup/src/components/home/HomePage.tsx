@@ -10,6 +10,9 @@ import { useNavigate } from 'react-router-dom';
 import routes from '../../constants/routes';
 import Loader from '../../commonComponenets/Loader';
 
+import Skeleton from "react-loading-skeleton";
+import 'react-loading-skeleton/dist/skeleton.css';
+
 const HomePage: React.FC = () => {
     const [products, setProducts] = useState<IProduct[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -111,14 +114,35 @@ const HomePage: React.FC = () => {
             </div>
             <div className="homepage__home-page">
                 {loading ? (
-                    <Loader />
+                    // <Loader />
+                    Array.from({ length: productsPerPage }).map((_, index) => (
+                        <div key={index} className="homepage__product-item">
+                            <Skeleton height={150} width={150} className="homepage__product-image" />
+                            <h2><Skeleton width={100} /></h2>
+                            <p><Skeleton width={50} /></p>
+                            <button disabled>
+                                <Skeleton width={80} height={30} />
+                            </button>
+                        </div>
+                    ))
                 ) : (
                     <>
                         {!products||products.length === 0 ? (
-                            <h2>No Products Found</h2>
+                                // <h2>No Products Found</h2>
+                                Array.from({ length: productsPerPage }).map((_, index) => (
+                                    <div key={index} className="homepage__product-item">
+                                        <Skeleton height={150} width={150} className="homepage__product-image" />
+                                        <h2><Skeleton width={100} /></h2>
+                                        <p><Skeleton width={50} /></p>
+                                        <button disabled>
+                                            <Skeleton width={80} height={30} />
+                                        </button>
+                                    </div>
+                                ))
                         ) : (
                             products.map(product => (
                                 <div key={product._id} className="homepage__product-item">
+                                    
                                     <img
                                         src={product.images[0].imageUrl}
                                         alt={product.product_name}

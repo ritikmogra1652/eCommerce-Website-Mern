@@ -15,6 +15,19 @@ export interface IProduct {
 export interface IImage{
     imageUrl:string;
 }
+export interface MeetingData {
+  _id: string;
+  userId: string;
+  topic: string;
+  start_time: string; // ISO Date string
+  duration: number;
+  join_url: string; // ISO Date string
+  approved: boolean;
+  createdAt: string; // ISO Date string
+  updatedAt: string; // ISO Date string
+  __v: number;
+}
+
 
 
 export interface ICategory {

@@ -16,6 +16,8 @@ import UpdatePassword from "./components/admin/UpdatePassword";
 // import EditProfile from "./components/auth/EditProfile";
 import AdminUserList from './components/admin/AdminUserList';
 import AdminReviews from "./components/admin/AdminReviews";
+import Calender from "./components/admin/Calender";
+import ApproveMeetings from "./components/admin/ApproveMeetings";
 
 interface Props {
     component: React.ComponentType;
@@ -128,6 +130,20 @@ const PublicRoutes: React.FC = () => {
                     path={routes.ADMIN_DASHBOARD}
                     element={
                         <AdminHeader component={AdminDashboard} route={routes.ADMIN_DASHBOARD} />
+                    }
+
+                />
+                <Route
+                    path={routes.ADMIN_CALENDER}
+                    element={
+                        <AdminHeader component={Calender} route={routes.ADMIN_CALENDER} />
+                    }
+
+                />
+                <Route
+                    path={routes.ADMIN_APPROVE_MEETINGS}
+                    element={
+                        <AdminHeader component={ApproveMeetings} route={routes.ADMIN_APPROVE_MEETINGS} />
                     }
 
                 />
